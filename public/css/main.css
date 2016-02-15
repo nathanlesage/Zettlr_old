@@ -1,0 +1,11 @@
+/*
+
+Additional CSS for notework
+
+Base directory for everything: css directory! NOT public directory!
+ */
+
+body
+{
+    background-image:url(../img/notes.main.background.jpg);
+}
