@@ -11,6 +11,7 @@
 |
 */
 
+// Go to NoteController as standard index file
 Route::get('/', 'NoteController@index');
 
 /*
@@ -24,6 +25,17 @@ Route::get('/', 'NoteController@index');
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    //
+// Group all note-related actions together
+Route::group(['prefix' => 'notes'], function () {
+    Route::get('listNotes', 'NoteController@listNotes');
+    Route::get('create', 'NoteController@create');
+    Route::post('create', 'NoteController@insertNote');
+    Route::get('edit', 'NoteController@edit');
+});
+
+// Group all outline-related actions together
+Route::group(['prefix' => 'outline'], function() {
+    Route::get('/', 'OutlineController@index');
+    Route::get('create', 'OutlineController@create');
+    Route::get('edit', 'OutlineController@edit');
 });

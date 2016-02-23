@@ -9,5 +9,8 @@ use App\Http\Controllers\Controller;
 
 class OutlineController extends Controller
 {
-    //
+    public function index()
+    {
+        return 'Outline index';
+    }
 }

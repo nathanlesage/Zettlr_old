@@ -1,3 +1,5 @@
+{{-- Main template for the Notes section --}}
+{{-- TODO: Export boilerplate to parent directory --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,9 +34,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="main-navbar">
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">View</a></li>
-                        <li><a href="#">Insert</a></li>
+                        <li><a href="{{ action('NoteController@index') }}">Home</a></li>
+                        <li><a href="{{ action('NoteController@listNotes') }}">View all notes</a></li>
+                        <li><a href="{{ action('NoteController@create') }}">Insert</a></li>
                         <li><a href="#">Import</a></li>
                     </ul>
                     <!-- Login form -->
