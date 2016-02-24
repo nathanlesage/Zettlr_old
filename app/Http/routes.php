@@ -12,7 +12,8 @@
 */
 
 // Go to NoteController as standard index file
-Route::get('/', 'NoteController@index');
+// TODO: Change to a single logon page (inside UserController)
+Route::get('/', 'NoteController@home');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +28,9 @@ Route::get('/', 'NoteController@index');
 
 // Group all note-related actions together
 Route::group(['prefix' => 'notes'], function () {
-    Route::get('listNotes', 'NoteController@listNotes');
+    Route::get('index', 'NoteController@index');
     Route::get('create', 'NoteController@create');
-    Route::post('create', 'NoteController@insertNote');
+    Route::post('create', 'NoteController@create');
     Route::get('edit', 'NoteController@edit');
 });
 

@@ -1,0 +1,21 @@
+{{-- Main template for the Home section --}}
+@extends('app')
+
+
+@section('content')
+    <div class="container">
+        
+        <!-- Little hack for vertical alignment -->
+        <div class="jumbotron" style="margin-top:25%;">
+            <h1>noteworks</h1>
+            <!-- Login form -->
+            <form class="form-inline" role="login">
+                <div class="form-group">
+                    <input type="text" class="form-control" autofocus="autofocus" placeholder="Username">
+                    <input type="password" class="form-control" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-success">Login</button>
+            </form>
+        </div>
+    </div>
+@endsection

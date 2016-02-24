@@ -9,13 +9,18 @@ use App\Http\Controllers\Controller;
 
 class NoteController extends Controller
 {
-    public function index() {
-        // For index just output a welcome page
-        return view('notes.main');
+    public function home() {
+        // For home just output a welcome page
+        // views/main.blade.php
+        return view('main');
     }
     
-    public function listNotes() {
-        // List all notes -> get from db and then output
+    public function index() {
+        // For index output a list of all notes
+        // views/notes/list.blade.php
+        
+        // For now return an empty array
+        return view('notes.list', ['notes' => '']);
     }
     
     public function create() {
