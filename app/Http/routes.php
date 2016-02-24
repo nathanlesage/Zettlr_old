@@ -30,7 +30,7 @@ Route::get('/', 'NoteController@home');
 Route::group(['prefix' => 'notes'], function () {
     Route::get('index', 'NoteController@index');
     Route::get('create', 'NoteController@create');
-    Route::post('create', 'NoteController@create');
+    Route::post('create', 'NoteController@insertNote');
     Route::get('edit', 'NoteController@edit');
 });
 

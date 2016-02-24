@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Models\Model;
 
 class NoteController extends Controller
 {
@@ -20,7 +21,9 @@ class NoteController extends Controller
         // views/notes/list.blade.php
         
         // For now return an empty array
-        return view('notes.list', ['notes' => '']);
+        $notes = Note::orderBy('id', 'desc')->get();
+        
+        return view('notes.list', ['notes' => $notes]);
     }
     
     public function create() {
@@ -44,5 +47,11 @@ class NoteController extends Controller
         }
         
         // Now insert via the model
+        $note = new App\Http\Models\Model::Note;
+        $note->title = $request->title;
+        $note->content = $request->content;
+        $note->save();
+        
+        return redirect(action('NoteController@index'));
     }
 }
