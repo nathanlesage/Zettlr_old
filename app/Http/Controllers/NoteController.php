@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Note;
 use App\Http\Controllers\Controller;
-use App\Http\Models\Model;
+
+use Illuminate\Http\Request;
+use Illuminate\Validation\Validator;
 
 class NoteController extends Controller
 {
@@ -21,7 +21,8 @@ class NoteController extends Controller
         // views/notes/list.blade.php
         
         // For now return an empty array
-        $notes = Note::orderBy('id', 'desc')->get();
+        $notes = new Note;
+        $notes = $notes::orderBy('id', 'desc')->get();
         
         return view('notes.list', ['notes' => $notes]);
     }
@@ -33,21 +34,21 @@ class NoteController extends Controller
     
     public function insertNote(Request $request) {
         // Insert a note into the db
-        $validator = Validator::make($request->all(), [
+        $valRes = $this->validate($request, [
         'title' => 'required|max:255',
         'content' => 'required|min:3'
         ]);
 
         // If he doesn't like us show some errors
         // TODO: Insert these errors into the view
-        if ($validator->fails()) {
-            return redirect('/')
+        if (!$valRes) {
+            return redirect('/404')
                 ->withInput()
-                ->withErrors($validator);
+                ->withErrors($valRes);
         }
         
         // Now insert via the model
-        $note = new App\Http\Models\Model::Note;
+        $note = new Note;
         $note->title = $request->title;
         $note->content = $request->content;
         $note->save();

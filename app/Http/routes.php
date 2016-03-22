@@ -40,3 +40,10 @@ Route::group(['prefix' => 'outline'], function() {
     Route::get('create', 'OutlineController@create');
     Route::get('edit', 'OutlineController@edit');
 });
+
+// Login functionality
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+    Route::get('/home', 'HomeController@index');
+});
