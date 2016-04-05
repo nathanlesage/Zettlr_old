@@ -1,4 +1,5 @@
-@extends('layouts.app')
+{{-- Changed layout.app to "our" app file --}}
+@extends('app')
 
 <!-- Main Content -->
 @section('content')

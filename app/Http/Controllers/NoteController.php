@@ -2,16 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
+
 use App\Note;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use Illuminate\Validation\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+// For rendering the markup within the view
+use GrahamCampbell\Markdown\Facades\Markdown;
 
 class NoteController extends Controller
 {
+	/**
+     * Create a new controller instance.
+     * Use "auth" middleware.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+    	// Require the user to be logged in
+    	// for every action this controller does
+        $this->middleware('auth');
+    }
+    
     public function home() {
         // For home just output a welcome page
+        // TODO: Add a general settings pane here
         // views/main.blade.php
         return view('main');
     }
@@ -21,38 +40,55 @@ class NoteController extends Controller
         // views/notes/list.blade.php
         
         // For now return an empty array
-        $notes = new Note;
-        $notes = $notes::orderBy('id', 'desc')->get();
+        $notes = Note::all();
         
         return view('notes.list', ['notes' => $notes]);
     }
     
-    public function create() {
+    public function getCreate() {
         // Display form to create a new note
         return view('notes.create');
     }
     
-    public function insertNote(Request $request) {
+    public function postCreate(Request $request) {
         // Insert a note into the db
-        $valRes = $this->validate($request, [
-        'title' => 'required|max:255',
-        'content' => 'required|min:3'
+        
+         $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'content' => 'required|min:3',
         ]);
 
-        // If he doesn't like us show some errors
-        // TODO: Insert these errors into the view
-        if (!$valRes) {
-            return redirect('/404')
-                ->withInput()
-                ->withErrors($valRes);
+        if ($validator->fails()) {
+            return redirect('/notes/create')
+                        ->withErrors($validator)
+                        ->withInput();
         }
         
-        // Now insert via the model
         $note = new Note;
         $note->title = $request->title;
         $note->content = $request->content;
+        
         $note->save();
         
-        return redirect(action('NoteController@index'));
+        // Now redirect to note create as the user
+        // definitely wants to add another note.
+        return redirect(url('/notes/create'));
+    }
+    
+    public function delete($id) {
+    	try
+    	{
+    		$note = Note::findOrFail($id);
+    	}
+    	catch(ModelNotFoundException $e)
+    	{
+    		// Didn't find the note? Tell the user.
+    		return redirect('/notes/index')
+    			->withErrors(['No note with specified ID found.']);
+    	}
+    	
+    	$note->delete();
+    	
+    	return redirect(url('/notes/index'));
     }
 }

@@ -158,7 +158,9 @@ return [
         /*
          * Some additional components
          */
-        Collective\Html\HtmlServiceProvider::class
+        Collective\Html\HtmlServiceProvider::class,
+        // Markdown parser
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class
 
     ],
 
@@ -209,7 +211,8 @@ return [
          * Additional aliases
          */
         'Form'=> 'Collective\Html\FormFacade',
-        'Html'=> 'Collective\Html\HtmlFacade'
+        'Html'=> 'Collective\Html\HtmlFacade',
+        'Markdown' => 'GrahamCampbell\Markdown\Facades\Markdown'
     ],
 
 ];

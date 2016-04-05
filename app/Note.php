@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
-    // Note model
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+    'title', 'content'
+    ];
 }

@@ -13,7 +13,7 @@
 
 // Go to NoteController as standard index file
 // TODO: Change to a single logon page (inside UserController)
-Route::get('/', 'NoteController@home');
+// Route::get('/', 'NoteController@home');
 
 /*
 |--------------------------------------------------------------------------
@@ -26,12 +26,23 @@ Route::get('/', 'NoteController@home');
 |
 */
 
+// Login functionality
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+	// Redirect here if user is logged in
+    Route::get('/', 'NoteController@index');
+    Route::get('/home', 'NoteController@home');
+    Route::get('notes/index', 'NoteController@index');
+    Route::get('notes/create', 'NoteController@getCreate');
+    Route::post('notes/create', 'NoteController@postCreate');
+    Route::get('notes/edit', 'NoteController@edit');
+    Route::get('notes/delete/{id}', 'NoteController@delete');
+});
+
 // Group all note-related actions together
 Route::group(['prefix' => 'notes'], function () {
-    Route::get('index', 'NoteController@index');
-    Route::get('create', 'NoteController@create');
-    Route::post('create', 'NoteController@insertNote');
-    Route::get('edit', 'NoteController@edit');
+    
 });
 
 // Group all outline-related actions together
@@ -41,9 +52,6 @@ Route::group(['prefix' => 'outline'], function() {
     Route::get('edit', 'OutlineController@edit');
 });
 
-// Login functionality
-Route::group(['middleware' => 'web'], function () {
-    Route::auth();
 
-    Route::get('/home', 'HomeController@index');
-});
+
+

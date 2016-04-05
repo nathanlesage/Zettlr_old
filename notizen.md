@@ -4,15 +4,20 @@
 
 1. artisan migrate
 
+# Hilfe
 
+Guter Artikel zum Thema Eloquent ORM (der auch die one-to-many-Relation erklärt):
+
+https://scotch.io/tutorials/a-guide-to-using-eloquent-orm-in-laravel
 
 * WICHTIG: Folgendes machen, wenn die DB-Struktur sich VERÄNDERT hat:
 
 1. artisan down (Dann kann keiner mehr auf die App zugreifen, eigentlich nur für ausgerollte Installationen wichtig, aber kann man sich ja angewöhnen)
-2. composer dumpautoload (baut irgendwelche Files die der Migrator dann nutzt)
+2. composer dump-autoload (baut irgendwelche Files die der Migrator dann nutzt)
 3. artisan migrate:rollback (nichts anderes als "schmeiß die Tabellen alle raus")
 4. artisan migrate (die Tabellen wieder anlegen in der "richtigen" Struktur)
-5. artisan up (Wieder in den Production-Modus)
+5. artisan db:seed (Fügt die Testdaten in die Datenbank ein)
+6. artisan up (Wieder in den Production-Modus)
 
 ## Notes
 
