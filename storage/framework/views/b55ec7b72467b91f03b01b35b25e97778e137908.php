@@ -41,7 +41,11 @@
     			currentElement = myPanel.index();
     			// Ask the server via Ajax
     			$.getJSON("<?php echo e(url('ajax/note')); ?>/" + id, function(data) {
-    				myPanel.append('<div class="panel-body" style="display:none;" id="note-'+ id +'-content">'+ data.content +'</div>');
+    				// "Arrayfy" the tags
+    				tagArray = [];
+          			for(i = 0; i < data.tags.length; i++)
+          				tagArray.push('<button class="btn btn-primary">'+data.tags[i].name+'</button>\n');
+    				myPanel.append('<div class="panel-body" style="display:none;" id="note-'+ id +'-content">'+ data.content +'<hr>'+tagArray.join("")+'</div>');
     			})
     			.fail(function() {
     				displayError("Couldn't find note.");

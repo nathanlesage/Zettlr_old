@@ -61,6 +61,11 @@
                     <li><a href="{{ action('NoteController@getCreate') }}">Insert</a></li>
                     <li><a href="#">Import</a></li>
                 </ul>
+                <form class="navbar-form navbar-right" role="search">
+        			<div class="form-group">
+          				<input type="text" class="form-control" placeholder="Search in notes &hellip;">
+        			</div>
+      			</form>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 </ul>

@@ -73,8 +73,18 @@ $(document).ready(function() {
         	}
       	});
       	
+      	// Prevent form submission by pressing Enter key in inputs
+      	$(window).keydown(function(e){
+    		if(e.keyCode == 13) {
+      			e.preventDefault();
+      			return false;
+    		}
+ 		});
+      	
       	// Bind return key to adding the tag
-      	$("#tagSearchBox").bind('keyup', 'Return', function(){
+      	$("#tagSearchBox").bind('keyup', 'Return', function(e){
+      		e.preventDefault();
+      		console.log("Return on SearchBox pressed");
       		$("#tagList").append('<div class="alert alert-info alert-dismissable"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
       		$("#tagSearchBox").val("");
       	});

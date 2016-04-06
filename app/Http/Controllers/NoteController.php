@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 
 use App\Note;
+use App\Tag;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -45,6 +46,14 @@ class NoteController extends Controller
         return view('notes.list', ['notes' => $notes]);
     }
     
+    public function show($id) {
+    	$note = Note::find($id);
+    	// Only with this statement does he catch the tags!
+    	$note->tags;
+    	
+    	return view('notes.show', ['note' => $note]);
+    }
+    
     public function getCreate() {
         // Display form to create a new note
         return view('notes.create');
@@ -69,6 +78,16 @@ class NoteController extends Controller
         $note->content = $request->content;
         
         $note->save();
+        
+        // Now fill the join table
+        
+        // TODO: Create new Tags and fill the join table
+        // for each tag, search, and, if it does not exist, create it
+        foreach($request->tags as $tagname)
+        {
+        	$tag = Tag::firstOrCreate(["name" => $tagname]);
+        	$note->tags()->attach($tag->id);
+        }
         
         // Now redirect to note create as the user
         // definitely wants to add another note.

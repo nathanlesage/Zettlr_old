@@ -25,6 +25,7 @@ class AjaxController extends Controller
     public function getNoteContents($id)
     {
     	$note = Note::find($id);
+    	$note->tags;
     		
     	if(! $note)
     	{
