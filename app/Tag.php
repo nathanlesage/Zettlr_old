@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Note extends Model
+class Tag extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,11 +12,11 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-    'title', 'content'
+    'name'
     ];
     
-    public function tags()
+    public function notes()
     {
-    	return $this->belongsToMany('App\Tag')->withTimeStamps();
+    	return $this->belongsToMany('App\Note')->withTimeStamps();
     }
 }

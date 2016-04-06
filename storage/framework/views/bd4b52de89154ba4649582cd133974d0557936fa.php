@@ -7,6 +7,22 @@
     
     <!-- Include jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    
+    <!-- Include noty jQuery plugin -->
+    <?php echo e(Html::script('js/jquery.noty.packaged.min.js')); ?>
+
+    
+    <!-- Include Hotkey jQuery plugin -->
+    <?php echo e(Html::script('js/jquery.hotkeys.js')); ?>
+
+    
+    <!-- Include jQuery UI -->
+    <?php echo e(Html::style('css/jquery-ui.min.css')); ?>
+
+    <?php echo e(Html::style('css/jquery-ui.structure.css')); ?>
+
+    <?php echo e(Html::script('js/jquery-ui.min.js')); ?>
+
 
     <!-- Include Bootstrap CSS and JS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
@@ -16,37 +32,12 @@
     <?php echo e(Html::style('css/main.css')); ?>
 
     
-    <!-- Include codemirror main javascript -->
-    <?php echo e(Html::script('js/codemirror.js')); ?>
-
-    <!-- Bugfix that prevents the textarea to be rendered successfully -->
-    <?php echo e(Html::script('js/codemirror_addons/overlay.js')); ?>
+    <!-- Include helper functions -->
+    <?php echo e(Html::script('js/helper_functions.js')); ?>
 
     
-    <!-- Include codemirror.css -->
-    <?php echo e(Html::style('css/codemirror.css')); ?>
-
-    
-    <!-- Include Markdown and its addon GithubFlavoredMarkdown -->
-    <?php echo e(Html::script('js/codemirror_modes/markdown.js')); ?>
-
-    <?php echo e(Html::script('js/codemirror_modes/gfm.js')); ?>
-
-    
-    <script>
-    $(document).ready(function() {
-    	// Is any gfm-code text in the area?
-    	// (You just found a stupid pun. Congratulations!)
-    	if($("#gfm-code").length)
-    	{
-    		var editor = CodeMirror.fromTextArea(document.getElementById("gfm-code"), {
-        		mode: 'gfm',
-        		lineNumbers: true,
-        		theme: "default"
-      		});
-      	}
-    });
-    </script>
+    <?php /* yield possible additional scripts */ ?>
+    <?php echo $__env->yieldContent('scripts'); ?>
 </head>
 
 <body>

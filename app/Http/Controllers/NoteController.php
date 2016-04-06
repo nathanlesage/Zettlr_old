@@ -39,8 +39,8 @@ class NoteController extends Controller
         // For index output a list of all notes
         // views/notes/list.blade.php
         
-        // For now return an empty array
-        $notes = Note::all();
+        //$notes = Note::all();
+        $notes = Note::get(['title', 'id']);
         
         return view('notes.list', ['notes' => $notes]);
     }

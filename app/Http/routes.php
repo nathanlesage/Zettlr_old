@@ -38,6 +38,11 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('notes/create', 'NoteController@postCreate');
     Route::get('notes/edit', 'NoteController@edit');
     Route::get('notes/delete/{id}', 'NoteController@delete');
+    
+    // Ajax routes
+    Route::get('/ajax/note/{id}', 'AjaxController@getNoteContents');
+    Route::get('/ajax/note/delete/{id}', 'AjaxController@getDeleteNote');
+    Route::get('/ajax/tag/search/{term}', 'AjaxController@getTagSearch');
 });
 
 // Group all note-related actions together

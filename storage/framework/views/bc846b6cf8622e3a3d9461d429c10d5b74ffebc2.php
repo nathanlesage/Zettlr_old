@@ -34,7 +34,6 @@
     		            <input type="checkbox" name="remember"> Remember Me
                     </label>
                 </div>
-                <a class="btn btn-link" href="<?php echo e(url('/password/reset')); ?>">Forgot Your Password?</a>
             </div>
     
             <div class="form-group">
@@ -42,6 +41,7 @@
             </div>
                 
         </form>
+        <p><a class="btn btn-link" href="<?php echo e(url('/password/reset')); ?>">Forgot Your Password?</a></p>
     </div>
 </div>
 <?php $__env->stopSection(); ?>

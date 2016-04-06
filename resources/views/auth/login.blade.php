@@ -33,7 +33,6 @@
     		            <input type="checkbox" name="remember"> Remember Me
                     </label>
                 </div>
-                <a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
             </div>
     
             <div class="form-group">
@@ -41,6 +40,7 @@
             </div>
                 
         </form>
+        <p><a class="btn btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a></p>
     </div>
 </div>
 @endsection
