@@ -21,6 +21,19 @@ use GrahamCampbell\Markdown\Facades\Markdown;
  
 class AjaxController extends Controller
 {
+	/**
+     * Create a new controller instance.
+     * Use "auth" middleware.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+    	// Require the user to be logged in
+    	// for every action this controller does
+        $this->middleware('auth');
+    }
+    
     // Fetch note contents via given ID
     public function getNoteContents($id)
     {

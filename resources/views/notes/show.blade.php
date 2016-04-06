@@ -7,7 +7,7 @@
 @section('content')
 <div class="container" style="background-color:white">
 	<div class="page-header">
-		<h1>{{ $note->title }} <small>#{{ $note->id }}</small></h1>
+		<h1>{{ $note->title }} <small>#{{ $note->id }} &ndash; <a href="{{ url('notes/edit/'.$note->id) }}">Edit</a></small></h1>
 	</div>
 	<div>
 		{!! Markdown::convertToHtml($note->content) !!}
@@ -19,7 +19,7 @@
 		<div class="panel-body">
 			@if(count($note->tags) > 0)
 				@foreach($note->tags as $tag)
-					<button class="btn btn-primary">$tag->name</button>
+					<button class="btn btn-primary">{{ $tag->name }}</button>
 				@endforeach
 			@else
 				<div class="alert alert-info">No tags found</div>

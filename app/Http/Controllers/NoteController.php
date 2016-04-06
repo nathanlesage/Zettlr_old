@@ -81,7 +81,6 @@ class NoteController extends Controller
         
         // Now fill the join table
         
-        // TODO: Create new Tags and fill the join table
         // for each tag, search, and, if it does not exist, create it
         foreach($request->tags as $tagname)
         {
@@ -92,6 +91,65 @@ class NoteController extends Controller
         // Now redirect to note create as the user
         // definitely wants to add another note.
         return redirect(url('/notes/create'));
+    }
+    
+    public function getEdit($id) {
+    	$note = Note::find($id);
+    	$note->tags;
+    	return view('notes.edit', ['note' => $note]);
+    }
+    
+    public function postEdit(Request $request, $id) {
+    	// Update a note
+        
+         $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'content' => 'required|min:3',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/notes/edit/'.$id)
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        
+        // First add any potential new tags to the database.
+        // And also attach them if not done yet
+        $tagIDs;
+        foreach($request->tags as $tagname)
+        {
+        	$tag = Tag::firstOrCreate(["name" => $tagname]);
+        	//if(!$note->tags->contains($tag->id))
+        		//$note->tags()->attach($tag->id);
+        	// Also add the tags to our array
+        	$tagIDs[] = $tag->id;
+        }
+        
+        // Get the note
+        $note = Note::find($id);
+
+        // Sync, i.e. remove no longer existent tags and add new tags
+        $note->tags()->sync($tagIDs);
+        
+        // Update
+        $note->title = $request->title;
+        $note->content = $request->content;
+        $note->save();
+        
+        
+        // Now redirect to note create as the user
+        // definitely wants to add another note.
+        return redirect(url('/notes/show/'.$id));
+        
+        // Now fill the join table
+        
+        // for each tag, search, and, if it does not exist, create it
+        foreach($request->tags as $tagname)
+        {
+        	$tag = Tag::firstOrCreate(["name" => $tagname]);
+        	$note->tags()->attach($tag->id);
+        }
+        
     }
     
     public function delete($id) {

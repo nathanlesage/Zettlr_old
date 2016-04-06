@@ -34,11 +34,15 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/', 'NoteController@index'); // show all notes TODO: redirect to notes/index
     Route::get('/home', 'NoteController@home'); // admin area
     
-    Route::get('notes/index', 'NoteController@index');
-    Route::get('notes/create', 'NoteController@getCreate');
-    Route::post('notes/create', 'NoteController@postCreate');
-    Route::get('notes/edit', 'NoteController@edit');
-    Route::get('notes/show/{id}', 'NoteController@show');
+    Route::get ('notes/index',     'NoteController@index');
+    
+    Route::get ('notes/create',    'NoteController@getCreate');
+    Route::post('notes/create',    'NoteController@postCreate');
+    
+    Route::get ('notes/edit/{id}', 'NoteController@getEdit');
+    Route::post('notes/edit/{id}', 'NoteController@postEdit');
+    
+    Route::get ('notes/show/{id}', 'NoteController@show');
     // TODO: DEPRECATED
     Route::get('notes/delete/{id}', 'NoteController@delete');
     
