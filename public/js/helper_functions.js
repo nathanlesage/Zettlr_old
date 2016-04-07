@@ -11,7 +11,7 @@ function displayError(msg)
             		maxVisible  : 10
         			});
 	}
-	function displaySuccess(msg)
+function displaySuccess(msg)
 	{
 		noty({
             		text        : msg,
@@ -24,7 +24,7 @@ function displayError(msg)
             		maxVisible  : 10
         			});
 	}
-	function displayInfo(msg)
+function displayInfo(msg)
 	{
 		noty({
             		text        : msg,
@@ -37,7 +37,7 @@ function displayError(msg)
             		maxVisible  : 10
         			});
 	}
-	function displayWarning(msg)
+function displayWarning(msg)
 	{
 		noty({
             		text        : msg,
@@ -50,3 +50,10 @@ function displayError(msg)
             		maxVisible  : 10
         			});
 	}
+	
+// Adds a tag on the create and show (blade.php) forms
+function addTag()
+    {
+    	$("#tagList").append('<div class="alert alert-info alert-dismissable"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+      		$("#tagSearchBox").val("");
+    }

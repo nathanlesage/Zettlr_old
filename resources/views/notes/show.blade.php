@@ -4,10 +4,13 @@
 @section('scripts')
 @endsection
 
+@section('scripts_on_document_ready')
+@endsection
+
 @section('content')
 <div class="container" style="background-color:white">
 	<div class="page-header">
-		<h1>{{ $note->title }} <small>#{{ $note->id }} &ndash; <a href="{{ url('notes/edit/'.$note->id) }}">Edit</a></small></h1>
+		<h1>{{ $note->title }} <small>#{{ $note->id }} (<a href="{{ url('notes/edit/'.$note->id) }}">Edit</a>)</small></h1>
 	</div>
 	<div>
 		{!! Markdown::convertToHtml($note->content) !!}

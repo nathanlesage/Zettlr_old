@@ -1,31 +1,16 @@
 <?php /* Creation template */ ?>
 
 
-<?php /* There are no additional script tags, so remember to provide them */ ?>
+<?php /* Yield additional scripts */ ?>
 <?php $__env->startSection('scripts'); ?>
 
-<?php /*Include CodeMirror stuff*/ ?>
-<!-- Include codemirror main javascript -->
-<?php echo e(Html::script('js/codemirror.js')); ?>
+<?php $__env->stopSection(); ?>
 
-<!-- Bugfix that helps the textarea to be rendered successfully -->
-<?php echo e(Html::script('js/codemirror_addons/overlay.js')); ?>
+<?php /* Yield our document ready code */ ?>
 
-   
-<!-- Include codemirror.css -->
-<?php echo e(Html::style('css/codemirror.css')); ?>
+<?php /*For syntax highlighting purposes (yes, gedit needs this crap): <script>*/ ?>
+<?php $__env->startSection('scripts_on_document_ready'); ?>
 
-    
-<!-- Include Markdown and its addon GithubFlavoredMarkdown -->
-<?php echo e(Html::script('js/codemirror_modes/markdown.js')); ?>
-
-<?php echo e(Html::script('js/codemirror_modes/gfm.js')); ?>
-
-
-
-
-<script>
-$(document).ready(function() {
     	// Is any gfm-code text in the area?
     	// (You just found a stupid pun. Congratulations!)
     	if($("#gfm-code").length)
@@ -38,7 +23,7 @@ $(document).ready(function() {
         		// Set Tab to false to focus next input
         		// And let Shift-Enter submit the form.
         		extraKeys: { "Tab": false, 
-        					 "Shift-Enter": function(cm){ $("#createNewNoteForm").submit(); }
+        					 "Shift-Enter": function(cm){ $("#editNoteForm").submit(); }
         				   }
       		});
       		
@@ -47,7 +32,7 @@ $(document).ready(function() {
       		// submitting the form REGARDLESSLY of when we press it.
       		// TODO: Think about removing this (but think twice)
       		$("div.codeMirror-focused").bind('keyup', 'Shift+Return', function(){
-      			$("#createNewNoteForm").submit();
+      			$("#editNoteForm").submit();
       		});
       		
       		// Do we have any errors concerning content? Add them to the editor afterwards.
@@ -56,22 +41,39 @@ $(document).ready(function() {
       	}
       	
       	// Create the autocomplete box
+      	// Create the autocomplete box
       	$( "#tagSearchBox" ).autocomplete({
       		// The source option tells autocomplete to
       		// send the request (with the term the user typed)
       		// to a remote server and the response can be handled
         	source: function( request, response ) {
             	$.getJSON( "<?php echo e(url('/ajax/tag/search')); ?>/" + request.term, {}, function(data) {
-          			// Remove the keys from the JSON data
-          			tagArray = [];
-          			for(i = 0; i < data.length; i++)
-          				tagArray.push(data[i].name);
-          	
           			// Call the response function of autocompleteUI
-          			response(tagArray);
+          			// We don't need to alter our json object as we
+          			// will be filling in everything manually via
+          			// focus, select and the _renderItem function.
+          			response(data);
           		});
-        	}
-      	});
+        	},
+        	// Focus is what happens, when the user selects a menu item.
+        	// In our case autocomplete can't guess it, so we have to
+        	// manually tell it which key it should use
+        	focus: function( event, ui ) {
+        		$( "#tagSearchBox" ).val( ui.item.name );
+        		return false;
+      		},
+      		select: function( event, ui ) {
+      			// select function would assume to insert ui.item.label
+      			// so we've overwritten it.
+        		$( "#tagSearchBox" ).val( ui.item.name );
+        		addTag();
+        		return false;
+      		}
+      	}).autocomplete("instance")._renderItem = function(ul, item) {
+      		// Overwriting render function, as our JSON has key name, 
+      		// and not label (which renderItem would assume).
+      		return $("<li>").append(item.name).appendTo(ul);
+      	};
       	
       	// Prevent form submission by pressing Enter key in inputs
       	$(window).keydown(function(e){
@@ -84,13 +86,11 @@ $(document).ready(function() {
       	// Bind return key to adding the tag
       	$("#tagSearchBox").bind('keyup', 'Return', function(e){
       		e.preventDefault();
-      		console.log("Return on SearchBox pressed");
-      		$("#tagList").append('<div class="alert alert-info alert-dismissable"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-      		$("#tagSearchBox").val("");
+      		addTag();
       	});
-    });
-</script>
+
 <?php $__env->stopSection(); ?>
+<?php /*</script> for syntax highlighting purposes*/ ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="container" style="background-color:white">

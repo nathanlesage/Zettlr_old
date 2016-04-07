@@ -6,8 +6,12 @@
 <script>
 	// Helper variables
 	var currentElement = 0;
+</script>
+<?php $__env->stopSection(); ?>
 
-	$(document).ready(function() {
+<?php /* for syntax highlighting: <script>*/ ?>
+<?php $__env->startSection('scripts_on_document_ready'); ?>
+
 	// TODO: When manually clicking on element traverse ALL childs to
 	// close them all. Also, set currentElement to the clicked one.
 	// TODO: When deleting an element, make sure if it was the currentElement
@@ -123,9 +127,8 @@
     	}
     	
     	});
-    });
-</script>
 <?php $__env->stopSection(); ?>
+<?php /*</script> end syntax highlighting */ ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="container" style="background-color:white">

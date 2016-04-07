@@ -6,8 +6,12 @@
 <script>
 	// Helper variables
 	var currentElement = 0;
+</script>
+@endsection
 
-	$(document).ready(function() {
+{{-- for syntax highlighting: <script>--}}
+@section('scripts_on_document_ready')
+
 	// TODO: When manually clicking on element traverse ALL childs to
 	// close them all. Also, set currentElement to the clicked one.
 	// TODO: When deleting an element, make sure if it was the currentElement
@@ -123,9 +127,8 @@
     	}
     	
     	});
-    });
-</script>
 @endsection
+{{--</script> end syntax highlighting --}}
 
 @section('content')
 <div class="container" style="background-color:white">

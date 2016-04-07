@@ -32,7 +32,7 @@ Route::group(['middleware' => 'web'], function () {
 
 	// Redirect here if user is logged in
     Route::get('/', 'NoteController@index'); // show all notes TODO: redirect to notes/index
-    Route::get('/home', 'NoteController@home'); // admin area
+    Route::get('/home', 'NoteController@home'); // TODO: admin area
     
     Route::get ('notes/index',     'NoteController@index');
     
@@ -43,12 +43,13 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('notes/edit/{id}', 'NoteController@postEdit');
     
     Route::get ('notes/show/{id}', 'NoteController@show');
-    // TODO: DEPRECATED
+    // TODO: Not used right now, everything done via Ajax Controller
     Route::get('notes/delete/{id}', 'NoteController@delete');
     
     // Ajax routes
-    Route::get('/ajax/note/{id}', 'AjaxController@getNoteContents');
     Route::get('/ajax/note/delete/{id}', 'AjaxController@getDeleteNote');
+    Route::get('/ajax/note/search/{term}', 'AjaxController@getNoteSearch');
+    Route::get('/ajax/note/{id}', 'AjaxController@getNoteContents');
     Route::get('/ajax/tag/search/{term}', 'AjaxController@getTagSearch');
 });
 

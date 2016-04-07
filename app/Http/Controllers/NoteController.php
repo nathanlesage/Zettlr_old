@@ -61,6 +61,7 @@ class NoteController extends Controller
     
     public function postCreate(Request $request) {
         // Insert a note into the db
+        // New tags have ID = -1!
         
          $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
@@ -82,6 +83,7 @@ class NoteController extends Controller
         // Now fill the join table
         
         // for each tag, search, and, if it does not exist, create it
+        // TODO: Check for no tags given
         foreach($request->tags as $tagname)
         {
         	$tag = Tag::firstOrCreate(["name" => $tagname]);
@@ -116,6 +118,7 @@ class NoteController extends Controller
         // First add any potential new tags to the database.
         // And also attach them if not done yet
         $tagIDs;
+        // TODO: check for no tags given
         foreach($request->tags as $tagname)
         {
         	$tag = Tag::firstOrCreate(["name" => $tagname]);

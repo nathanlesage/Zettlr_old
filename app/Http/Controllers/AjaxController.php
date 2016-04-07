@@ -77,7 +77,7 @@ class AjaxController extends Controller
     {
     	// The "LIKE"-Statement in SQL just searches for the pattern
     	// anywhere in, at the beginning or the end of a term.
-    	$tags = Tag::where('name', 'LIKE', '%'.$term.'%')->get(['name']);
+    	$tags = Tag::where('name', 'LIKE', '%'.$term.'%')->get(['name', 'id']);
     	
     	if(! $tags)
     	{
@@ -86,6 +86,26 @@ class AjaxController extends Controller
     	else
     	{
     		return $tags;
+    	}
+    }
+    
+    public function getNoteSearch($term)
+    {
+    	// TODO: implement a "good" fulltext search.
+    	
+    	$notes = Note::where('content', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
+    	
+    	if(! $notes)
+    	{
+    		return response()->json(['message', 'No search results'], 404);
+    	}
+    	else
+    	{
+    		foreach($notes as $note)
+    		{
+    			$note->content = substr($note->content, 0, 60);
+    		}
+    		return $notes;
     	}
     }
 }
