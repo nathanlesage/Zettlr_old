@@ -155,7 +155,11 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
         $paths = is_array($paths) ? $paths : func_get_args();
 
         foreach ($paths as $path) {
-            $this->driver->delete($path);
+            try {
+                $this->driver->delete($path);
+            } catch (FileNotFoundException $e) {
+                //
+            }
         }
 
         return true;
@@ -229,6 +233,8 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
         $adapter = $this->driver->getAdapter();
 
         if ($adapter instanceof AwsS3Adapter) {
+            $path = $adapter->getPathPrefix().$path;
+
             return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
         } elseif ($adapter instanceof LocalAdapter) {
             return '/storage/'.$path;

@@ -47,11 +47,46 @@ class NoteController extends Controller
     }
     
     public function show($id) {
+    	// eager load Note with its tags
     	$note = Note::find($id);
-    	// Only with this statement does he catch the tags!
     	$note->tags;
+    	// does the note exist? If not, return error
+    	if(!$note)
+    		return redirect('notes/index')->withErrors(['message', 'That note does not exist!']);
+    		
+    	// Get all note and their tags if the tag ID is in our tags-array
+    	$tags = [];
+    	foreach($note->tags as $tag)
+    		$tags[] = $tag->id;
+    		
+    	// That was fucking hard to write :x
+    	$relatedNotes = Note::whereHas('tags', function($query) use($tags) {
+    		$query->whereIn('tag_id', $tags);
+    	})->get();
     	
-    	return view('notes.show', ['note' => $note]);
+    	// Now we have all relatedNotes
+    	// But they have ALL tags with them.
+    	// We have to determine the relevancy manually
+    	$maxCount = 0;
+    	foreach($relatedNotes as $n)
+    	{
+    		// count all similar tags and write a count-attribute to the model
+    		$count = 0;
+    		
+    		foreach($n->tags as $t)
+    			foreach($note->tags as $t2)
+    				if($t->id == $t2->id) {
+    					$count++;
+    					break;
+    				}
+    		
+    		$n->count = $count;
+    		// write current maxCount
+    		if($count > $maxCount)
+    			$maxCount = $count;
+    	}
+    	
+    	return view('notes.show', ['note' => $note, 'relatedNotes' => $relatedNotes, 'maxCount' => $maxCount]);
     }
     
     public function getCreate() {

@@ -89,12 +89,50 @@ class AjaxController extends Controller
     	}
     }
     
-    public function getNoteSearch($term)
+    public function getNoteSearch($term, $operator = "AND")
     {
     	// TODO: implement a "good" fulltext search.
+    	// $operator: can be any of the following values
+    	// "OR": find any word of $term (divided by spaces)
+    	// "AND": results must contain all words in $term at any position
+    	// "EXACT": results must contain the exact $term
+    	/* Deactivated because it broke the system
+    	switch($operator)
+    	{
+    		case "OR":
+    			// First divide the search terms
+    			$terms = explode(" ", $term);
+    			// Then build the query.
+    			// First get an empty query to be filled.
+    			$query = Note::query();
+    			// Now do a foreach loop of all terms
+    			foreach($terms as $t)
+    			{
+    				$query->where('', 'LIKE', '%'.$t.'%');
+    			}
+    			break;
+    		case "AND":
+    			// First divide the search terms
+    			$terms = explode(" ", $term);
+    			// SELECT title, content, id FROM TABLE notes WHERE (title LIKE $t[0] AND title LIKE $t[1]) OR WHERE (content LIKE $t[0] AND content LIKE $t[1])
+    			
+    			$notes = Note::orWhere(function($query) use($terms) {
+    				foreach($terms as $t)
+    					$query->where('title', 'LIKE', $t);
+    			})->orWhere(function($query) use($terms) {
+    				foreach($terms as $t)
+    					$query->where('content', 'LIKE', $t);
+    			})->get();
+    			break;
+    		case "EXACT":
+    			// Easy piece of cake:
+    			$notes = Note::where('content', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
+    		break;
+    	}*/
     	
-    	$notes = Note::where('content', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
+    	$notes = Note::where('content', 'LIKE', '%'.$term.'%')->orWhere('title', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
     	
+    	// Do we have a search result?
     	if(! $notes)
     	{
     		return response()->json(['message', 'No search results'], 404);
@@ -103,7 +141,7 @@ class AjaxController extends Controller
     	{
     		foreach($notes as $note)
     		{
-    			$note->content = substr($note->content, 0, 60);
+    			$note->content = substr($note->content, 0, 120)."&hellip;";
     		}
     		return $notes;
     	}

@@ -12,7 +12,6 @@ use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 class Request extends SymfonyRequest implements Arrayable, ArrayAccess
 {
@@ -24,6 +23,13 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
      * @var string
      */
     protected $json;
+
+    /**
+     * All of the converted files for the request.
+     *
+     * @var array
+     */
+    protected $convertedFiles;
 
     /**
      * The user resolver callback.
@@ -103,6 +109,19 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
         $question = $this->getBaseUrl().$this->getPathInfo() == '/' ? '/?' : '?';
 
         return $query ? $this->url().$question.$query : $this->url();
+    }
+
+    /**
+     * Get the full URL for the request with the added query string parameters.
+     *
+     * @param  array  $query
+     * @return string
+     */
+    public function fullUrlWithQuery(array $query)
+    {
+        return count($this->query()) > 0
+                        ? $this->url().'/?'.http_build_query(array_merge($this->query(), $query))
+                        : $this->fullUrl().'?'.http_build_query($query);
     }
 
     /**
@@ -398,7 +417,11 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
      */
     public function allFiles()
     {
-        return $this->convertUploadedFiles($this->files->all());
+        $files = $this->files->all();
+
+        return $this->convertedFiles
+                    ? $this->convertedFiles
+                    : $this->convertedFiles = $this->convertUploadedFiles($files);
     }
 
     /**
@@ -410,6 +433,10 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
     protected function convertUploadedFiles(array $files)
     {
         return array_map(function ($file) {
+            if (is_null($file) || (is_array($file) && empty(array_filter($file)))) {
+                return $file;
+            }
+
             return is_array($file)
                         ? $this->convertUploadedFiles($file)
                         : UploadedFile::createFromBase($file);
@@ -425,13 +452,7 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
      */
     public function file($key = null, $default = null)
     {
-        $file = data_get($this->files->all(), $key, $default);
-
-        if (is_array($file)) {
-            return $this->convertUploadedFiles($file);
-        } elseif ($file instanceof SymfonyUploadedFile) {
-            return $this->convertUploadedFiles([$file])[0];
-        }
+        return data_get($this->allFiles(), $key, $default);
     }
 
     /**

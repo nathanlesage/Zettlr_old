@@ -80,12 +80,6 @@
       			return false;
     		}
  		});
-      	
-      	// Bind return key to adding the tag
-      	$("#tagSearchBox").bind('keyup', 'Return', function(e){
-      		e.preventDefault();
-      		addTag();
-      	});
     
 @endsection
 {{--</script> end syntax highlighting--}}

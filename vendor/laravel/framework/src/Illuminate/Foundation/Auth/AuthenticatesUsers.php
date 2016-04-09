@@ -179,6 +179,16 @@ trait AuthenticatesUsers
     }
 
     /**
+     * Get the guest middleware for the application.
+     */
+    public function guestMiddleware()
+    {
+        $guard = $this->getGuard();
+
+        return $guard ? 'guest:'.$guard : 'guest';
+    }
+
+    /**
      * Get the login username to be used by the controller.
      *
      * @return string
@@ -196,7 +206,7 @@ trait AuthenticatesUsers
     protected function isUsingThrottlesLoginsTrait()
     {
         return in_array(
-            ThrottlesLogins::class, class_uses_recursive(get_class($this))
+            ThrottlesLogins::class, class_uses_recursive(static::class)
         );
     }
 
