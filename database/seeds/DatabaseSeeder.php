@@ -129,33 +129,7 @@ Familie liefert zudem ideologischen Grundlage, auf welcher sich Staat und Kapita
 
 > "The left is horrified by the fact that workers—male and female, waged and unwaged—want more money, more time for themselves, more power, instead of being concerned with figuring out how to rationalise production"? (Cox & Federici 1976, 18)'
         ]);
-        
-        DB::table('tags')->insert(['name' => "Arbeit"]);
-        DB::table('tags')->insert(['name' => "Arbeitsteilung"]);
-DB::table('tags')->insert(['name' => "Asketismus"]);
-DB::table('tags')->insert(['name' => "Autonomismus"]);
-DB::table('tags')->insert(['name' => "Begierde / Verlangen / Wunsch"]);
-DB::table('tags')->insert(['name' => "Familie"]);
-DB::table('tags')->insert(['name' => "Feminismus"]);
-DB::table('tags')->insert(['name' => "Forderung"]);
-DB::table('tags')->insert(['name' => "Frauen"]);
-DB::table('tags')->insert(['name' => "Fredric Jameson"]);
-DB::table('tags')->insert(['name' => "Gender"]);
-DB::table('tags')->insert(['name' => "Gesellschaft"]);
-DB::table('tags')->insert(['name' => "Kathi Weeks"]);
-DB::table('tags')->insert(['name' => "Klassenkampf"]);
-DB::table('tags')->insert(['name' => "Kritik"]);
-DB::table('tags')->insert(['name' => "Macht"]);
-DB::table('tags')->insert(['name' => "Produktion"]);
-DB::table('tags')->insert(['name' => "Nihilismus"]);
-DB::table('tags')->insert(['name' => "Hegel is my waifu"]);
-DB::table('tags')->insert(['name' => "ToDo"]);
-DB::table('tags')->insert(['name' => "ToGulag"]);
-DB::table('tags')->insert(['name' => "Base > Superstructure"]);
-DB::table('tags')->insert(['name' => "ToGulag"]);
-DB::table('tags')->insert(['name' => "Lorem Ipsum Dolor Sit Amet, consectetur adipisici elit, sed eiusmod tempor"]);
-        
-
+     
         DB::table('notes')->insert([
             'title' => 'Psychologie & Ideologie. Naturalisierungsprozesse sozialer Ungleichheit. Positivismus',
             'content' => 'Zwei besonders beliebte Methoden zur Naturalisierung (oder besser gesagt Biologisierung) von sozialen Phänomenen sind Evolutionspsychologie & alles was mit Genetik zu tun hat.
@@ -238,6 +212,81 @@ Jacobi ist der Ansicht, dass das Prinzip der Subjekt-Objekt Identität im Ideali
 
 > Hat man in aller Tiefe begriffen — und ich verlange, dass man hier gerade tief greift, tief begreift — inwiefern es schlechterdings nicht die Aufgabe der Gesunden sein kann, Kranke zu warten, Kranke gesund zu machen, so ist damit auch eine Nothwendigkeit mehr begriffen, — die Nothwendigkeit von Ärzten und Krankenwärtern, die selber krank sind: und nunmehr haben und halten wir den Sinn des asketischen Priesters mit beiden Händen. Der asketische Priester muss uns als der vorherbestimmte Heiland, Hirt und Anwalt der kranken Heerde gelten: damit erst verstehen wir seine ungeheure historische Mission. Die Herrschaft über Leidende ist sein Reich, auf sie weist ihn sein Instinkt an, in ihr hat er seine eigenste Kunst, seine Meisterschaft, seine Art von Glück. Er muss selber krank sein, er muss den Kranken und Schlechtweggekommenen von Grund aus verwandt sein, um sie zu verstehen, — um sich mit ihnen zu verstehen; aber er muss auch stark sein, mehr Herr noch über sich als über Andere, unversehrt namentlich in seinem Willen zur Macht, damit er das Vertrauen und die Furcht der Kranken hat, damit er ihnen Halt, Widerstand, Stütze, Zwang, Zuchtmeister, Tyrann, Gott sein kann. Er hat sie zu vertheidigen, seine Heerde — gegen wen? Gegen die Gesunden, es ist kein Zweifel, auch gegen den Neid auf die Gesunden; er muss der natürliche Widersacher und Verächter aller rohen, stürmischen, zügellosen, harten, gewaltthätig-raubthierhaften Gesundheit und Mächtigkeit sein. Der Priester ist die erste Form des delikateren Thiers, das leichter noch verachtet als hasst. Es wird ihm nicht erspart bleiben, Krieg zu führen mit den Raubthieren, einen Krieg der List (des „Geistes“) mehr als der Gewalt, wie sich von selbst versteht, — er wird es dazu unter Umständen nöthig haben, beinahe einen neuen Raubthier-Typus an sich herauszubilden, mindestens zu bedeuten, — eine neue Thier-Furchtbarkeit, in welcher der Eisbär, die geschmeidige kalte abwartende Tigerkatze und nicht am wenigsten der Fuchs zu einer ebenso anziehenden als furchteinflössenden Einheit gebunden scheinen. Gesetzt, dass die Noth ihn zwingt, so tritt er dann wohl bärenhafternst, ehrwürdig, klug, kalt, trügerisch-überlegen, als Herold und Mundstück geheimnissvollerer Gewalten, mitten unter die andere Art Raubthiere selbst, entschlossen, auf diesem Boden Leid, Zwiespalt, Selbstwiderspruch, wo er kann, auszusäen und, seiner Kunst nur zu gewiss, über Leidende jederzeit Herr zu werden. Er bringt Salben und Balsam mit, es ist kein Zweifel; aber erst hat er nöthig, zu verwunden, um Arzt zu sein; indem er dann den Schmerz stillt, den die Wunde macht, vergiftet er zugleich die Wunde — darauf vor Allem nämlich versteht er sich, dieser Zauberer und Raubthier-Bändiger, in dessen Umkreis alles Gesunde nothwendig krank und alles Kranke nothwendig zahm wird. Er vertheidigt in der That gut genug seine kranke Heerde, dieser seltsame Hirt, — er vertheidigt sie auch gegen sich, gegen die in der Heerde selbst glimmende Schlechtigkeit, Tücke, Böswilligkeit und was sonst allen Süchtigen und Kranken unter einander zu eigen ist, er kämpft klug, hart und heimlich mit der Anarchie und der jederzeit beginnenden Selbstauflösung innerhalb der Heerde, in welcher jener gefährlichste Spreng- und Explosivstoff, das Ressentiment, sich beständig häuft und häuft. Diesen Sprengstoff so zu entladen, dass er nicht die Heerde und nicht den Hirten zersprengt, das ist sein eigentliches Kunststück, auch seine oberste Nützlichkeit; wollte man den Werth der priesterlichen Existenz in die kürzeste Formel fassen, so wäre geradewegs zu sagen: der Priester ist der Richtungs-Veränderer des Ressentiment. Jeder Leidende nämlich sucht instinktiv zu seinem Leid eine Ursache; genauer noch, einen Thäter, noch bestimmter, einen für Leid empfänglichen schuldigen Thäter, — kurz, irgend etwas Lebendiges, an dem er seine Affekte thätlich oder in effigie auf irgend einen Vorwand hin entladen kann: denn die Affekt-Entladung ist der grösste Erleichterungs- nämlich Betäubungs-Versuch des Leidenden, sein unwillkürlich begehrtes Narcoticum gegen Qual irgend welcher Art. Hierin allein ist, meiner Vermuthung nach, die wirkliche physiologische Ursächlichkeit des Ressentiment, der Rache und ihrer Verwandten, zu finden, in einem Verlangen also nach Betäubung von Schmerz durch Affekt: — man sucht dieselbe gemeinhin, sehr irrthümlich, wie mich dünkt, in dem Defensiv-Gegenschlag, einer blossen Schutzmaassregel der Reaktion, einer „Reflexbewegung“ im Falle irgend einer plötzlichen Schädigung und Gefährdung, von der Art, wie sie ein Frosch ohne Kopf noch vollzieht, um eine ätzende Säure loszuwerden. Aber die Verschiedenheit ist fundamental: im Einen Falle will man weiteres Beschädigtwerden hindern, im anderen Falle will man einen quälenden, heimlichen, unerträglich-werdenden Schmerz durch eine heftigere Emotion irgend welcher Art betäuben und für den Augenblick wenigstens aus dem Bewusstsein schaffen, — dazu braucht man einen Affekt, einen möglichst wilden Affekt und, zu dessen Erregung, den ersten besten Vorwand. „Irgend Jemand muss schuld daran sein, dass ich mich schlecht befinde“ — diese Art zu schliessen ist allen Krankhaften eigen, und zwar je mehr ihnen die wahre Ursache ihres Sich-Schlecht-Befindens, die physiologische, verborgen bleibt (— sie kann etwa in einer Erkrankung des nervus sympathicus liegen oder in einer übermässigen Gallen-Absonderung, oder an einer Armuth des Blutes an schwefel- und phosphorsaurem Kali oder in Druckzuständen des Unterleibes, welche den Blutumlauf stauen, oder in Entartung der Eierstöcke und dergleichen). Die Leidenden sind allesammt von einer entsetzlichen Bereitwilligkeit und Erfindsamkeit in Vorwänden zu schmerzhaften Affekten; sie geniessen ihren Argwohn schon, das Grübeln über Schlechtigkeiten und scheinbare Beeinträchtigungen, sie durchwühlen die Eingeweide ihrer Vergangenheit und Gegenwart nach dunklen fragwürdigen Geschichten, wo es ihnen freisteht, in einem quälerischen Verdachte zu schwelgen und am eignen Gifte der Bosheit sich zu berauschen — sie reissen die ältesten Wunden auf, sie verbluten sich an längst ausgeheilten Narben, sie machen Übelthäter aus Freund, Weib, Kind und was sonst ihnen am nächsten steht. „Ich leide: daran muss irgend Jemand schuld sein“ — also denkt jedes krankhafte Schaf. Aber sein Hirt, der asketische Priester, sagt zu ihm: „Recht so, mein Schaf! irgend wer muss daran schuld sein: aber du selbst bist dieser Irgend-Wer, du selbst bist daran allein schuld, — du selbst bist an dir allein schuld!“… Das ist kühn genug, falsch genug: aber Eins ist damit wenigstens erreicht, damit ist, wie gesagt, die Richtung des Ressentiment — verändert.'
         ]);
+        
+        DB::table('tags')->insert([['name' => "Arbeit"],
+        						  ['name' => "Arbeitsteilung"],
+        						  ['name' => "Asketismus"],
+        						  ['name' => "Autonomismus"],
+        						  ['name' => "Begierde / Verlangen / Wunsch"],
+        						  ['name' => "Familie"],
+        						  ['name' => "Feminismus"],
+        						  ['name' => "Forderung"],
+        						  ['name' => "Frauen"],
+        						  ['name' => "Fredric Jameson"],
+        						  ['name' => "Gender"],
+        						  ['name' => "Gesellschaft"],
+        						  ['name' => "Kathi Weeks"],
+        						  ['name' => "Klassenkampf"],
+        						  ['name' => "Kritik"],
+        						  ['name' => "Macht"],
+        						  ['name' => "Produktion"],
+        						  ['name' => "Nihilismus"],
+        						  ['name' => "Hegel is my waifu"],
+        						  ['name' => "ToDo"],
+        						  ['name' => "ToGulag"],
+        						  ['name' => "Base > Superstructure"],
+        						  ['name' => "ToGulag"],
+        						  ['name' => "Lorem Ipsum Dolor Sit Amet, consectetur adipisici elit, sed eiusmod tempor"]]);
+        						  
+		// We have 14 notes and 24 tags - let's assign them a little bit randomly
+		DB::table('note_tag')->insert([['note_id' => 1, 'tag_id' =>2],
+									  ['note_id' => 1, 'tag_id' =>3],
+									  ['note_id' => 1, 'tag_id' =>5],
+									  ['note_id' => 1, 'tag_id' =>6],
+									  ['note_id' => 1, 'tag_id' =>12],
+									  ['note_id' => 2, 'tag_id' =>3],
+									  ['note_id' => 2, 'tag_id' =>8],
+									  ['note_id' => 2, 'tag_id' =>9],
+									  ['note_id' => 2, 'tag_id' =>16],
+									  ['note_id' => 3, 'tag_id' =>3],
+									  ['note_id' => 3, 'tag_id' =>16],
+									  ['note_id' => 4, 'tag_id' =>16],
+									  ['note_id' => 4, 'tag_id' =>17],
+									  ['note_id' => 4, 'tag_id' =>20],
+									  ['note_id' => 4, 'tag_id' =>22],
+									  ['note_id' => 4, 'tag_id' =>23],
+									  ['note_id' => 5, 'tag_id' =>1],
+									  ['note_id' => 5, 'tag_id' =>2],
+									  ['note_id' => 5, 'tag_id' =>14],
+									  ['note_id' => 6, 'tag_id' =>1],
+									  ['note_id' => 6, 'tag_id' =>5],
+									  ['note_id' => 6, 'tag_id' =>9],
+									  ['note_id' => 6, 'tag_id' =>24],
+									  ['note_id' => 7, 'tag_id' =>22],
+									  ['note_id' => 7, 'tag_id' =>23],
+									  ['note_id' => 8, 'tag_id' =>10],
+									  ['note_id' => 9, 'tag_id' =>3],
+									  ['note_id' => 9, 'tag_id' =>7],
+									  ['note_id' => 9, 'tag_id' =>8],
+									  ['note_id' => 9, 'tag_id' =>14],
+									  ['note_id' => 9, 'tag_id' =>20],
+									  ['note_id' => 10, 'tag_id' =>3],
+									  ['note_id' => 10, 'tag_id' =>7],
+									  ['note_id' => 10, 'tag_id' =>9],
+									  ['note_id' => 10, 'tag_id' =>10],
+									  ['note_id' => 11, 'tag_id' =>5],
+									  ['note_id' => 11, 'tag_id' =>6],
+									  ['note_id' => 11, 'tag_id' =>7],
+									  ['note_id' => 12, 'tag_id' =>1],
+									  ['note_id' => 12, 'tag_id' =>2],
+									  ['note_id' => 12, 'tag_id' =>3],
+									  ['note_id' => 13, 'tag_id' =>10],
+									  ['note_id' => 13, 'tag_id' =>11],
+									  ['note_id' => 13, 'tag_id' =>12],
+									  ['note_id' => 13, 'tag_id' =>13],
+									  ['note_id' => 13, 'tag_id' =>14],
+									  ['note_id' => 14, 'tag_id' =>15],
+									  ['note_id' => 14, 'tag_id' =>16]]);
         
     }
 }

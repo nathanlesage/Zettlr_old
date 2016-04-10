@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 
 // For rendering the markup within the view
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -64,6 +65,10 @@ class NoteController extends Controller
     		$query->whereIn('tag_id', $tags);
     	})->get();
     	
+    	// Now remove this note from collection (to reduce inception level)
+    	$relatedNotes = $relatedNotes->keyBy('id');
+    	$relatedNotes->forget($note->id);
+    	
     	// Now we have all relatedNotes
     	// But they have ALL tags with them.
     	// We have to determine the relevancy manually
@@ -86,7 +91,15 @@ class NoteController extends Controller
     			$maxCount = $count;
     	}
     	
-    	return view('notes.show', ['note' => $note, 'relatedNotes' => $relatedNotes, 'maxCount' => $maxCount]);
+    	// Now we need to sort the relatedNotes by relevancy
+    	//$relatedNotes = array_values(array_sort($relatedNotes, function($value) { return $value->count; }));
+    	//array_multisort($relatedNotes, "SORT_DESC", );
+    	$relatedNotes = Collection::make($relatedNotes)->sortBy(function($value) { return $value->count; }, SORT_REGULAR, true)->all();
+    	
+    	// Now retrieve IDs and title of all linked notes
+    	$linkedNotes = $note->notes;
+    	
+    	return view('notes.show', ['note' => $note, 'relatedNotes' => $relatedNotes, 'maxCount' => $maxCount, 'linkedNotes' => $linkedNotes]);
     }
     
     public function getCreate() {

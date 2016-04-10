@@ -9,6 +9,10 @@
 body
 {
     background-image:url(../img/notes.main.background.jpg);
+    background-position:top center;
+    background-attachment:fixed;
+    /* Hack for fixed navbar */
+    padding-top:70px;
 }
 
 /*

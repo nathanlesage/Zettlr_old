@@ -89,46 +89,9 @@ class AjaxController extends Controller
     	}
     }
     
-    public function getNoteSearch($term, $operator = "AND")
+    public function getNoteSearch($term)
     {
     	// TODO: implement a "good" fulltext search.
-    	// $operator: can be any of the following values
-    	// "OR": find any word of $term (divided by spaces)
-    	// "AND": results must contain all words in $term at any position
-    	// "EXACT": results must contain the exact $term
-    	/* Deactivated because it broke the system
-    	switch($operator)
-    	{
-    		case "OR":
-    			// First divide the search terms
-    			$terms = explode(" ", $term);
-    			// Then build the query.
-    			// First get an empty query to be filled.
-    			$query = Note::query();
-    			// Now do a foreach loop of all terms
-    			foreach($terms as $t)
-    			{
-    				$query->where('', 'LIKE', '%'.$t.'%');
-    			}
-    			break;
-    		case "AND":
-    			// First divide the search terms
-    			$terms = explode(" ", $term);
-    			// SELECT title, content, id FROM TABLE notes WHERE (title LIKE $t[0] AND title LIKE $t[1]) OR WHERE (content LIKE $t[0] AND content LIKE $t[1])
-    			
-    			$notes = Note::orWhere(function($query) use($terms) {
-    				foreach($terms as $t)
-    					$query->where('title', 'LIKE', $t);
-    			})->orWhere(function($query) use($terms) {
-    				foreach($terms as $t)
-    					$query->where('content', 'LIKE', $t);
-    			})->get();
-    			break;
-    		case "EXACT":
-    			// Easy piece of cake:
-    			$notes = Note::where('content', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
-    		break;
-    	}*/
     	
     	$notes = Note::where('content', 'LIKE', '%'.$term.'%')->orWhere('title', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
     	
@@ -145,5 +108,31 @@ class AjaxController extends Controller
     		}
     		return $notes;
     	}
+    }
+    
+    public function getLinkNotes($id1, $id2)
+    {
+    	if(($id1 <= 0) || ($id2 <= 0))
+    		return response()->json(['message', 'Bad request: An ID was invalid'], 400);
+    	
+    	try
+    	{
+    		Note::findOrFail($id1);
+    		Note::findOrFail($id2);
+    	}
+    	catch(ModelNotFoundException $e)
+    	{
+    		return response()->json(['message', 'Some ID did not belong to any note'], 404);
+    	}
+    	
+    	// This note is the currently active note
+    	$note = Note::find($id1);
+    	$note2 = Note::find($id2);
+    	
+    	//  And it should be attached to this ID (and vice versa)
+    	$note->notes()->attach($id2);
+    	$note2->notes()->attach($id1);
+    	
+    	return response()->json(['message', 'Notes linked successfully'], 200);
     }
 }

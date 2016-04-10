@@ -25,6 +25,15 @@
     			openNote(myPanel);
     	});
     	
+    	$("div.onClickLoadNote").mouseover(function() {
+    		if(!$(this).parent().hasClass("panel-primary"))
+    			$(this).parent().addClass("panel-info");
+    	});
+    	$("div.onClickLoadNote").mouseout(function() {
+    		if(!$(this).parent().hasClass("panel-primary") || $(this).parent().hasClass("panel-info"))
+    			$(this).parent().removeClass("panel-info");
+    	});
+    	
     	// Close panel on focus lose to pertain consistency with keyboard nav
     	$("div.panel-default").blur(function() {
     		console.log("blur");
@@ -51,13 +60,10 @@
     			displaySuccess("Note deleted successfully");
     				myAnchor.parent().parent().parent().remove();
     			});
-    			
-    			// myElem.parent().parent().remove();
     		})
     		.fail(function() {
     			displayError("Could not remove note");
     		});
-    	
     	});
 <?php $__env->stopSection(); ?>
 <?php /*</script> end syntax highlighting */ ?>
@@ -72,8 +78,8 @@
        <?php /* The content of the notes will be dynamically loaded */ ?>
         <?php foreach($notes as $note): ?>
         <div class="panel panel-default" id="<?php echo e($note->id); ?>">
-  			<div class="panel-heading onClickLoadNote">
-    			<h3 class="panel-title" style="cursor:pointer;"><?php echo e($note->id); ?> &mdash; <?php echo e($note->title); ?> <a href="#" class="pull-right onClickRemoveNote"><span class="glyphicon glyphicon-remove"></span></a></h3>
+  			<div class="panel-heading onClickLoadNote" style="cursor:pointer;">
+    			<h3 class="panel-title"><?php echo e($note->id); ?> &mdash; <?php echo e($note->title); ?> <span class="pull-right"><a title="Inspect this note in Trail Mode" data-toggle="tooltip" href="<?php echo e(url('/notes/show')); ?>/<?php echo e($note->id); ?>"><span class="glyphicon glyphicon-search"></span></a>&nbsp;&nbsp;<a title="Edit this note" data-toggle="tooltip" href="<?php echo e(url('/notes/edit/')); ?>/<?php echo e($note->id); ?>"><span class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;<a title="Permanently delete note" href="#" class="onClickRemoveNote"><span class="glyphicon glyphicon-remove"></span></a></span></h3>
   			</div>
 		</div>
         <?php endforeach; ?>

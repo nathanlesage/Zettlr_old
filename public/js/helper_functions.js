@@ -73,11 +73,6 @@ function setFocus(myPanel)
    		$(this).removeAttr("tabindex");
    		$(this).next().children(".panel-heading")[0].click();
    		closeNote($(this));
-   		/*$(this).children(".panel-body").slideUp("fast", function() {
-   			// Remove highlight class
-   			$(this).parent().removeClass("panel-primary");
-   			$(this).remove();
-   		});*/
    	});
    	myPanel.bind("keydown", "up", function(e) {
    		// Is there a prev element?
@@ -88,11 +83,6 @@ function setFocus(myPanel)
    		$(this).removeAttr("tabindex");
    		$(this).prev().children(".panel-heading")[0].click();
    		closeNote($(this));
-   		/*$(this).children(".panel-body").slideUp("fast", function() {
-   			// Remove highlight class
-   			$(this).parent().removeClass("panel-primary");
-   			$(this).remove();
-   		})*/;
    	});
 }
 
@@ -117,7 +107,8 @@ function openNote(myPanel)
    		
    		// At last scroll to the panel. Because it looks nice.
    		$('html, body').animate({
-   			scrollTop: myPanel.offset().top
+   			// add the body padding (fixed navbar hack)
+   			scrollTop: myPanel.offset().top - parseInt($("body").css("paddingTop"))
    			}, 100);
    		
    		setFocus(myPanel);

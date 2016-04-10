@@ -19,4 +19,11 @@ class Note extends Model
     {
     	return $this->belongsToMany('App\Tag')->withTimeStamps();
     }
+    
+    public function notes()
+    {
+    	// Inception part 2: Referencing a model within itself
+    	// blongsToMany(Note, pivot table name, first foreign, second foreign)
+    	return $this->belongsToMany('App\Note', 'note_note', 'note1_id', 'note2_id')->withTimeStamps();
+    }
 }

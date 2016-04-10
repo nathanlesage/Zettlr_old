@@ -51,6 +51,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/ajax/note/search/{term}', 'AjaxController@getNoteSearch');
     Route::get('/ajax/note/{id}', 'AjaxController@getNoteContents');
     Route::get('/ajax/tag/search/{term}', 'AjaxController@getTagSearch');
+    Route::get('/ajax/link/{id1}/with/{id2}', 'AjaxController@getLinkNotes');
 });
 
 // Group all note-related actions together

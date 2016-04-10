@@ -52,6 +52,9 @@
     <script>
     $(document).ready(function() {
     
+    // Select all elements with data-toggle="tooltip" in the document
+	$('[data-toggle="tooltip"]').tooltip(); 
+    
     @yield('scripts_on_document_ready')
     
     /*
@@ -109,7 +112,7 @@
 
     <!-- Navigation -->
     @if (Auth::check())
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
