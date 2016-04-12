@@ -33,30 +33,40 @@ Route::group(['middleware' => 'web'], function () {
 	// Redirect here if user is logged in
     Route::get('/', 'NoteController@index'); // show all notes TODO: redirect to notes/index
     Route::get('/home', 'NoteController@home'); // TODO: admin area
-    
+
     Route::get ('notes/index',     'NoteController@index');
-    
-    Route::get ('notes/create',    'NoteController@getCreate');
+
+    Route::get ('notes/create/{outlineId?}',    'NoteController@getCreate');
     Route::post('notes/create',    'NoteController@postCreate');
-    
+
     Route::get ('notes/edit/{id}', 'NoteController@getEdit');
     Route::post('notes/edit/{id}', 'NoteController@postEdit');
-    
+
     Route::get ('notes/show/{id}', 'NoteController@show');
     // TODO: Not used right now, everything done via Ajax Controller
     Route::get('notes/delete/{id}', 'NoteController@delete');
-    
+
+    Route::get('outlines/', 'OutlineController@index');
+    Route::get('outlines/create', 'OutlineController@getCreate');
+    Route::post('outlines/create', 'OutlineController@postCreate');
+    Route::get('outlines/show/{id}', 'OutlineController@show');
+
     // Ajax routes
     Route::get('/ajax/note/delete/{id}', 'AjaxController@getDeleteNote');
     Route::get('/ajax/note/search/{term}', 'AjaxController@getNoteSearch');
     Route::get('/ajax/note/{id}', 'AjaxController@getNoteContents');
     Route::get('/ajax/tag/search/{term}', 'AjaxController@getTagSearch');
     Route::get('/ajax/link/{id1}/with/{id2}', 'AjaxController@getLinkNotes');
+    // M-m-m-monster link!
+    Route::get('/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}', 'AjaxController@getOutlineAttach');
+    Route::get('/ajax/changeindex/{type}/{elementId}/{outlineId}/{newIndex}', 'AjaxController@getChangeIndex');
+    Route::get('/ajax/outline/detach/{outlineId}/{noteId}', 'AjaxController@getOutlineDetachNote');
+    Route::get('/ajax/outline/remove/{outlineId}/{customId}', 'AjaxController@getOutlineRemoveCustom');
 });
 
 // Group all note-related actions together
 Route::group(['prefix' => 'notes'], function () {
-    
+
 });
 
 // Group all outline-related actions together
@@ -65,7 +75,3 @@ Route::group(['prefix' => 'outline'], function() {
     Route::get('create', 'OutlineController@create');
     Route::get('edit', 'OutlineController@edit');
 });
-
-
-
-

@@ -14,16 +14,26 @@ class Note extends Model
     protected $fillable = [
     'title', 'content'
     ];
-    
+
     public function tags()
     {
-    	return $this->belongsToMany('App\Tag')->withTimeStamps();
+    	return $this->belongsToMany('App\Tag')->withTimestamps();
     }
-    
+
     public function notes()
     {
     	// Inception part 2: Referencing a model within itself
     	// blongsToMany(Note, pivot table name, first foreign, second foreign)
     	return $this->belongsToMany('App\Note', 'note_note', 'note1_id', 'note2_id')->withTimeStamps();
+    }
+
+    public function outlines()
+    {
+      return $this->belongsToMany('App\Outline')->withPivot('index')->withTimestamps();
+    }
+
+    public function references()
+    {
+      return $this->belongsToMany('App\Reference')->withTimestamps();
     }
 }

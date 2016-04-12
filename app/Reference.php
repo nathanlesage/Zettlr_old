@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tag extends Model
+class Reference extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,12 +12,12 @@ class Tag extends Model
      * @var array
      */
     protected $fillable = [
-    'name'
+    'title', 'year', 'author_last', 'author_first', 'reference_type'
     ];
 
     public function notes()
     {
-    	return $this->belongsToMany('App\Note')->withTimestamps();
+      return $this->belongsToMany('App\Note')->withTimestamps();
     }
 
     public function outlines()

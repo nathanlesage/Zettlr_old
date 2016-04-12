@@ -16,6 +16,10 @@ class CreateReferencesTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->String('title', 255);
+            $table->String('author_last', 255);
+            $table->String('author_fist', 255);
+            $table->Integer('year')->unsigned();
+            $table->String('reference_type', 255);
         });
     }
 

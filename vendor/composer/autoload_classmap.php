@@ -6,9 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateCustomFieldsTable' => $baseDir . '/database/migrations/2016_04_11_155151_create_custom_fields_table.php',
     'CreateNoteNoteTable' => $baseDir . '/database/migrations/2016_04_10_102937_create_note_note_table.php',
+    'CreateNoteOutlineTable' => $baseDir . '/database/migrations/2016_04_11_160707_create_note_outline_table.php',
     'CreateNoteTagTable' => $baseDir . '/database/migrations/2016_04_06_174737_create_note_tag_table.php',
     'CreateNotesTable' => $baseDir . '/database/migrations/2016_02_23_181027_create_notes_table.php',
+    'CreateOutlineTagTable' => $baseDir . '/database/migrations/2016_04_12_152730_create_outline_tag_table.php',
+    'CreateOutlinesTable' => $baseDir . '/database/migrations/2016_04_10_121454_create_outlines_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateReferencesTable' => $baseDir . '/database/migrations/2016_02_23_184040_create_references_table.php',
     'CreateTagsTable' => $baseDir . '/database/migrations/2016_02_23_183129_create_tags_table.php',

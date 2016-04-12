@@ -22,11 +22,11 @@
         		lineWrapping: true,
         		// Set Tab to false to focus next input
         		// And let Shift-Enter submit the form.
-        		extraKeys: { "Tab": false, 
+        		extraKeys: { "Tab": false,
         					 "Shift-Enter": function(cm){ $("#editNoteForm").submit(); }
         				   }
       		});
-      		
+
       		// Submit form on Shift+Enter
       		// We're binding it to the document, which leads to
       		// submitting the form REGARDLESSLY of when we press it.
@@ -34,13 +34,12 @@
       		$("div.codeMirror-focused").bind('keyup', 'Shift+Return', function(){
       			$("#editNoteForm").submit();
       		});
-      		
+
       		// Do we have any errors concerning content? Add them to the editor afterwards.
       		if({{ $errors->has('content') ? 'true' : 'false' }})
       			$("div.CodeMirror").addClass("has-error has-feedback");
       	}
-      	
-      	// Create the autocomplete box
+
       	// Create the autocomplete box
       	$( "#tagSearchBox" ).autocomplete({
       		// The source option tells autocomplete to
@@ -70,11 +69,11 @@
         		return false;
       		}
       	}).autocomplete("instance")._renderItem = function(ul, item) {
-      		// Overwriting render function, as our JSON has key name, 
+      		// Overwriting render function, as our JSON has key name,
       		// and not label (which renderItem would assume).
       		return $("<li>").append(item.name).appendTo(ul);
       	};
-      	
+
       	// Prevent form submission by pressing Enter key in inputs
       	$(window).keydown(function(e){
     		if(e.keyCode == 13) {
@@ -88,35 +87,56 @@
 
 @section('content')
 <div class="container" style="background-color:white">
-    <h1>Create new note</h1>
-    {{-- Check if this URL works --}}
-    
+  <div class="page-header">
+    <h1>Create new note
+      @if($outline)
+        <small>{{$outline->name}}</small>
+      @endif
+    </h1>
+  </div>
+
     <form method="POST" action="{{ url('/notes/create') }}" id="createNewNoteForm">
             {!! csrf_field() !!}
-            
+
             <div class="form-group row{{ $errors->has('title') ? ' has-error has-feedback' : '' }}">
             	<div class="col-md-8">
             		<label for="titleInput" class="sr-only">Title</label>
-                	<input type="text" class="form-control" name="title" autofocus="autofocus" placeholder="Titel" value="{{ old('title') }}">  
+                	<input type="text" class="form-control" name="title" autofocus="autofocus" placeholder="Titel" value="{{ old('title') }}" tabindex="1">
                 </div>
                 <div class="col-md-4">
-                	<input class="form-control" style="" type="text" id="tagSearchBox" placeholder="Search for tags &hellip;">
+                	<input class="form-control" style="" type="text" id="tagSearchBox" placeholder="Search for tags &hellip;" tabindex="3">
                 </div>
             </div>
-            
+
             <div class="form-group row{{ $errors->has('content') ? ' has-error has-feedback' : '' }}">
             	<div class="col-md-8">
             		<label for="gfm-code" class="sr-only">Content</label>
-                	<textarea class="form-control" id="gfm-code" name="content" placeholder="Content">{{ old('content') }}</textarea>
+                	<textarea class="form-control" id="gfm-code" name="content" placeholder="Content" tabindex="2">{{ old('content') }}</textarea>
                 </div>
                 <div class="col-md-4" id="tagList">
                 	<!-- Here the tags are appended -->
+                  @if($outline)
+                    @if(count($outline->tags) > 0)
+                      @foreach($outline->tags as $tag)
+                        <div class="alert alert-info alert-dismissable">
+                          <input type="hidden" value="$tag->name" name="tags[]">
+                          {{ $tag->name }}
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                      @endforeach
+                    @endif
+                  @endif
                 </div>
             </div>
-            
+
             <div class="form-group row">
             	<div class="col-md-4 col-md-offset-4">
-            		<button type="submit" class="btn btn-default">Create</button>
+                @if($outline)
+                <input type="hidden" name="outlineId" value="{{ $outline->id }}">
+                @endif
+            		<button type="submit" class="btn btn-default" tabindex="4">Create</button>
             	</div>
             </div>
 		</form>

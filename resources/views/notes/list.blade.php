@@ -11,20 +11,20 @@
 
 {{-- for syntax highlighting: <script>--}}
 @section('scripts_on_document_ready')
-	
+
     	// Bind mouse clicks to the onClickLoadNote h3 elements
     	$("div.onClickLoadNote").click(function() {
     		myPanelHeader = $(this);
     		myPanel = myPanelHeader.parent();
     		myPanelBody = myPanel.children(".panel-body");
-    		
+
     		// Determine if panel is opened or closed
     		if(myPanelBody.length)
     			closeNote(myPanel);
-    		else    		
+    		else
     			openNote(myPanel);
     	});
-    	
+
     	$("div.onClickLoadNote").mouseover(function() {
     		if(!$(this).parent().hasClass("panel-primary"))
     			$(this).parent().addClass("panel-info");
@@ -33,17 +33,17 @@
     		if(!$(this).parent().hasClass("panel-primary") || $(this).parent().hasClass("panel-info"))
     			$(this).parent().removeClass("panel-info");
     	});
-    	
+
     	// Close panel on focus lose to pertain consistency with keyboard nav
     	$("div.panel-default").blur(function() {
     		console.log("blur");
     		myPanel = $(this);
     		myPanelBody = myPanel.children(".panel-body");
-    		
+
     		if(myPanelBody.length)
     			closeNote(myPanel);
     	});
-    	
+
     	// Bind mouse clicks to the onClickRemoveNote anchor elements
     	$("a.onClickRemoveNote").click(function(event) {
     		// First stop event propagation to prevent triggering
@@ -54,7 +54,7 @@
     		event.stopPropagation();
     		myAnchor = $(this);
     		id = myAnchor.parent().parent().parent().attr("id");
-    		
+
     		$.getJSON("{{ url('/ajax/note/delete') }}/" + id, function(data) {
     		myAnchor.parent().parent().parent().slideUp("fast", function() {
     			displaySuccess("Note deleted successfully");
@@ -78,10 +78,22 @@
        {{-- The content of the notes will be dynamically loaded --}}
         @foreach ($notes as $note)
         <div class="panel panel-default" id="{{ $note->id }}">
-  			<div class="panel-heading onClickLoadNote" style="cursor:pointer;">
-    			<h3 class="panel-title">{{ $note->id }} &mdash; {{ $note->title }} <span class="pull-right"><a title="Inspect this note in Trail Mode" data-toggle="tooltip" href="{{ url('/notes/show') }}/{{ $note->id }}"><span class="glyphicon glyphicon-search"></span></a>&nbsp;&nbsp;<a title="Edit this note" data-toggle="tooltip" href="{{ url('/notes/edit/') }}/{{ $note->id }}"><span class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;<a title="Permanently delete note" href="#" class="onClickRemoveNote"><span class="glyphicon glyphicon-remove"></span></a></span></h3>
-  			</div>
-		</div>
+	  			<div class="panel-heading onClickLoadNote" style="cursor:pointer;">
+	    			<h3 class="panel-title">{{ $note->id }} &mdash; {{ $note->title }}
+							<span class="pull-right">
+								<a title="Inspect this note in Trail Mode" data-toggle="tooltip" href="{{ url('/notes/show') }}/{{ $note->id }}">
+									<span class="glyphicon glyphicon-search"></span>
+								</a>&nbsp;&nbsp;
+								<a title="Edit this note" data-toggle="tooltip" href="{{ url('/notes/edit/') }}/{{ $note->id }}">
+									<span class="glyphicon glyphicon-edit"></span>
+								</a>&nbsp;&nbsp;
+								<a title="Permanently delete note" href="#" class="onClickRemoveNote" data-toggle="tooltip">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+							</span>
+						</h3>
+	  			</div>
+				</div>
         @endforeach
         </div>
         @else
