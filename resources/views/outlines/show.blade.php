@@ -2,7 +2,7 @@
 
 @section('scripts')
 @endsection
-{{--<script> add highlighting--}}
+
 @section('scripts_on_document_ready')
   $('#onClickAddHeading').click(function(e) {
     e.preventDefault();
@@ -273,60 +273,76 @@
   }
 
 @endsection
-{{--</script> end--}}
 
 @section('content')
-<div class="container" style="background-color:white;">
-  <div class="page-header" id="{{ $outline->id }}">
-    <h1>{{ $outline->name }} <small>Outline (<a href="{{ url('outlines/edit') }}/{{ $outline->id }}">Edit</a> / <a href="{{ url('/notes/create') }}/{{ $outline->id }}">Create new notes</a>)</small></h1>
-  </div>
-    @if($outline->description)
-      <div class="well well-lg">{{ $outline->description }}
-      @if(count($outline->tags) > 0)
-        <p>Associated tags:
-        @foreach($outline->tags as $tag)
-          <button type="button" class="btn btn-primary">{{ $tag->name }}</button>
-        @endforeach
-        </p>
-      @endif
-    </div>
-    @else
-      <div class="well well-lg"><em>No description</em></div>
-    @endif
-    <div id="outlineContents">
-      <!-- Here the contents of this outliner will be displayed -->
-      @if(count($attachedElements) > 0)
-        @foreach($attachedElements as $element)
-        {{-- Each element can either be a note or a customField --}}
-        {{-- Determine with $element->objType (can be 'custom' or 'note')--}}
-          @if($element->objType == 'note')
-          <article id="{{ $element->id }}" class="draggable">
-            <h3 class="bg-primary">{{ $element->title }}
-              <span class="pull-right">
-                <a title="Remove note from outliner" href="#" class="onClickRemoveNote" style="color:#bce8f1;" data-toggle="tooltip">
-									<span class="glyphicon glyphicon-remove"></span>
-								</a>
-              </span>
-            </h3>
-            <div>{!! Markdown::convertToHtml($element->content) !!}</div>
-            <hr>
-          </article>
-          @else
-            {{-- Element is a custom field --}}
-            <{{ $element->type }} class="draggable" id="{{ $element->id }}">{!! $element->content !!}
-            <span class="pull-right">
-              <a title="Remove custom field from outliner" href="#" class="onClickRemoveCustom" data-toggle="tooltip">
-                <span class="glyphicon glyphicon-remove"></span>
-              </a>
-            </span></{{ $element->type }}>
-          @endif
-        @endforeach
-      @endif
-    </div>
-  {{-- Now add functionality to let the users add additional stuff --}}
-  <!-- First: What do you want to add? -->
-    <p><button type="button" class="btn btn-primary" id="onClickAddHeading">Add a new heading</button>
-    <button type="button" class="btn btn-primary" id="onClickAddParagraph">Add a new custom note</button>
-    <button type="button" class="btn btn-primary" id="onClickAddNote">Add a new note to this outliner</button></p>
-</div>
-@endsection
+    <div class="container" style="background-color:white;">
+        <div class="page-header" id="{{ $outline->id }}">
+            <h1>{{ $outline->name }}
+                <small>Outline (<a href="{{ url('outlines/edit') }}/{{ $outline->id }}">Edit</a> /
+                    <a href="{{ url('/notes/create') }}/{{ $outline->id }}">Create new notes</a>)</small>
+                </h1>
+            </div>
+            @if($outline->description)
+                <div class="well well-lg">{{ $outline->description }}</div>
+            @else
+                <div class="well well-lg"><em>No description</em></div>
+            @endif
+            <div class="row">
+                <div class="col-md-6">
+                    @if(count($outline->tags) > 0)
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-info">Associated tags</li>
+                            @foreach($outline->tags as $tag)
+                                <li class="list-group-item">{{ $tag->name }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+                <div class="col-md-6">
+                    @if(count($outline->references) > 0)
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-success">Associated references</li>
+                            @foreach($outline->references as $reference)
+                                <li class="list-group-item">{{ $reference->author_last }} ({{ $reference->year }}): {{ $reference->title }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+            <div id="outlineContents">
+                <!-- Here the contents of this outliner will be displayed -->
+                @if(count($attachedElements) > 0)
+                    @foreach($attachedElements as $element)
+                        {{-- Each element can either be a note or a customField --}}
+                        {{-- Determine with $element->objType (can be 'custom' or 'note')--}}
+                        @if($element->objType == 'note')
+                            <article id="{{ $element->id }}" class="draggable">
+                                <h3 class="bg-primary">{{ $element->title }}
+                                    <span class="pull-right">
+                                        <a title="Remove note from outliner" href="#" class="onClickRemoveNote" style="color:#bce8f1;" data-toggle="tooltip">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </span>
+                                </h3>
+                                <div>{!! Markdown::convertToHtml($element->content) !!}</div>
+                                <hr>
+                            </article>
+                        @else
+                            {{-- Element is a custom field --}}
+                            <{{ $element->type }} class="draggable" id="{{ $element->id }}">{!! $element->content !!}
+                            <span class="pull-right">
+                                <a title="Remove custom field from outliner" href="#" class="onClickRemoveCustom" data-toggle="tooltip">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </span></{{ $element->type }}>
+                        @endif
+                    @endforeach
+                @endif
+            </div>
+            {{-- Now add functionality to let the users add additional stuff --}}
+            <!-- First: What do you want to add? -->
+            <p><button type="button" class="btn btn-primary" id="onClickAddHeading">Add a new heading</button>
+                <button type="button" class="btn btn-primary" id="onClickAddParagraph">Add a new custom note</button>
+                <button type="button" class="btn btn-primary" id="onClickAddNote">Add a new note to this outliner</button></p>
+            </div>
+        @endsection

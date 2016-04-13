@@ -7,9 +7,13 @@
     <div class="container">
         <!-- Little hack for vertical alignment -->
         <div class="jumbotron" style="margin-top:25%;">
-            <h1>noteworks</h1>
-            <p>Noteworks is a free and open-source Zettelkasten adaption. <button class="btn btn-primary">Learn more &hellip;</button></p>
+            <h1>Zettlr</h1>
             <p>You are logged in as <strong><?php echo e(Auth::user()->name); ?></strong>.</p>
+            <p>There are currently <strong><?php echo e($noteCount); ?> Notes</strong>,
+              <strong><?php echo e($tagCount); ?> Tags</strong>,
+              <strong><?php echo e($referenceCount); ?> References</strong> and
+              <strong><?php echo e($outlineCount); ?> Outlines</strong> saved in this app.</p>
+              <p><a class="btn btn-primary" href="<?php echo e(url('/settings')); ?>">Settings</a></p>
         </div>
     </div>
 <?php $__env->stopSection(); ?>

@@ -89,16 +89,6 @@ class OutlineController extends Controller
           }
       }
 
-      // Do we have remaining notes or custom fields left? Attach them at the end
-      // The indices will be updated the next time anything is added, removed or moved.
-    /*  if(count($attachedNotes) > 0)
-        foreach($attachedNotes as $note)
-          $attachedElements->push($note);
-
-          if(count($attachedCustoms) > 0)
-            foreach($attachedCustoms as $field)
-              $attachedElements->push($field);*/
-
       return view('outlines.show', compact('outline', 'attachedElements'));
     }
 
@@ -111,8 +101,8 @@ class OutlineController extends Controller
     public function postCreate(Request $request)
     {
       $validator = Validator::make($request->all(), [
-         'name' => 'required|max:255',
-         'description' => 'min:3|max:400'
+         'name' => 'required|min:3|max:255',
+         'description' => 'min:3'
      ]);
 
      if ($validator->fails()) {
@@ -120,33 +110,37 @@ class OutlineController extends Controller
                      ->withErrors($validator)
                      ->withInput();
      }
+
      // Validator passed? Then create.
      $outline = new Outline;
      $outline->name = $request->name;
      $outline->description = $request->description;
      $outline->save();
 
-     foreach($request->tags as $tagname)
+     if(count($request->tags) > 0)
      {
-       $tag = Tag::firstOrCreate(["name" => $tagname]);
-       $outline->tags()->attach($tag->id);
-     }
-
-     foreach($request->references as $referenceId)
-     {
-         try {
-           $ref = Reference::findOrFail($referenceId);
-           // If this line is executed the model exists
-           $outline->references()->attach($ref->id);
-
-         } catch (ModelNotFoundException $e) {
-           // Do nothing
+         foreach($request->tags as $tagname)
+         {
+           $tag = Tag::firstOrCreate(["name" => $tagname]);
+           $outline->tags()->attach($tag->id);
          }
      }
 
-      // Lastly, redirect to the outliner just created to let the user
-      // fill it with input
-      // return redirect('outlines/show/'.$outline->id);
+     if(count($request->references) > 0)
+     {
+         foreach($request->references as $referenceId)
+         {
+             try {
+               $ref = Reference::findOrFail($referenceId);
+               // If this line is executed the model exists
+               $outline->references()->attach($ref->id);
+
+             } catch (ModelNotFoundException $e) {
+               // Do nothing
+             }
+         }
+     }
+     
       // For now let's add the user some notes
       return redirect('notes/create/'.$outline->id);
     }
@@ -167,29 +161,81 @@ class OutlineController extends Controller
       if(!$id || $id <= 0)
         return redirect('outlines/create')->withInput();
 
-      // First add any potential new tags to the database.
-      // And also attach them if not done yet
-      $tagIDs;
-      // TODO: check for no tags given
-      foreach($request->tags as $tagname)
+        $validator = Validator::make($request->all(), [
+           'name' => 'required|min:3|max:255',
+           'description' => 'min:3'
+       ]);
+
+       if ($validator->fails()) {
+           return redirect('/outlines/edit/'.$id)
+                       ->withErrors($validator)
+                       ->withInput();
+       }
+
+       // If everything passed let's edit!
+       $outline = Outline::find($id);
+
+      if(count($request->tags) > 0)
       {
-        $tag = Tag::firstOrCreate(["name" => $tagname]);
-        //if(!$note->tags->contains($tag->id))
-          //$note->tags()->attach($tag->id);
-        // Also add the tags to our array
-        $tagIDs[] = $tag->id;
+          $tagIDs = [];
+
+          foreach($request->tags as $tagname)
+          {
+              $tag = Tag::firstOrCreate(["name" => $tagname]);
+              $tagIDs[] = $tag->id;
+          }
+          // Sync tag list
+          $outline->tags()->sync($tagIDs);
+      }
+      else {
+          // Sync with empty array to remove all
+          $outline->tags()->sync([]);
       }
 
-      $outline = Outline::find($id);
+      if(count($request->references) > 0)
+      {
+          // Same for references
+          $referenceIDs = [];
 
+          foreach($request->references as $referenceId)
+          {
+              try {
+                  $ref = Reference::findOrFail($referenceId);
+                  // If this line is executed the model exists
+                  $referenceIDs[] = $ref->id;
 
-      // Sync, i.e. remove no longer existent tags and add new tags
-      $outline->tags()->sync($tagIDs);
+              } catch (ModelNotFoundException $e) {
+                  // Do nothing
+              }
+          }
+
+          $outline->references()->sync($referenceIDs);
+      }
+      else {
+          // Sync with empty array to remove all
+          $outline->references()->sync([]);
+      }
 
       $outline->name = $request->name;
       $outline->description = $request->description;
       $outline->save();
 
       return redirect(url('/outlines/show/'.$id));
+    }
+
+    public function delete($id)
+    {
+      try {
+          $outline = Outline::findOrFail($id);
+      } catch (ModelNotFoundException $e) {
+        return redirect('/outlines');
+      }
+
+      $outline->notes()->detach();
+      $outline->customFields()->delete();
+
+      $outline->delete();
+
+      return redirect('/outlines');
     }
 }

@@ -71,7 +71,7 @@
 <?php $__env->startSection('content'); ?>
 <div class="container" style="background-color:white">
 	<div class="page-header">
-		<h1>notework <small>showing all notes</small></h1>
+		<h1>Notes</h1>
 	</div>
        <?php if(count($notes) > 0): ?>
        <div class="panel-group" id="panel-container">

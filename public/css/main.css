@@ -1,14 +1,14 @@
 /*
- *
- * Additional CSS for notework
- *
- * Base directory for everything in this file: css directory!
- * NOT public directory (as it is for the blade engine)
- */
+*
+* Additional CSS for Zettlr
+*
+* Base directory for everything in this file: css directory!
+* NOT public directory (as it is for the blade engine)
+*/
 
 body
 {
-    background-image:url(../img/notes.main.background.jpg);
+    background-image:url(../img/notes.main.background.2.jpg);
     background-position:top center;
     background-attachment:fixed;
     /* Hack for fixed navbar */
@@ -16,34 +16,34 @@ body
 }
 
 /*
- * Little bootstrap hack for making the links visible on focused note panels
- */
+* Little bootstrap hack for making the links visible on focused note panels
+*/
 .panel-primary > .panel-heading a
 {
-  /* Bootstrap info base color */
-  color:#bce8f1;
+    /* Bootstrap info base color */
+    color:#bce8f1;
 }
 
 /*
- * Style for draggable elements
- */
+* Style for draggable elements
+*/
 .draggable:hover
 {
-  border-color:#bde;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(150,200,250,.6);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(150,200,250,.6);
-  background-color:#bde;
-  cursor:-webkit-grab;
-  cursor:-moz-grab;
+    border-color:#bde;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(150,200,250,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(150,200,250,.6);
+    background-color:#bde;
+    cursor:-webkit-grab;
+    cursor:-moz-grab;
 }
 
 /*
- * CodeMirror-hack for adapting the design
- * to bootstrap
- */
+* CodeMirror-hack for adapting the design
+* to bootstrap
+*/
 .CodeMirror
 {
-	border: 1px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 4px;
 }
 
@@ -56,9 +56,9 @@ body
 }
 
 /*
- * CodeMirror-hack for showing the text-cursor all over the "textarea"
- */
+* CodeMirror-hack for showing the text-cursor all over the "textarea"
+*/
 .CodeMirror-scroll
 {
-	cursor:text;
+    cursor:text;
 }
