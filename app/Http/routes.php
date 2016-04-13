@@ -50,12 +50,25 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('outlines/create', 'OutlineController@getCreate');
     Route::post('outlines/create', 'OutlineController@postCreate');
     Route::get('outlines/show/{id}', 'OutlineController@show');
+    Route::get('outlines/edit/{id}', 'OutlineController@getEdit');
+    Route::post('outlines/edit/{id}', 'OutlineController@postEdit');
+
+    Route::get('/tags/index', 'TagController@index');
+    Route::get('/tags/delete/{id}', 'TagController@delete');
+
+    Route::get('/references/index', 'ReferenceController@index');
+    Route::get('/references/create', 'ReferenceController@getCreate');
+    Route::post('/references/create', 'ReferenceController@postCreate');
+    Route::get('/references/edit/{id}', 'ReferenceController@getEdit');
+    Route::post('/references/edit/{id}', 'ReferenceController@postEdit');
+    Route::get('/references/delete/{id}', 'ReferenceController@delete');
 
     // Ajax routes
     Route::get('/ajax/note/delete/{id}', 'AjaxController@getDeleteNote');
     Route::get('/ajax/note/search/{term}', 'AjaxController@getNoteSearch');
     Route::get('/ajax/note/{id}', 'AjaxController@getNoteContents');
     Route::get('/ajax/tag/search/{term}', 'AjaxController@getTagSearch');
+    Route::get('/ajax/reference/search/{term}', 'AjaxController@getReferenceSearch');
     Route::get('/ajax/link/{id1}/with/{id2}', 'AjaxController@getLinkNotes');
     // M-m-m-monster link!
     Route::get('/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}', 'AjaxController@getOutlineAttach');

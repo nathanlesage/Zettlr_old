@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>noteworks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Include jQuery -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
@@ -26,14 +27,10 @@
 
 
     <!-- Include Bootstrap CSS and JS -->
-    <?php echo e(Html::style('css/bootstrap.min.css')); ?>
-
-    <?php echo e(Html::script('js/bootstrap.min.js')); ?>
-
-    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>-->
-
-
+    <!--<?php echo e(Html::style('css/bootstrap.min.css')); ?>-->
+    <!--<?php echo e(Html::script('js/bootstrap.min.js')); ?>-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
 
     <!-- Include additional css -->
     <?php echo e(Html::style('css/main.css')); ?>
@@ -77,6 +74,8 @@
 	$('[data-toggle="tooltip"]').tooltip();
 
     <?php echo $__env->yieldContent('scripts_on_document_ready'); ?>
+
+    <?php echo $__env->make('layouts.generic_document_ready', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
     /*
      * Functions for search bar follow here
@@ -151,6 +150,8 @@
                     <li><a href="<?php echo e(url('/notes/create')); ?>">Insert notes</a></li>
                     <li><a href="<?php echo e(url('/outlines')); ?>">Outlines</a></li>
                     <li><a href="<?php echo e(url('/outlines/create')); ?>">Create new outline</a></li>
+                    <li><a href="<?php echo e(url('tags/index')); ?>">Tags</a></li>
+                    <li><a href="<?php echo e(url('/references/index')); ?>">References</a></li>
                     <li><a href="#">Import</a></li>
                 </ul>
                 <form class="navbar-form navbar-left" role="search">

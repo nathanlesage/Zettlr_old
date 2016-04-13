@@ -30,7 +30,7 @@
           val = $('#onEnterAddHeading').val();
           // TODO: Ajax insert into database
           // Link: /ajax/outline/attach/{outlineID}/custom/{requestContent}/{index}/{type}
-          $.getJSON("{{ url('/ajax/outline/attach') }}/" + outlineID + "/custom/" + val + "/" + myIndex + "/h2", {}, function(data) {
+          $.getJSON("{{ url('/ajax/outline/attach') }}/" + outlineID + "/custom/" + encodeURIComponent(val) + "/" + myIndex + "/h2", {}, function(data) {
             // remove the form
             $('#formStyler').remove();
             $('#outlineContents').append('<h2 class="draggable" id="' + data.id + '">'+ val +'<span class="pull-right">'
@@ -75,15 +75,14 @@
       // Add new lines with Shift+Enter
       if((e.which == 13) && !e.shiftKey)
       {
-          // For now just display it
           val = $('#onEnterAddParagraph').val();
-          // Replace newline with <br>-tags
-          val = (val + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '<br> '+ '$2');
-          // TODO: Ajax insert into database
-          // Link: /ajax/outline/attach/{outlineID}/custom/{requestContent}/{index}/{type}
-          $.getJSON("{{ url('/ajax/outline/attach') }}/" + outlineID + "/custom/" + val + "/" + myIndex + "/p", {}, function(data) {
+          $.getJSON("{{ url('/ajax/outline/attach') }}/" + outlineID + "/custom/" + encodeURIComponent(val) + "/" + myIndex + "/p", {}, function(data) {
             // remove the form
             $('#formStyler').remove();
+            // Replace newline with <br>-tags just for instant displaying. When reloading the page, this is done
+            // via the nl2br-function in PHP.
+            val = (val + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '<br> '+ '$2');
+
             $('#outlineContents').append('<p class="draggable" id="' + data.id + '">'+ val +'<span class="pull-right">'
               + '<a title="Remove custom field from outliner" href="#" class="onClickRemoveCustom" data-toggle="tooltip">'
               + '<span class="glyphicon glyphicon-remove"></span>'
@@ -157,7 +156,7 @@
                response(data);
              }).fail(function() { displayError("Could not get search results"); });
          },
-         // Do nothing on focus (i.e. don't do anything with content
+         // Do nothing on focus (i.e. don't do anything with content)
          focus: function( event, ui ) {
            return false;
          },
@@ -279,10 +278,18 @@
 @section('content')
 <div class="container" style="background-color:white;">
   <div class="page-header" id="{{ $outline->id }}">
-    <h1>{{ $outline->name }} <small>Outline (<a href="#">Edit</a>, <a href="{{ url('/notes/create') }}/{{ $outline->id }}">Create new notes</a>)</small></h1>
+    <h1>{{ $outline->name }} <small>Outline (<a href="{{ url('outlines/edit') }}/{{ $outline->id }}">Edit</a> / <a href="{{ url('/notes/create') }}/{{ $outline->id }}">Create new notes</a>)</small></h1>
   </div>
     @if($outline->description)
-      <div class="well well-lg">{{ $outline->description }}</div>
+      <div class="well well-lg">{{ $outline->description }}
+      @if(count($outline->tags) > 0)
+        <p>Associated tags:
+        @foreach($outline->tags as $tag)
+          <button type="button" class="btn btn-primary">{{ $tag->name }}</button>
+        @endforeach
+        </p>
+      @endif
+    </div>
     @else
       <div class="well well-lg"><em>No description</em></div>
     @endif
@@ -306,7 +313,7 @@
           </article>
           @else
             {{-- Element is a custom field --}}
-            <{{ $element->type }} class="draggable" id="{{ $element->id }}">{{ $element->content }}
+            <{{ $element->type }} class="draggable" id="{{ $element->id }}">{!! $element->content !!}
             <span class="pull-right">
               <a title="Remove custom field from outliner" href="#" class="onClickRemoveCustom" data-toggle="tooltip">
                 <span class="glyphicon glyphicon-remove"></span>

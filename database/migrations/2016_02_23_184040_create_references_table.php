@@ -17,9 +17,9 @@ class CreateReferencesTable extends Migration
             $table->timestamps();
             $table->String('title', 255);
             $table->String('author_last', 255);
-            $table->String('author_fist', 255);
+            $table->String('author_first', 255);
             $table->Integer('year')->unsigned();
-            $table->String('reference_type', 255);
+            $table->Integer('reference_type');
         });
     }
 

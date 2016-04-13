@@ -7,6 +7,7 @@ use Validator;
 use App\Note;
 use App\Tag;
 use App\Outline;
+use App\Reference;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -152,6 +153,18 @@ class NoteController extends Controller
         	$note->tags()->attach($tag->id);
         }
 
+        foreach($request->references as $referenceId)
+        {
+          try {
+            Reference::findOrFail($referenceId);
+            // If this line is executed the model exists
+            $note->references()->attach($referenceId);
+
+          } catch (ModelNotFoundException $e) {
+            // Do nothing
+          }
+        }
+
         if($request->outlineId > 0)
         {
           $outline = Outline::find($request->outlineId);
@@ -170,6 +183,7 @@ class NoteController extends Controller
     public function getEdit($id) {
     	$note = Note::find($id);
     	$note->tags;
+      $note->references;
     	return view('notes.edit', ['note' => $note]);
     }
 
@@ -199,12 +213,27 @@ class NoteController extends Controller
         	// Also add the tags to our array
         	$tagIDs[] = $tag->id;
         }
+        // Same for references
+        $referenceIDs;
+
+        foreach($request->references as $referenceId)
+        {
+            try {
+              $ref = Reference::findOrFail($referenceId);
+              // If this line is executed the model exists
+              $referenceIDs[] = $ref->id;
+
+            } catch (ModelNotFoundException $e) {
+              // Do nothing
+            }
+        }
 
         // Get the note
         $note = Note::find($id);
 
         // Sync, i.e. remove no longer existent tags and add new tags
         $note->tags()->sync($tagIDs);
+        $note->references()->sync($referenceIDs);
 
         // Update
         $note->title = $request->title;

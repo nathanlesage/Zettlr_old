@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>noteworks</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Include jQuery -->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
@@ -20,12 +21,10 @@
     {{ Html::script('js/jquery-ui.min.js') }}
 
     <!-- Include Bootstrap CSS and JS -->
-    {{ Html::style('css/bootstrap.min.css') }}
-    {{ Html::script('js/bootstrap.min.js') }}
-    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>-->
-
-
+    <!--{{ Html::style('css/bootstrap.min.css') }}-->
+    <!--{{ Html::script('js/bootstrap.min.js') }}-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
 
     <!-- Include additional css -->
     {{ Html::style('css/main.css') }}
@@ -60,6 +59,8 @@
 	$('[data-toggle="tooltip"]').tooltip();
 
     @yield('scripts_on_document_ready')
+
+    @include('layouts.generic_document_ready')
 
     /*
      * Functions for search bar follow here
@@ -134,7 +135,8 @@
                     <li><a href="{{ url('/notes/create') }}">Insert notes</a></li>
                     <li><a href="{{ url('/outlines') }}">Outlines</a></li>
                     <li><a href="{{ url('/outlines/create') }}">Create new outline</a></li>
-                    <li><a href="#">Import</a></li>
+                    <li><a href="{{ url('tags/index') }}">Tags</a></li>
+                    <li><a href="{{ url('/references/index') }}">References</a></li>
                 </ul>
                 <form class="navbar-form navbar-left" role="search">
         			<div class="form-group">

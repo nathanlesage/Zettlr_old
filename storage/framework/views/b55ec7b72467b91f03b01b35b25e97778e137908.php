@@ -53,12 +53,12 @@
     		// happens to be the onClickLoadNote-div element.
     		event.stopPropagation();
     		myAnchor = $(this);
-    		id = myAnchor.parent().parent().parent().attr("id");
+    		id = myAnchor.parent().parent().parent().parent().parent().attr("id");
 
     		$.getJSON("<?php echo e(url('/ajax/note/delete')); ?>/" + id, function(data) {
     		myAnchor.parent().parent().parent().slideUp("fast", function() {
     			displaySuccess("Note deleted successfully");
-    				myAnchor.parent().parent().parent().remove();
+    				myAnchor.parent().parent().parent().parent().parent().remove();
     			});
     		})
     		.fail(function() {
@@ -79,9 +79,12 @@
         <?php foreach($notes as $note): ?>
         <div class="panel panel-default" id="<?php echo e($note->id); ?>">
 	  			<div class="panel-heading onClickLoadNote" style="cursor:pointer;">
-	    			<h3 class="panel-title"><?php echo e($note->id); ?> &mdash; <?php echo e($note->title); ?>
-
-							<span class="pull-right">
+						<div class="row">
+							<div class="col-md-10">
+								<h3 class="panel-title"><?php echo e($note->id); ?> &mdash; <?php echo e($note->title); ?></h3>
+							</div>
+							<div class="col-md-2">
+								<span class="pull-right">
 								<a title="Inspect this note in Trail Mode" data-toggle="tooltip" href="<?php echo e(url('/notes/show')); ?>/<?php echo e($note->id); ?>">
 									<span class="glyphicon glyphicon-search"></span>
 								</a>&nbsp;&nbsp;
@@ -92,7 +95,9 @@
 									<span class="glyphicon glyphicon-remove"></span>
 								</a>
 							</span>
-						</h3>
+							</div>
+						</div>
+
 	  			</div>
 				</div>
         <?php endforeach; ?>

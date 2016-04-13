@@ -12,6 +12,7 @@ use App\Note;
 use App\Tag;
 use App\CustomField;
 use App\Outline;
+use App\Reference;
 
 // For rendering the markup within the view
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -23,7 +24,7 @@ use GrahamCampbell\Markdown\Facades\Markdown;
 
 class AjaxController extends Controller
 {
-	/**
+	 /**
      * Create a new controller instance.
      * Use "auth" middleware.
      *
@@ -91,6 +92,26 @@ class AjaxController extends Controller
     	}
     }
 
+    public function getReferenceSearch($term)
+    {
+    	// The "LIKE"-Statement in SQL just searches for the pattern
+    	// anywhere in, at the beginning or the end of a term.
+    	$references = Reference::where('title', 'LIKE', '%'.$term.'%')
+                              ->orWhere('author_first', 'LIKE', '%'.$term.'%')
+                              ->orWhere('author_last', 'LIKE', '%'.$term.'%')
+                              ->orWhere('title', 'LIKE', '%'.$term.'%')
+                              ->get();
+
+    	if(! $references)
+    	{
+    		return response()->json(['message', 'No references match your search term'], 404);
+    	}
+    	else
+    	{
+    		return $references;
+    	}
+    }
+
     public function getNoteSearch($term)
     {
     	// TODO: implement a "good" fulltext search.
@@ -155,7 +176,7 @@ class AjaxController extends Controller
          $field = new CustomField;
 
          $field->type = $type; // type is the HTML tag (i.e. p, h3, div)
-         $field->content = $requestContent; // What goes inside the tag
+         $field->content = nl2br($requestContent); // What goes inside the tag
          $field->index = $index; // The index inside the outliner
 
          $outline->customFields()->save($field);

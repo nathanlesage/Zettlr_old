@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 
 use App\Outline;
 use App\Tag;
+use App\Reference;
 
 class OutlineController extends Controller
 {
@@ -45,6 +46,9 @@ class OutlineController extends Controller
       } catch (ModelNotFoundException $e) {
         return redirect('outlines')->withErrors(['message', 'Could not find outline.']);
       }
+
+      $outline->tags;
+      $outline->references;
 
       // Then get all relationships
       $attachedNotes = $outline->notes;
@@ -128,10 +132,64 @@ class OutlineController extends Controller
        $outline->tags()->attach($tag->id);
      }
 
+     foreach($request->references as $referenceId)
+     {
+         try {
+           $ref = Reference::findOrFail($referenceId);
+           // If this line is executed the model exists
+           $outline->references()->attach($ref->id);
+
+         } catch (ModelNotFoundException $e) {
+           // Do nothing
+         }
+     }
+
       // Lastly, redirect to the outliner just created to let the user
       // fill it with input
       // return redirect('outlines/show/'.$outline->id);
       // For now let's add the user some notes
       return redirect('notes/create/'.$outline->id);
+    }
+
+    public function getEdit($id)
+    {
+        if(!$id || $id <= 0)
+          return redirect('outlines/create')->withInput();
+
+        $outline = Outline::find($id);
+        $outline->tags;
+
+        return view('outlines.edit', ['outline' => $outline]);
+    }
+
+    public function postEdit(Request $request, $id)
+    {
+      if(!$id || $id <= 0)
+        return redirect('outlines/create')->withInput();
+
+      // First add any potential new tags to the database.
+      // And also attach them if not done yet
+      $tagIDs;
+      // TODO: check for no tags given
+      foreach($request->tags as $tagname)
+      {
+        $tag = Tag::firstOrCreate(["name" => $tagname]);
+        //if(!$note->tags->contains($tag->id))
+          //$note->tags()->attach($tag->id);
+        // Also add the tags to our array
+        $tagIDs[] = $tag->id;
+      }
+
+      $outline = Outline::find($id);
+
+
+      // Sync, i.e. remove no longer existent tags and add new tags
+      $outline->tags()->sync($tagIDs);
+
+      $outline->name = $request->name;
+      $outline->description = $request->description;
+      $outline->save();
+
+      return redirect(url('/outlines/show/'.$id));
     }
 }
