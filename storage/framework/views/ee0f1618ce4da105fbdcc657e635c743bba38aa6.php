@@ -26,7 +26,7 @@
             <div class="form-group row<?php echo e($errors->has('title') ? ' has-error has-feedback' : ''); ?>">
                 <div class="col-md-8">
                     <label for="titleInput" class="sr-only">Title</label>
-                    <input type="text" class="form-control" name="title" autofocus="autofocus" placeholder="Titel" value="<?php echo e(old('title')); ?>" tabindex="1">
+                    <input type="text" class="form-control" name="title" autofocus="autofocus" placeholder="Title" value="<?php echo e(old('title')); ?>" tabindex="1">
                 </div>
                 <div class="col-md-4">
                     <input class="form-control" style="" type="text" id="tagSearchBox" placeholder="Search for tags &hellip;" tabindex="3">
