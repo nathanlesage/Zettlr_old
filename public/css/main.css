@@ -24,6 +24,18 @@ body
     color:#bce8f1;
 }
 
+#tagList > .btn
+{
+    /* Margin hack for the tag list */
+    margin:5px;
+}
+
+#tagList > .btn > .close
+{
+    /* A little bit more spacing */
+    margin-left:5px;
+}
+
 /*
 * Style for draggable elements
 */

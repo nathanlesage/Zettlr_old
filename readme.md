@@ -12,7 +12,7 @@ With Zettlr you can …
 
 * … store a huge amount of notes, add literature references and tag them
 * … discover previously unknown connections between notes based on tags
-* … batch insert notes with pre-assigned tags and references so that you can insert notes belonging to one paper or one train of thought even faster
+* … insert notes with pre-assigned tags and references so that you can insert notes even faster
 * … use outlines to gather notes, add your personal notes and arrange them any way you like
 
 ## Install

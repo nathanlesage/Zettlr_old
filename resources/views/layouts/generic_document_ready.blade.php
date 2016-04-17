@@ -154,3 +154,15 @@ $("#navSearchBar").autocomplete("instance")._renderItem = function(ul, item) {
     // and not label (which renderItem would assume).
     return $("<li>").addClass("list-group-item").append('<h4 class="list-group-item-heading">'+item.title+'</h4><p class="list-group-item-text">'+item.content+'</p>').appendTo(ul);
 };
+
+// Prevent form submission on Return in input fields except the login form
+$('input').keypress(function(e) {
+    if((e.which == 13) && !($(this).hasClass("loginInputField")))
+    {
+        // Have we got a Ctrl key press?
+        if(!e.ctrlKey)
+            e.preventDefault();
+        else
+            $('#noteForm').submit();
+    }
+});

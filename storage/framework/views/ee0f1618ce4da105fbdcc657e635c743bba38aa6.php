@@ -19,7 +19,7 @@
             </h1>
         </div>
 
-        <form method="POST" action="<?php echo e(url('/notes/create')); ?>" id="createNewNoteForm">
+        <form method="POST" action="<?php echo e(url('/notes/create')); ?>" id="noteForm">
             <?php echo csrf_field(); ?>
 
 
@@ -43,11 +43,11 @@
                     <?php if($outline): ?>
                         <?php if(count($outline->tags) > 0): ?>
                             <?php foreach($outline->tags as $tag): ?>
-                                <div class="alert alert-info alert-dismissable">
-                                    <input type="hidden" value="$tag->name" name="tags[]">
+                                <div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                                    <input type="hidden" value="<?php echo e($tag->name); ?>" name="tags[]">
                                     <?php echo e($tag->name); ?>
 
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -78,7 +78,7 @@
                             <?php if(count($outline->references) > 0): ?>
                                 <?php foreach($outline->references as $reference): ?>
                                     <div class="alert alert-success alert-dismissable">
-                                        <input type="hidden" value="$tag->name" name="references[]">
+                                        <input type="hidden" value="<?php echo e($reference->id); ?>" name="references[]">
                                         <?php echo e($reference->author_last); ?> <?php echo e($reference->year); ?>
 
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

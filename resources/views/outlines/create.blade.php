@@ -64,9 +64,7 @@
                     <label for="desc">Description</label>
                 </div>
                 <div class="col-md-10">
-                    <textarea class="form-control" id="desc" name="description" placeholder="Short description (optional)" tabindex="4">
-                        {{ old('description') }}
-                    </textarea>
+                    <textarea class="form-control" id="desc" name="description" placeholder="Short description (optional)" tabindex="4">{{ old('description') }}</textarea>
                 </div>
             </div>
             <div class="form-group">

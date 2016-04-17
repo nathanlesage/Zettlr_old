@@ -18,7 +18,7 @@
             <h1 class="page-title">Update note</h1>
         </div>
 
-        <form method="POST" action="{{ url('/notes/edit/'.$note->id) }}" id="editNoteForm">
+        <form method="POST" action="{{ url('/notes/edit/'.$note->id) }}" id="noteForm">
             {!! csrf_field() !!}
 
             <div class="form-group row{{ $errors->has('title') ? ' has-error has-feedback' : '' }}">

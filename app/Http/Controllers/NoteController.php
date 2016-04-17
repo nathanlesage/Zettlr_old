@@ -134,13 +134,20 @@ class NoteController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
-            'content' => 'required|min:3',
+            'content' => 'required|min:50',
         ]);
 
         if ($validator->fails()) {
-            return redirect('/notes/create')
-            ->withErrors($validator)
-            ->withInput();
+            if($request->outlineId > 0) {
+                return redirect('/notes/create/'.$request->outlineId)
+                ->withErrors($validator)
+                ->withInput();
+            }
+            else {
+                return redirect('/notes/create')
+                ->withErrors($validator)
+                ->withInput();
+            }
         }
 
         $note = new Note;

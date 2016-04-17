@@ -19,7 +19,7 @@
             </h1>
         </div>
 
-        <form method="POST" action="{{ url('/notes/create') }}" id="createNewNoteForm">
+        <form method="POST" action="{{ url('/notes/create') }}" id="noteForm">
             {!! csrf_field() !!}
 
             <div class="form-group row{{ $errors->has('title') ? ' has-error has-feedback' : '' }}">
@@ -42,10 +42,10 @@
                     @if($outline)
                         @if(count($outline->tags) > 0)
                             @foreach($outline->tags as $tag)
-                                <div class="alert alert-info alert-dismissable">
-                                    <input type="hidden" value="$tag->name" name="tags[]">
+                                <div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                                    <input type="hidden" value="{{ $tag->name }}" name="tags[]">
                                     {{ $tag->name }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -76,7 +76,7 @@
                             @if(count($outline->references) > 0)
                                 @foreach($outline->references as $reference)
                                     <div class="alert alert-success alert-dismissable">
-                                        <input type="hidden" value="$tag->name" name="references[]">
+                                        <input type="hidden" value="{{ $reference->id }}" name="references[]">
                                         {{ $reference->author_last }} {{ $reference->year }}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>

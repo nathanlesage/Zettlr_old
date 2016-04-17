@@ -9,10 +9,10 @@
         <div class="jumbotron" style="margin-top:25%;">
             <h1>Zettlr</h1>
             <p>You are logged in as <strong><?php echo e(Auth::user()->name); ?></strong>.</p>
-            <p>There are currently <strong><?php echo e($noteCount); ?> Notes</strong>,
-              <strong><?php echo e($tagCount); ?> Tags</strong>,
-              <strong><?php echo e($referenceCount); ?> References</strong> and
-              <strong><?php echo e($outlineCount); ?> Outlines</strong> saved in this app.</p>
+            <p>There are currently <strong><?php echo e($noteCount); ?></strong> Notes,
+              <strong><?php echo e($tagCount); ?></strong> Tags,
+              <strong><?php echo e($referenceCount); ?></strong> References and
+              <strong><?php echo e($outlineCount); ?></strong> Outlines saved in this app.</p>
               <p><a class="btn btn-primary" href="<?php echo e(url('/settings')); ?>">Settings</a></p>
         </div>
     </div>

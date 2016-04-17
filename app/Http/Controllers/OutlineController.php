@@ -18,15 +18,15 @@ use App\Reference;
 class OutlineController extends Controller
 {
     /**
-     * Create a new controller instance.
-     * Use "auth" middleware.
-     *
-     * @return void
-     */
+    * Create a new controller instance.
+    * Use "auth" middleware.
+    *
+    * @return void
+    */
     public function __construct()
     {
-    	// Require the user to be logged in
-    	// for every action this controller does
+        // Require the user to be logged in
+        // for every action this controller does
         $this->middleware('auth');
     }
 
@@ -40,115 +40,141 @@ class OutlineController extends Controller
 
     public function show($id)
     {
-      // Take the id and output it (for now)
-      try {
-        $outline = Outline::findOrFail($id);
-      } catch (ModelNotFoundException $e) {
-        return redirect('outlines')->withErrors(['message', 'Could not find outline.']);
-      }
+        // Take the id and output it (for now)
+        try {
+            $outline = Outline::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return redirect('outlines')->withErrors(['message', 'Could not find outline.']);
+        }
 
-      $outline->tags;
-      $outline->references;
+        $outline->tags;
+        $outline->references;
 
-      // Then get all relationships
-      $attachedNotes = $outline->notes;
-      // Save indices
-      foreach($attachedNotes as $note)
-      {
-        // Our view won't be able to determine the type of the element
-        $note->objType = 'note';
-        $note->index = $note->pivot->index;
-      }
+        // Then get all relationships
+        $attachedNotes = $outline->notes;
+        // Save indices
+        foreach($attachedNotes as $note)
+        {
+            // Our view won't be able to determine the type of the element
+            // Therefore create a new attribute that our view can relate to
+            $note->objType = 'note';
+            // Get the note index
+            $note->index = $note->pivot->index;
+        }
 
-      $attachedCustoms = $outline->customFields;
-      foreach($attachedCustoms as $field)
+        // The index of custom fields is stored in the custom fields database,
+        // so we don't need to get it specifically
+        $attachedCustoms = $outline->customFields;
+        foreach($attachedCustoms as $field)
         $field->objType = 'custom';
 
-      // Set the keyBy ID for both attach-collections
-      // to make it able to "forget" all moved items.
-      $attachedNotes->keyBy('id');
-      $attachedCustoms->keyBy('id');
+        // Set the keyBy ID for both attach-collections
+        // to make it able to "forget" all moved items.
+        $attachedNotes->keyBy('id');
+        $attachedCustoms->keyBy('id');
 
-      // Now shuffle them into the right order into a new array
-      $attachedElements = new Collection();
-      // IMPORTANT: Index is 1-based!
-      for($i = 0; $i < (count($attachedNotes)+count($attachedCustoms)); $i++)
-      {
-        foreach($attachedNotes as $note)
-          if($note->index == ($i+1))
-          {
-            $attachedElements->push($note);
-            $attachedNotes->pull($note->id);
-          }
+        // Now shuffle them into the right order into a new array
+        $attachedElements = new Collection();
+        // IMPORTANT: Index is 1-based!
+        if((count($attachedNotes) <= 0) || (count($attachedCustoms) <= 0))
+        {
+            // If either array is empty, just insert it to the attached elements.
+            if(count($attachedNotes) == 0)
+            {
+                $attachedElements = $attachedCustoms;
+            }
+            else {
+                // And vice versa
+                $attachedElements = $attachedNotes;
+            }
+        }
+        else
+        {
+            // Shuffling only makes sense if both arrays are present.
+            for($i = 0; $i < (count($attachedNotes)+count($attachedCustoms)); $i++)
+            {
+                foreach($attachedNotes as $note)
+                {
+                    if($note->index == ($i+1))
+                    {
+                        $attachedElements->push($note);
+                        $attachedNotes->pull($i);
+                    }
+                }
 
-        foreach($attachedCustoms as $field)
-          if($field->index == ($i+1))
-          {
-            $attachedElements->push($field);
-            $attachedCustoms->pull($field->id);
-          }
-      }
 
-      return view('outlines.show', compact('outline', 'attachedElements'));
+                foreach($attachedCustoms as $field)
+                {
+                    if($field->index == ($i+1))
+                    {
+                        $attachedElements->push($field);
+                        $attachedCustoms->pull($i);
+                        echo "asda      ".$note->id."<br>";
+                    }
+                }
+            }
+        }
+
+        return view('outlines.show', compact('outline', 'attachedElements'));
     }
 
     public function getCreate()
     {
-      // Simply return the view
-      return view('outlines.create');
+        // Simply return the view
+        return view('outlines.create');
     }
 
     public function postCreate(Request $request)
     {
-      $validator = Validator::make($request->all(), [
-         'name' => 'required|min:3|max:255',
-         'description' => 'min:3'
-     ]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3|max:255',
+            'description' => 'min:3'
+        ]);
 
-     if ($validator->fails()) {
-         return redirect('/outlines/create')
-                     ->withErrors($validator)
-                     ->withInput();
-     }
+        if ($validator->fails()) {
+            return redirect('/outlines/create')
+            ->withErrors($validator)
+            ->withInput();
+        }
 
-     // Validator passed? Then create.
-     $outline = new Outline;
-     $outline->name = $request->name;
-     $outline->description = $request->description;
-     $outline->save();
+        // Validator passed? Then create.
+        $outline = new Outline;
+        $outline->name = $request->name;
+        $outline->description = $request->description;
+        $outline->save();
 
-     if(count($request->tags) > 0)
-     {
-         foreach($request->tags as $tagname)
-         {
-           $tag = Tag::firstOrCreate(["name" => $tagname]);
-           $outline->tags()->attach($tag->id);
-         }
-     }
+        if(count($request->tags) > 0)
+        {
+            foreach($request->tags as $tagname)
+            {
+                $tag = Tag::firstOrCreate(["name" => $tagname]);
+                $outline->tags()->attach($tag->id);
+            }
+        }
 
-     if(count($request->references) > 0)
-     {
-         foreach($request->references as $referenceId)
-         {
-             try {
-               $ref = Reference::findOrFail($referenceId);
-               // If this line is executed the model exists
-               $outline->references()->attach($ref->id);
+        if(count($request->references) > 0)
+        {
+            foreach($request->references as $referenceId)
+            {
+                try {
+                    $ref = Reference::findOrFail($referenceId);
+                    // If this line is executed the model exists
+                    $outline->references()->attach($ref->id);
 
-             } catch (ModelNotFoundException $e) {
-               // Do nothing
-             }
-         }
-     }
-     
-      // For now let's add the user some notes
-      return redirect('notes/create/'.$outline->id);
+                } catch (ModelNotFoundException $e) {
+                    // Do nothing
+                }
+            }
+        }
+
+        // For now let's add the user some notes
+        return redirect('notes/create/'.$outline->id);
     }
 
     public function getEdit($id)
     {
         if(!$id || $id <= 0)
-          return redirect('outlines/create')->withInput();
+        return redirect('outlines/create')->withInput();
 
         $outline = Outline::find($id);
         $outline->tags;
@@ -158,84 +184,84 @@ class OutlineController extends Controller
 
     public function postEdit(Request $request, $id)
     {
-      if(!$id || $id <= 0)
+        if(!$id || $id <= 0)
         return redirect('outlines/create')->withInput();
 
         $validator = Validator::make($request->all(), [
-           'name' => 'required|min:3|max:255',
-           'description' => 'min:3'
-       ]);
+            'name' => 'required|min:3|max:255',
+            'description' => 'min:3'
+        ]);
 
-       if ($validator->fails()) {
-           return redirect('/outlines/edit/'.$id)
-                       ->withErrors($validator)
-                       ->withInput();
-       }
+        if ($validator->fails()) {
+            return redirect('/outlines/edit/'.$id)
+            ->withErrors($validator)
+            ->withInput();
+        }
 
-       // If everything passed let's edit!
-       $outline = Outline::find($id);
+        // If everything passed let's edit!
+        $outline = Outline::find($id);
 
-      if(count($request->tags) > 0)
-      {
-          $tagIDs = [];
+        if(count($request->tags) > 0)
+        {
+            $tagIDs = [];
 
-          foreach($request->tags as $tagname)
-          {
-              $tag = Tag::firstOrCreate(["name" => $tagname]);
-              $tagIDs[] = $tag->id;
-          }
-          // Sync tag list
-          $outline->tags()->sync($tagIDs);
-      }
-      else {
-          // Sync with empty array to remove all
-          $outline->tags()->sync([]);
-      }
+            foreach($request->tags as $tagname)
+            {
+                $tag = Tag::firstOrCreate(["name" => $tagname]);
+                $tagIDs[] = $tag->id;
+            }
+            // Sync tag list
+            $outline->tags()->sync($tagIDs);
+        }
+        else {
+            // Sync with empty array to remove all
+            $outline->tags()->sync([]);
+        }
 
-      if(count($request->references) > 0)
-      {
-          // Same for references
-          $referenceIDs = [];
+        if(count($request->references) > 0)
+        {
+            // Same for references
+            $referenceIDs = [];
 
-          foreach($request->references as $referenceId)
-          {
-              try {
-                  $ref = Reference::findOrFail($referenceId);
-                  // If this line is executed the model exists
-                  $referenceIDs[] = $ref->id;
+            foreach($request->references as $referenceId)
+            {
+                try {
+                    $ref = Reference::findOrFail($referenceId);
+                    // If this line is executed the model exists
+                    $referenceIDs[] = $ref->id;
 
-              } catch (ModelNotFoundException $e) {
-                  // Do nothing
-              }
-          }
+                } catch (ModelNotFoundException $e) {
+                    // Do nothing
+                }
+            }
 
-          $outline->references()->sync($referenceIDs);
-      }
-      else {
-          // Sync with empty array to remove all
-          $outline->references()->sync([]);
-      }
+            $outline->references()->sync($referenceIDs);
+        }
+        else {
+            // Sync with empty array to remove all
+            $outline->references()->sync([]);
+        }
 
-      $outline->name = $request->name;
-      $outline->description = $request->description;
-      $outline->save();
+        $outline->name = $request->name;
+        $outline->description = $request->description;
+        $outline->save();
 
-      return redirect(url('/outlines/show/'.$id));
+        return redirect(url('/outlines/show/'.$id));
     }
 
     public function delete($id)
     {
-      try {
-          $outline = Outline::findOrFail($id);
-      } catch (ModelNotFoundException $e) {
+        try {
+            $outline = Outline::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            return redirect('/outlines');
+        }
+
+        $outline->notes()->detach();
+        $outline->customFields()->delete();
+
+        $outline->delete();
+
         return redirect('/outlines');
-      }
-
-      $outline->notes()->detach();
-      $outline->customFields()->delete();
-
-      $outline->delete();
-
-      return redirect('/outlines');
     }
 }

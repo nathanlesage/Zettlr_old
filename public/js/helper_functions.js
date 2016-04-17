@@ -65,7 +65,9 @@ function addTag()
 		if($("#tagSearchBox").val() == tagList[i])
 		{
 			// We already have that tag: display an error and return
-			displayError("That tag is already in your tag list");
+			displayInfo("That tag is already in your tag list");
+			// Empty the search box
+			$("#tagSearchBox").val("");
 			return;
 		}
 	}
@@ -77,8 +79,7 @@ function addTag()
 		// We don't have that tag yet, so push it
 		tagList.push($("#tagSearchBox").val());
 	}
-
-	$("#tagList").append('<div class="alert alert-info alert-dismissable"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+	$("#tagList").append('<div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })"><span aria-hidden="true">&times;</span></button></div>');
 	$("#tagSearchBox").val("");
 }
 
@@ -95,7 +96,8 @@ function addReference(referenceId = 0)
 		if($("#referenceSearchBox").val() == referenceList[i])
 		{
 			// We already have that tag: display an error and return
-			displayError("That reference is already in your references list");
+			displayInfo("That reference is already in your references list");
+			$("#referenceSearchBox").val("");
 			return;
 		}
 	}

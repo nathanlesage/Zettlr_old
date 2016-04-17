@@ -127,10 +127,11 @@ class AjaxController extends Controller
     	{
     		foreach($notes as $note)
     		{
-    			$note->content = substr($note->content, 0, 120)."&hellip;";
+    			$note->content = strip_tags(Markdown::convertToHtml(str_limit($note->content, 120, '&hellip;')));
     		}
-    		return $notes;
-    	}
+            
+            return $notes;
+        }
     }
 
     public function getLinkNotes($id1, $id2)
