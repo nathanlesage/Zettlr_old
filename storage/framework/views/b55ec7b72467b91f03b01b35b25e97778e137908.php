@@ -81,7 +81,7 @@
 	  			<div class="panel-heading onClickLoadNote" style="cursor:pointer;">
 						<div class="row">
 							<div class="col-md-10">
-								<h3 class="panel-title"><?php echo e($note->id); ?> &mdash; <?php echo e($note->title); ?></h3>
+								<h3 class="panel-title"><span class="badge"><?php echo e($note->id); ?></span> <?php echo e($note->title); ?></h3>
 							</div>
 							<div class="col-md-2">
 								<span class="pull-right">

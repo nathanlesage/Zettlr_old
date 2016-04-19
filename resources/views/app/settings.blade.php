@@ -12,7 +12,7 @@
         <label for="userName">Your username:</label>
       </div>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="userName" name="name" value="{{ Auth::user()->name }}">
+        <input type="text" class="form-control" id="userName" name="name" value="{{ (old('name')) ? old('name') : Auth::user()->name }}">
         <p class="help-block">{{ $errors->first("name") }}</p>
       </div>
     </div>
@@ -22,7 +22,7 @@
         <label for="userMail">Your Email:</label>
       </div>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="userMail" name="email" value="{{ Auth::user()->email }}">
+        <input type="text" class="form-control" id="userMail" name="email" value="{{ (old('email')) ? old('email') : Auth::user()->email }}">
         <p class="help-block">{{$errors->first("email")}}</p>
       </div>
     </div>

@@ -54,9 +54,22 @@
                             <?php endforeach; ?>
                         <?php endif; ?>
                     <?php endif; ?>
+                    <?php /* Old tags from $request */ ?>
+                    <?php if(count(old('tags')) > 0): ?>
+                        <?php foreach(old('tags') as $tag): ?>
+                            <?php /* The old object only contains the array */ ?>
+                            <div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                                <input type="hidden" value="<?php echo e($tag); ?>" name="tags[]">
+                                <?php echo e($tag); ?>
+
+                                <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
-
 
             <div class="form-group row">
                 <div class="col-md-8">
@@ -87,6 +100,20 @@
                                     </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
+                        <?php endif; ?>
+                        <?php if(count(old('references')) > 0): ?>
+                            <?php foreach(old('references') as $referenceID): ?>
+                                <?php $reference = App\Reference::find($referenceID) ?>
+                                <?php /* The old object only contains the array */ ?>
+                                <div class="alert alert-success alert-dismissable">
+                                    <input type="hidden" value="<?php echo e($reference->id); ?>" name="references[]">
+                                    <?php echo e($reference->author_last); ?> <?php echo e($reference->year); ?>
+
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                 </div>

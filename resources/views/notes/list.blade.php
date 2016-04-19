@@ -81,7 +81,7 @@
 	  			<div class="panel-heading onClickLoadNote" style="cursor:pointer;">
 						<div class="row">
 							<div class="col-md-10">
-								<h3 class="panel-title">{{ $note->id }} &mdash; {{ $note->title }}</h3>
+								<h3 class="panel-title"><span class="badge">{{ $note->id }}</span> {{ $note->title }}</h3>
 							</div>
 							<div class="col-md-2">
 								<span class="pull-right">

@@ -40,13 +40,19 @@ if($('#tagSearchBox').length)
         // send the request (with the term the user typed)
         // to a remote server and the response can be handled
         source: function( request, response ) {
-            $.getJSON( "{{ url('/ajax/tag/search') }}/" + request.term, {}, function(data) {
+            $.getJSON( "{{ url('/ajax/tag/search') }}/" + encodeURIComponent(request.term), {}, function(data) {
                 // Call the response function of autocompleteUI
                 // We don't need to alter our json object as we
                 // will be filling in everything manually via
                 // focus, select and the _renderItem function.
                 data.unshift(new Object({name: $("#tagSearchBox").val(), isFieldValue: true}));
                 response(data);
+            }).fail(function(jqXHR, textStatus, errorThrown)
+            {
+                if(jqXHR.status == 500)
+                {
+                    displayError("There was an error while retrieving the search results");
+                }
             });
         },
         // Focus is what happens, when the user selects a menu item.
@@ -81,12 +87,18 @@ if($('#referenceSearchBox').length)
         // send the request (with the term the user typed)
         // to a remote server and the response can be handled
         source: function( request, response ) {
-            $.getJSON( "{{ url('/ajax/reference/search') }}/" + request.term, {}, function(data) {
+            $.getJSON( "{{ url('/ajax/reference/search') }}/" + encodeURIComponent(request.term), {}, function(data) {
                 // Call the response function of autocompleteUI
                 // We don't need to alter our json object as we
                 // will be filling in everything manually via
                 // focus, select and the _renderItem function.
                 response(data);
+            }).fail(function(jqXHR, textStatus, errorThrown)
+            {
+                if(jqXHR.status == 500)
+                {
+                    displayError("There was an error while retrieving the search results");
+                }
             });
         },
         // Focus is what happens, when the user selects a menu item.
@@ -119,13 +131,19 @@ $("#navSearchBar").autocomplete({
     // send the request (with the term the user typed)
     // to a remote server and the response can be handled
     source: function( request, response ) {
-        $.getJSON( "{{ url('/ajax/note/search') }}/" + request.term, {}, function(data) {
+        $.getJSON( "{{ url('/ajax/note/search') }}/" + encodeURIComponent(request.term), {}, function(data) {
             // Call the response function of autocompleteUI
             // We don't need to alter our json object as we
             // will be filling in everything manually via
             // focus, select and the _renderItem function.
-            response(data);
-        }).fail(function() { displayError("Could not get search results"); });
+            response(data);// TODO fail function
+        }).fail(function(jqXHR, textStatus, errorThrown)
+        {
+            if(jqXHR.status == 500)
+            {
+                displayError("There was an error while retrieving the search results");
+            }
+        });
     },
     // Do nothing on focus (i.e. don't do anything with content
     focus: function( event, ui ) {
