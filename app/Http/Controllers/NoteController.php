@@ -106,8 +106,9 @@ class NoteController extends Controller
 
         // Now retrieve IDs and title of all linked notes
         $linkedNotes = $note->notes;
+        $mainID = $note->id;
 
-        return view('notes.show', ['note' => $note, 'relatedNotes' => $relatedNotes, 'maxCount' => $maxCount, 'linkedNotes' => $linkedNotes]);
+        return view('notes.show', compact('note', 'relatedNotes', 'maxCount', 'linkedNotes', 'mainID'));
     }
 
     public function getCreate($outlineId = 0) {

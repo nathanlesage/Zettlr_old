@@ -153,7 +153,7 @@ function openNote(myPanel)
 		for(i = 0; i < data.tags.length; i++)
 		{
 			console.log(data.tags[i].name);
-			tagArray.push('<button class="btn btn-primary">'+data.tags[i].name+'</button>\n');
+			tagArray.push('<button class="btn btn-primary tag">'+data.tags[i].name+'</button>\n');
 		}
 
 

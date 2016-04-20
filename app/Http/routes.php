@@ -52,6 +52,7 @@ Route::group(['middleware' => 'web'], function () {
 
     // Tags routes
     Route::get('/tags/index',       'TagController@index');
+    Route::get('/tags/show/{id}',   'TagController@show');
     Route::get('/tags/delete/{id}', 'TagController@delete');
 
     // References routes
@@ -73,6 +74,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/ajax/tag/search/{term}',       'AjaxController@getTagSearch');
     Route::get('/ajax/reference/search/{term}', 'AjaxController@getReferenceSearch');
     Route::get('/ajax/link/{id1}/with/{id2}',   'AjaxController@getLinkNotes');
+    Route::get('/ajax/unlink/{id1}/from/{id2}', 'AjaxController@getUnlinkNotes');
     Route::get('/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}',
                                                 'AjaxController@getOutlineAttach');
     Route::get('/ajax/changeindex/{type}/{elementId}/{outlineId}/{newIndex}',

@@ -4,7 +4,6 @@
 @section('scripts')
 @endsection
 
-{{--<script> Highlighting--}}
 @section('scripts_on_document_ready')
 
 	$("a.onClickPreviewNote").click(function(e) {
@@ -28,13 +27,25 @@
 			location.reload();
 		})
 		.fail(function(data) {
-			displayError(data.message);
+			displayError("Error while linking the notes");
+		});
+	});
+
+	$("a.onClickUnlink").click(function(e) {
+		e.preventDefault();
+		id = $(this).attr("id");
+		$.getJSON("{{ url('ajax/unlink') }}/" + $("div.page-header").attr("id").substr(8) + "/from/" + id, function(data) {
+			displaySuccess("Notes unlinked successfully");
+			// Reload to remove the link in the breadcrumb
+			location.reload();
+		})
+		.fail(function(data) {
+			displayError("Error while unlinking the notes");
 		});
 	});
 
 	$("#tabs").tabs();
 @endsection
-{{--</script> end highlighting--}}
 
 @section('content')
 	<div class="container" style="background-color:white">
@@ -65,7 +76,7 @@
 						<hr>
 						@if(count($note->tags) > 0)
 							@foreach($note->tags as $tag)
-								<button class="btn btn-primary">{{ $tag->name }}</button>
+								<button class="btn btn-primary tag">{{ $tag->name }}</button>
 							@endforeach
 						@else
 							<div class="alert alert-primary">No tags found</div>
@@ -87,42 +98,48 @@
 			</div> <!-- ./ col-lg-8 -->
 			<!-- Space for trails -->
 			<div class="col-lg-4">
+				<div>&nbsp;<br>&nbsp;</div>
 				<div class="panel panel-default panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Related Notes</h3>
 					</div>
-					<div class="panel-body" style="max-height:20%">
+					<div class="panel-body list-group">
 						@if(count($relatedNotes) > 0)
 							@foreach($relatedNotes as $note)
-								<div class="row">
-									<div class="col-md-9">
-										<p><a href="#" id="{{ $note->id }}" title="Preview this note" class="onClickPreviewNote">{{ $note->title }}</a></p>
+								<div class="list-group-item">
+									<p class="list-group-item-text">
+										<a href="#" id="{{ $note->id }}" title="Preview this note" class="onClickPreviewNote" data-toggle="tooltip">{{ $note->title }}</a>
+									</p>
+									<p class="list-group-item-text">
+									@if(!$note->notes->contains($mainID))
+										<a href="#" title="Link these two notes" data-toggle="tooltip" class="onClickLink pull-right" id="{{ $note->id }}">
+											<span class="glyphicon glyphicon-plus"></span>
+										</a>
+									@else
+										<a href="#" title="Unlink these two notes" data-toggle="tooltip" class="onClickUnlink pull-right" id="{{ $note->id }}">
+											<span class="glyphicon glyphicon-minus"></span>
+										</a>
+									@endif
+									<div class="progress" style="width:90%;">
+										<div class="progress-bar
+										@if(round($note->count/$maxCount, 2) < 0.33)
+											progress-bar-danger
+										@elseif(round($note->count/$maxCount, 2) < 0.66)
+											progress-bar-warning
+										@else
+											progress-bar-success
+										@endif" role="progressbar"
+										aria-valuenow="{{ round($note->count/$maxCount, 2) * 100 }}"
+										aria-valuemin="0"
+										aria-valuemax="100"
+										style="width: {{ round($note->count/$maxCount, 2) * 100 }}%"
+										title="{{ round($note->count/$maxCount, 2) * 100 }}% Relevancy"
+										data-toggle="tooltip">
+										<span class="sr-only">{{ round($note->count/$maxCount, 2) * 100 }}% Relevancy</span>
 									</div>
-									<div class="col-md-3">
-										<p>
-											<a href="#" title="Link these two notes" data-toggle="tooltip" class="onClickLink" id="{{ $note->id }}"><span class="glyphicon glyphicon-plus"></span></a>
-										</p>
-										<div class="progress">
-											<div class="progress-bar
-											@if(round($note->count/$maxCount, 2) < 0.33)
-												progress-bar-danger
-											@elseif(round($note->count/$maxCount, 2) < 0.66)
-												progress-bar-warning
-											@else
-												progress-bar-success
-											@endif" role="progressbar"
-											aria-valuenow="{{ round($note->count/$maxCount, 2) * 100 }}"
-											aria-valuemin="0"
-											aria-valuemax="100"
-											style="width: {{ round($note->count/$maxCount, 2) * 100 }}%"
-											title="{{ round($note->count/$maxCount, 2) * 100 }}% Relevancy"
-											data-toggle="tooltip">
-											<span class="sr-only">{{ round($note->count/$maxCount, 2) * 100 }}% Relevancy</span>
-										</div>
-									</div> <!-- ./ progress -->
-								</div> <!-- ./ col-md-3 -->
-							</div> <!-- ./ row -->
-							<hr>
+								</div>
+							</p>
+							</div>
 						@endforeach
 					@else
 						<div class="alert alert-info">No related notes found</div>

@@ -43,7 +43,7 @@
                         <!-- Here the tags are appended -->
                         @if(count($outline->tags) > 0)
                             @foreach($outline->tags as $tag)
-                                <div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                                <div class="btn btn-primary tag" onClick="$(this).fadeOut(function() { $(this).remove(); })">
                                     <input type="hidden" value="{{ $tag->name }}" name="tags[]">
                                     {{ $tag->name }}
                                     <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">

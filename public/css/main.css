@@ -24,7 +24,7 @@ body
     color:#bce8f1;
 }
 
-#tagList > .btn
+.btn.btn-primary.tag
 {
     /* Margin hack for the tag list */
     margin:5px;

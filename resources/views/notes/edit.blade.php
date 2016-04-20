@@ -40,7 +40,7 @@
                     <!-- Here the tags are appended -->
                     @if(count($note->tags) > 0)
                         @foreach($note->tags as $tag)
-                            <div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                            <div class="btn btn-primary tag" onClick="$(this).fadeOut(function() { $(this).remove(); })">
                                 <input type="hidden" value="{{ $tag->name }}" name="tags[]">
                                 {{ $tag->name }}
                                 <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">
@@ -53,7 +53,7 @@
                     @if(count(old('tags')) > 0)
                         @foreach(old('tags') as $tag)
                             {{-- The old object only contains the array --}}
-                            <div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                            <div class="btn btn-primary tag" onClick="$(this).fadeOut(function() { $(this).remove(); })">
                                 <input type="hidden" value="{{ $tag }}" name="tags[]">
                                 {{ $tag }}
                                 <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">

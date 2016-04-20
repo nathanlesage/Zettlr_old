@@ -7,6 +7,12 @@
 * Adapted display of tags on outline create/edit-pages
 * Fixed an issue, which caused references to be lost after editing, as the reference ID has not been passed to the form
 * Layout of note IDs on list.blade.php changed
+* [tech] Removed vendor from repo and adapted the composer.json file to reflect this is just an app based on laravel and not laravel itself
+* Updated layout of related notes in notes/show, added functionality to unlink notes that are linked
+* Updated layout of Tag list
+* Added show-template to list all notes of a specific tag.
+* Updated tag display to everywhere have more margin
+* Limited retrieved Tags on search to ease the flood out a little bit
 
 ## v0.1.1-beta (2016-04-17)
 

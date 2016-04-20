@@ -80,7 +80,7 @@ class AjaxController extends Controller
     {
     	// The "LIKE"-Statement in SQL just searches for the pattern
     	// anywhere in, at the beginning or the end of a term.
-    	$tags = Tag::where('name', 'LIKE', '%'.$term.'%')->get(['name', 'id']);
+    	$tags = Tag::where('name', 'LIKE', '%'.$term.'%')->limit(20)->get(['name', 'id']);
 
     	if(! $tags)
     	{
@@ -129,7 +129,7 @@ class AjaxController extends Controller
     		{
     			$note->content = strip_tags(Markdown::convertToHtml(str_limit($note->content, 120, '&hellip;')));
     		}
-            
+
             return $notes;
         }
     }
@@ -156,6 +156,32 @@ class AjaxController extends Controller
     	//  And it should be attached to this ID (and vice versa)
     	$note->notes()->attach($id2);
     	$note2->notes()->attach($id1);
+
+    	return response()->json(['message', 'Notes linked successfully'], 200);
+    }
+
+    public function getUnlinkNotes($id1, $id2)
+    {
+    	if(($id1 <= 0) || ($id2 <= 0))
+    		return response()->json(['message', 'Bad request: An ID was invalid'], 400);
+
+    	try
+    	{
+    		Note::findOrFail($id1);
+    		Note::findOrFail($id2);
+    	}
+    	catch(ModelNotFoundException $e)
+    	{
+    		return response()->json(['message', 'Some ID did not belong to any note'], 404);
+    	}
+
+    	// This note is the currently active note
+    	$note = Note::find($id1);
+    	$note2 = Note::find($id2);
+
+    	//  And it should be detached to this ID (and vice versa)
+    	$note->notes()->detach($id2);
+    	$note2->notes()->detach($id1);
 
     	return response()->json(['message', 'Notes linked successfully'], 200);
     }

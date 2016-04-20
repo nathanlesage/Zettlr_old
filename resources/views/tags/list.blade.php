@@ -6,18 +6,26 @@
             <h1>Tags</h1>
         </div>
         @if(count($tags) > 0)
-            <ul class="panel-group">
+            <table class="table table-striped">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th style="text-align:right;">Occurrence</th>
+                    <th style="text-align:right;">Actions</th>
+                </tr>
                 @foreach($tags as $tag)
-                    <li class="list-group-item">
-                        {{ $tag->name }}
-                        <span class="pull-right">
+                    <tr>
+                        <td>{{ $tag->id }}</td>
+                        <td><a href="{{ url('/tags/show/') }}/{{ $tag->id }}" title="Show all related notes" data-toggle="tooltip">{{ $tag->name }}</a></td>
+                        <td style="text-align:right;">{{ count($tag->notes) }}</td>
+                        <td style="text-align:right;">
                             <a href="{{ url('/tags/delete')}}/{{$tag->id}}" title="Remove tag" data-toggle="tooltip">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </a>
-                        </span>
-                    </li>
+                        </td>
+                    </tr>
                 @endforeach
-            </ul>
+            </table>
         @else
             <div class="alert alert-warning">No tags found</div>
         @endif
