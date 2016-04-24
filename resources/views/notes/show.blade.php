@@ -76,7 +76,7 @@
 						<hr>
 						@if(count($note->tags) > 0)
 							@foreach($note->tags as $tag)
-								<button class="btn btn-primary tag">{{ $tag->name }}</button>
+								<a href="{{ url('/tags/show') }}/{{ $tag->id }}" class="btn btn-primary tag">{{ $tag->name }}</a>
 							@endforeach
 						@else
 							<div class="alert alert-primary">No tags found</div>
@@ -87,7 +87,7 @@
 								<button class="btn btn-success">{{ $reference->author_last }} ({{ $reference->year }}): {{ $reference->title }}</button>
 							@endforeach
 						@else
-							<div class="alert alert-success">No references found</div>
+							<div class="alert alert-info">No references found</div>
 						@endif
 					</div>
 					<div class="panel-body" id="tabs-2">

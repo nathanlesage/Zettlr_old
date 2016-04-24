@@ -100,6 +100,7 @@ class AjaxController extends Controller
                               ->orWhere('author_first', 'LIKE', '%'.$term.'%')
                               ->orWhere('author_last', 'LIKE', '%'.$term.'%')
                               ->orWhere('title', 'LIKE', '%'.$term.'%')
+                              ->limit(20)
                               ->get();
 
     	if(! $references)
@@ -116,7 +117,10 @@ class AjaxController extends Controller
     {
     	// TODO: implement a "good" fulltext search.
 
-    	$notes = Note::where('content', 'LIKE', '%'.$term.'%')->orWhere('title', 'LIKE', '%'.$term.'%')->get(['content', 'title', 'id']);
+    	$notes = Note::where('content', 'LIKE', '%'.$term.'%')
+                    ->orWhere('title', 'LIKE', '%'.$term.'%')
+                    ->limit(15)
+                    ->get(['content', 'title', 'id']);
 
     	// Do we have a search result?
     	if(! $notes)

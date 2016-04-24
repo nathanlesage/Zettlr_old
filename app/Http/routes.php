@@ -65,7 +65,7 @@ Route::group(['middleware' => 'web'], function () {
 
     // Trail routes
     // Deactivated for always killing the dev server
-    // Route::get('/trails', 'TrailController@index');
+    Route::get('/trails', 'TrailController@index');
 
     // Settings controls
     Route::get('/settings',     'AppController@index');

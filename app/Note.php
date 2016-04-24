@@ -47,7 +47,7 @@ class Note extends Model
             $query->where('note2_id', '=', $this->id);
             $query->where('note1_id', '<', $this->id);
         })->get(['id']);
-        
+
         return $prevNotes;
     }
 

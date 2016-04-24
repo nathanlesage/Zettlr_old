@@ -9,12 +9,15 @@
 * Layout of note IDs on list.blade.php changed
 * [tech] Removed vendor from repo and adapted the composer.json file to reflect this is just an app based on laravel and not laravel itself
 * Updated layout of related notes in notes/show, added functionality to unlink notes that are linked
-* Updated layout of Tag list
+* Updated layout of tag list
 * Added show-template to list all notes of a specific tag.
 * Updated tag display to everywhere have more margin
-* Limited retrieved Tags on search to ease the flood out a little bit
-* Made the tag-List sortable (to filter out unused tags, search for tags, etc.)
+* Limited retrieved tags, references and notes in searches to 20 (notes: 15) to ease the flood out a little bit
+* Made the tag-list sortable (to filter out unused tags, search for tags, etc.)
 * Switched to a local less compiler for more consistency and options to configure
+* Adapted design and moved main.css-contents into bootstrap less-files
+* Tags now link to their respective overview page
+* Implemented trails: Zettlr can now search through all linked notes and display all individual paths
 
 ## v0.1.1-beta (2016-04-17)
 

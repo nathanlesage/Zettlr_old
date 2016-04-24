@@ -12,7 +12,7 @@
         <label for="userName">Your username:</label>
       </div>
       <div class="col-sm-10">
-        <input type="text" class="form-control" id="userName" name="name" value="{{ (old('name')) ? old('name') : Auth::user()->name }}">
+        <input type="text" class="form-control" id="userName" name="name" value="{{ (old('name')) ? old('name') : Auth::user()->name }}" autofocus>
         <p class="help-block">{{ $errors->first("name") }}</p>
       </div>
     </div>
