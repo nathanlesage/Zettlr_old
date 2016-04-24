@@ -28,7 +28,7 @@
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
-    Route::get('/',     'NoteController@index');
+    Route::get('/',     'NoteController@home');
     Route::get('/home', 'NoteController@home');
 
     // Notes routes
@@ -62,6 +62,10 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/references/edit/{id}',     'ReferenceController@getEdit');
     Route::post('/references/edit/{id}',    'ReferenceController@postEdit');
     Route::get('/references/delete/{id}',   'ReferenceController@delete');
+
+    // Trail routes
+    // Deactivated for always killing the dev server
+    // Route::get('/trails', 'TrailController@index');
 
     // Settings controls
     Route::get('/settings',     'AppController@index');

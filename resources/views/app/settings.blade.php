@@ -1,4 +1,4 @@
-@extends('app');
+@extends('app')
 
 @section('content')
 <div class="container" style="background-color:white;">

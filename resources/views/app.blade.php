@@ -14,6 +14,8 @@
     {{ Html::script('js/jquery.noty.packaged.min.js') }}
     <!-- Include Hotkey jQuery plugin -->
     {{ Html::script('js/jquery.hotkeys.js') }}
+    <!-- Include tablesorter jQuery plugin -->
+    {{ Html::script('js/jquery.tablesorter.min.js') }}
 
     <!-- Include jQuery UI -->
     {{ Html::style('css/jquery-ui.min.css') }}
@@ -21,10 +23,10 @@
     {{ Html::script('js/jquery-ui.min.js') }}
 
     <!-- Include Bootstrap CSS and JS -->
-    <!--{{ Html::style('css/bootstrap.min.css') }}-->
-    <!--{{ Html::script('js/bootstrap.min.js') }}-->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+    {{ Html::style('css/app.min.css') }}
+    {{ Html::script('js/bootstrap.min.js') }}
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>-->
 
     <!-- Include additional css -->
     {{ Html::style('css/main.css') }}

@@ -24,53 +24,43 @@ body
     color:#bce8f1;
 }
 
-.btn.btn-primary.tag
-{
-    /* Margin hack for the tag list */
-    margin:5px;
-}
 
 #tagList > .btn > .close
 {
     /* A little bit more spacing */
     margin-left:5px;
 }
-
 /*
-* Style for draggable elements
-*/
-.draggable:hover
+ * Styles for sortable tables
+ */
+.header::after, .headerSortDown::after, .headerSortUp::after
 {
-    border-color:#bde;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(150,200,250,.6);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(150,200,250,.6);
-    background-color:#bde;
-    cursor:-webkit-grab;
-    cursor:-moz-grab;
+    font-family: 'Glyphicons Halflings';
+    font-weight: 400;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    line-height:1;
+    padding-left:10px;
+    vertical-align: middle;
+}
+
+.header::after
+{
+    content:"\e150";
+}
+
+.headerSortDown::after
+{
+    content:"\e113";
+}
+
+.headerSortUp::after
+{
+    content: "\e114";
 }
 
 /*
 * CodeMirror-hack for adapting the design
 * to bootstrap
 */
-.CodeMirror
-{
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.CodeMirror-focused
-{
-    border-color: #66afe9;
-    outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-}
-
-/*
-* CodeMirror-hack for showing the text-cursor all over the "textarea"
-*/
-.CodeMirror-scroll
-{
-    cursor:text;
-}

@@ -13,6 +13,8 @@
 * Added show-template to list all notes of a specific tag.
 * Updated tag display to everywhere have more margin
 * Limited retrieved Tags on search to ease the flood out a little bit
+* Made the tag-List sortable (to filter out unused tags, search for tags, etc.)
+* Switched to a local less compiler for more consistency and options to configure
 
 ## v0.1.1-beta (2016-04-17)
 
