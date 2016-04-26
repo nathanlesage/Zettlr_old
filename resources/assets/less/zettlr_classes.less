@@ -65,7 +65,7 @@
 body
 {
     // Body background and navbar fix
-    background-image:url('/img/notes.main.background.2.jpg');
+    background-image:@background-image;
     background-position:top center;
     background-attachment:fixed;
     padding-top:70px;
@@ -75,6 +75,9 @@ body
 .CodeMirror {
     border: 1px solid @input-border;
     border-radius: @input-border-radius;
+    // Auto resize on more than ten lines but auto show at least 10 lines height
+    height: auto;
+    min-height: @line-height-computed * 10;
 }
 
 .CodeMirror-focused {
@@ -87,4 +90,6 @@ body
 // CodeMirror-hack for showing the text-cursor all over the "textarea"
 .CodeMirror-scroll{
     cursor:text;
+    // Minimum height: ten lines
+    min-height: @line-height-computed * 10
 }

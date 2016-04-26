@@ -10,6 +10,7 @@ if($("#gfm-code").length)
     var editor = CodeMirror.fromTextArea(document.getElementById("gfm-code"), {
         mode: 'gfm',
         lineNumbers: true,
+        viewportMargin: Infinity,
         theme: "default",
         lineWrapping: true,
         // Set Tab to false to focus next input

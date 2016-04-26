@@ -16,9 +16,12 @@
 
     // Display a text input for the heading
     $('#outlineContents')
-      .append('<div class="form-group" id="formStyler">'
+      .after('<div class="form-horizontal" id="formStyler">'
+        + '<div class="input-group">'
         + '<input class="form-control" type="text" name="heading"'
-        + 'id="onEnterAddHeading" placeholder="Heading" value=""></div>');
+        + 'id="onEnterAddHeading" placeholder="Heading" value="">'
+        + '<div class="input-group-addon" style="cursor:pointer;" title="Cancel" data-toggle="tooltip" onClick="$(\'#formStyler\').remove()"><span class="glyphicon glyphicon-remove"></span></div></div>'
+        + '<hr></div>');
     // Now focus
     $('#onEnterAddHeading').focus();
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
@@ -46,6 +49,11 @@
             displayError("Could not save custom field.")
           });
       }
+      elseif(e.which == 27) // Escape
+      {
+          // Just remove the element and do nothing
+          $('#formStyler').remove();
+      }
     });
   });
   // End Heading input
@@ -63,10 +71,13 @@
 
     // Display a text input for the heading
     $('#outlineContents')
-      .append('<div class="form-group" id="formStyler">'
+      .after('<div class="form-horizontal" id="formStyler">'
+              + '<div class="input-group">'
               + '<textarea rows="10" class="form-control" name="paragraph"'
-              + 'id="onEnterAddParagraph" placeholder="Press Shift+Return for insert"'
-              + 'value=""></textarea></div>');
+              + 'id="onEnterAddParagraph" placeholder="Press Shift+Return for a new line"'
+              + 'value=""></textarea>'
+              + '<div class="input-group-addon" style="cursor:pointer;" title="Cancel" data-toggle="tooltip" onClick="$(\'#formStyler\').remove()"><span class="glyphicon glyphicon-remove"></span></div>'
+              + '</div><hr></div>');
     // Now focus and scroll down to have the field in view
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
     $('#onEnterAddParagraph').focus();
@@ -96,6 +107,11 @@
           }).fail(function() {
             displayError("Could not save custom field.")
           });
+      }
+      elseif(e.which == 27) // Escape
+      {
+          // Just remove the element and do nothing
+          $('#formStyler').remove();
       }
     });
   }); // End Paragraph Input
@@ -137,9 +153,12 @@
 
     // Display a search box
     $('#outlineContents')
-      .append('<div class="form-group" id="formStyler">'
+      .after('<div class="form-horizontal" id="formStyler">'
+      + '<div class="input-group">'
       + '<input class="form-control" type="text" name="note" id="noteSearchBox"'
-      + 'placeholder="Search for notes" value=""></div>');
+      + 'placeholder="Search for notes" value="">'
+      + '<div class="input-group-addon" style="cursor:pointer;" title="Cancel" data-toggle="tooltip" onClick="$(\'#formStyler\').remove()"><span class="glyphicon glyphicon-remove"></span></div>'
+      + '</div><hr></div>');
     // Now focus
     $('#noteSearchBox').focus();
 
@@ -273,7 +292,6 @@
   }
 
 @endsection
-
 @section('content')
     <div class="container" style="background-color:white;">
         <div class="page-header" id="{{ $outline->id }}">
@@ -309,7 +327,7 @@
                     @endif
                 </div>
             </div>
-            <div id="outlineContents">
+                <div id="outlineContents">
                 <!-- Here the contents of this outliner will be displayed -->
                 @if(count($attachedElements) > 0)
                     @foreach($attachedElements as $element)
@@ -341,8 +359,9 @@
             </div>
             {{-- Now add functionality to let the users add additional stuff --}}
             <!-- First: What do you want to add? -->
-            <p><button type="button" class="btn btn-primary" id="onClickAddHeading">Add a new heading</button>
+                <button type="button" class="btn btn-primary" id="onClickAddHeading">Add a new heading</button>
                 <button type="button" class="btn btn-primary" id="onClickAddParagraph">Add a new custom note</button>
-                <button type="button" class="btn btn-primary" id="onClickAddNote">Add a new note to this outliner</button></p>
+                <button type="button" class="btn btn-primary" id="onClickAddNote">Add a new note to this outliner</button>
+                <hr>
             </div>
         @endsection

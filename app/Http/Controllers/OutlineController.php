@@ -98,7 +98,7 @@ class OutlineController extends Controller
                     if($note->index == ($i+1))
                     {
                         $attachedElements->push($note);
-                        $attachedNotes->pull($i);
+                        $attachedNotes->pull($i+1);
                     }
                 }
 
@@ -108,8 +108,7 @@ class OutlineController extends Controller
                     if($field->index == ($i+1))
                     {
                         $attachedElements->push($field);
-                        $attachedCustoms->pull($i);
-                        echo "asda      ".$note->id."<br>";
+                        $attachedCustoms->pull($i+1);
                     }
                 }
             }

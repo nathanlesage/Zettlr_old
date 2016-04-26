@@ -6,6 +6,45 @@
     <title>Zettlr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Generic Icons -->
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/img/favicon/favicon.ico">
+    <link rel="icon" type="image/gif" href="/img/favicon/favicon.gif">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon.png">
+
+    <!-- Apple specific icons -->
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon.png">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-57x57.png" sizes="57x57">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-60x60.png" sizes="60x60">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-72x72.png" sizes="72x72">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-76x76.png" sizes="76x76">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-114x114.png" sizes="114x114">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-120x120.png" sizes="120x120">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-128x128.png" sizes="128x128">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-144x144.png" sizes="144x144">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-152x152.png" sizes="152x152">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-180x180.png" sizes="180x180">
+    <link rel="apple-touch-icon" href="/img/favicon/apple-touch-icon-precomposed.png">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/img/favicon/favicon-196x196.png" sizes="196x196">
+
+    <!-- Microsoft specific icons -->
+    <meta name="msapplication-TileImage" content="/img/favicon/win8-tile-144x144.png">
+    <meta name="msapplication-TileColor" content="#15c707">
+    <meta name="msapplication-navbutton-color" content="#ffffff">
+    <meta name="application-name" content="Zettlr"/>
+    <meta name="msapplication-tooltip" content="Zettlr"/>
+    <meta name="apple-mobile-web-app-title" content="Zettlr"/>
+    <meta name="msapplication-square70x70logo" content="/img/favicon/win8-tile-70x70.png">
+    <meta name="msapplication-square144x144logo" content="/img/favicon/win8-tile-144x144.png">
+    <meta name="msapplication-square150x150logo" content="/img/favicon/win8-tile-150x150.png">
+    <meta name="msapplication-wide310x150logo" content="/img/favicon/win8-tile-310x150.png">
+    <meta name="msapplication-square310x310logo" content="/img/favicon/win8-tile-310x310.png">
+
     <!-- Include jQuery -->
     {{ Html::script('js/jquery.min.js') }}
 
@@ -20,13 +59,6 @@
     {{ Html::style('css/jquery-ui.min.css') }}
     {{ Html::style('css/jquery-ui.structure.css') }}
     {{ Html::script('js/jquery-ui.min.js') }}
-
-    <!-- Include Bootstrap CSS and JS -->
-    {{ Html::style('css/app.min.css') }}
-    {{ Html::script('js/bootstrap.min.js') }}
-
-    <!-- Include helper functions -->
-    {{ Html::script('js/helper_functions.js') }}
 
     <!-- Include codemirror main javascript -->
     {{ Html::script('js/codemirror.js') }}
@@ -43,6 +75,13 @@
     <!-- Include Show hint-addon for Codemirror -->
     {{ Html::script('js/codemirror_addons/show-hint.js') }}
     {{ Html::style('css/codemirror_addons/show-hint.css') }}
+
+    <!-- Include Bootstrap CSS and JS -->
+    {{ Html::style('css/app.min.css') }}
+    {{ Html::script('js/bootstrap.min.js') }}
+
+    <!-- Include helper functions -->
+    {{ Html::script('js/helper_functions.js') }}
 
     {{-- yield possible additional scripts --}}
     @yield('scripts')
