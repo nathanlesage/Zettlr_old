@@ -79,7 +79,7 @@ function addTag()
 		// We don't have that tag yet, so push it
 		tagList.push($("#tagSearchBox").val());
 	}
-	$("#tagList").append('<div class="btn btn-primary" onClick="$(this).fadeOut(function() { $(this).remove(); })"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })"><span aria-hidden="true">&times;</span></button></div>');
+	$("#tagList").append('<div class="btn btn-primary tag" onClick="$(this).fadeOut(function() { $(this).remove(); })"><input type="hidden" value="'+$("#tagSearchBox").val()+'" name="tags[]">'+$("#tagSearchBox").val()+' <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })"><span aria-hidden="true">&times;</span></button></div>');
 	$("#tagSearchBox").val("");
 }
 
@@ -153,7 +153,7 @@ function openNote(myPanel)
 		for(i = 0; i < data.tags.length; i++)
 		{
 			console.log(data.tags[i].name);
-			tagArray.push('<button class="btn btn-primary">'+data.tags[i].name+'</button>\n');
+			tagArray.push('<button class="btn btn-primary tag">'+data.tags[i].name+'</button>\n');
 		}
 
 

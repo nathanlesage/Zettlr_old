@@ -1,13 +1,25 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "nathanlesage/Zettlr",
+    "description": "Zettlr is a Zettelkasten implementation",
+    "keywords": ["writing", "creative writing", "academic", "note"],
     "license": "MIT",
     "type": "project",
+    "authors": [
+        {
+            "name": "Nathan LeSage",
+            "role": "Developer"
+        },
+        {
+            "name": "SamwiseK",
+            "role": "Developer"
+        }
+
+    ],
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "graham-campbell/markdown": "^6.0"
+        "graham-campbell/markdown": "^6.0",
+        "oyejorge/less.php": "v1.7.0.10"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

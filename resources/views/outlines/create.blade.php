@@ -40,6 +40,19 @@
                 </div>
                 <div class="col-md-10" id="tagList">
                     <!-- Here the tags are appended -->
+                    {{-- Old tags from $request --}}
+                    @if(count(old('tags')) > 0)
+                        @foreach(old('tags') as $tag)
+                            {{-- The old object only contains the array --}}
+                            <div class="btn btn-primary tag" onClick="$(this).fadeOut(function() { $(this).remove(); })">
+                                <input type="hidden" value="{{ $tag }}" name="tags[]">
+                                {{ $tag }}
+                                <button type="button" class="close" title="Remove" onClick="$(this).parent().fadeOut(function() { $(this).remove(); })">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
 
@@ -56,6 +69,19 @@
                 </div>
                 <div class="col-md-10" id="referenceList">
                     <!-- Here the references are appended -->
+                    @if(count(old('references')) > 0)
+                        @foreach(old('references') as $referenceID)
+                            <?php $reference = App\Reference::find($referenceID) ?>
+                            {{-- The old object only contains the array --}}
+                            <div class="alert alert-success alert-dismissable">
+                                <input type="hidden" value="{{ $reference->id }}" name="references[]">
+                                {{ $reference->author_last }} {{ $reference->year }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
 

@@ -1,0 +1,95 @@
+// jQuery-UI adaptions to Bootstrap
+
+// Elements in sortable lists on outlines that are draggable
+.draggable
+{
+    box-sizing:border-box;
+    border: 1px solid transparent;
+    border-radius: @input-border-radius;
+    .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
+    &:hover {
+        border-color:@brand-primary;
+        // Copied from mixins/forms.less
+        @color-rgba: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .6);
+        outline: 0;
+        .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color-rgba}");
+        cursor:-webkit-grab;
+        cursor:-moz-grab;
+    }
+}
+
+// Hovering over elements on the navbar search
+.ui-state-focus, .ui-menu-item:hover {
+        background-color:lighten(@brand-primary, 33%);
+}
+
+// Tablesorter caret-glyphicons
+.header::after, .headerSortDown::after, .headerSortUp::after {
+    font-family: 'Glyphicons Halflings';
+    font-weight: 400;
+    font-style: normal;
+    display: inline-block;
+    text-decoration: inherit;
+    line-height:1;
+    padding-left:10px;
+    vertical-align: middle;
+}
+
+.header::after {
+    // glyphicon-sortable
+    content:"\e150";
+}
+
+.headerSortDown::after {
+    // glyphicon-caret-up
+    content:"\e113";
+}
+
+.headerSortUp::after {
+    // glyphicon-caret-down
+    content: "\e114";
+}
+
+// General layout fixes
+
+#tagList > .btn > .close {
+    // Add a little bit more spacing between tag text and close button
+    margin-left:5px;
+}
+
+.panel-primary > .panel-heading a {
+    // Invert the color of links on panel primary
+    color:@gray-lighter;
+}
+
+body
+{
+    // Body background and navbar fix
+    background-image:@background-image;
+    background-position:top center;
+    background-attachment:fixed;
+    padding-top:70px;
+}
+
+// Adapt CodeMirror to bootstrap basic styling
+.CodeMirror {
+    border: 1px solid @input-border;
+    border-radius: @input-border-radius;
+    // Auto resize on more than ten lines but auto show at least 10 lines height
+    height: auto;
+    min-height: @line-height-computed * 10;
+}
+
+.CodeMirror-focused {
+    border-color: @brand-primary;
+    outline: 0;
+    @color-rgba: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .6);
+    .box-shadow(~"inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px @{color-rgba}");
+}
+
+// CodeMirror-hack for showing the text-cursor all over the "textarea"
+.CodeMirror-scroll{
+    cursor:text;
+    // Minimum height: ten lines
+    min-height: @line-height-computed * 10
+}

@@ -7,41 +7,57 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Tag;
+use App\Note;
 
 class TagController extends Controller
 {
-  /**
+    /**
     * Create a new controller instance.
     * Use "auth" middleware.
     *
     * @return void
     */
-   public function __construct()
-   {
-    // Require the user to be logged in
-    // for every action this controller does
-       $this->middleware('auth');
-   }
+    public function __construct()
+    {
+        // Require the user to be logged in
+        // for every action this controller does
+        $this->middleware('auth');
+    }
 
-   public function index()
-   {
-     $tags = Tag::all();
+    public function index()
+    {
+        // Don't only return the Tags, but also the IDs of the belonging notes, to get a count
+        $tags = Tag::all();
 
-     return view('tags.list', compact('tags'));
-   }
+        return view('tags.list', compact('tags'));
+    }
 
-   public function delete($id)
-   {
-     if(!$id || $id <= 0)
-      return redirect(url('/tags/index'))->withErrors(['message' => 'No such tag']);
+    public function show($id)
+    {
+        if(!$id || $id <= 0)
+        return redirect(url('/tags/index'))->withErrors(['message' => 'No such tag']);
 
-      $tag = Tag::find($id);
-      // First remove all relations to other models
-      $tag->notes()->detach();
-      $tag->outlines()->detach();
-      // Second delete
-      $tag->delete();
+        $tag = Tag::find($id);
 
-      return redirect(url('/tags/index'));
-   }
+        $notes = Note::whereHas('tags', function ($query) use($id) {
+            $query->where('tag_id', '=', $id);
+        })->get();
+
+        return view('tags.show', compact('notes', 'tag'));
+    }
+
+    public function delete($id)
+    {
+        if(!$id || $id <= 0)
+        return redirect(url('/tags/index'))->withErrors(['message' => 'No such tag']);
+
+        $tag = Tag::find($id);
+        // First remove all relations to other models
+        $tag->notes()->detach();
+        $tag->outlines()->detach();
+        // Second delete
+        $tag->delete();
+
+        return redirect(url('/tags/index'));
+    }
 }
