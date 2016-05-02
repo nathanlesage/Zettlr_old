@@ -2,7 +2,7 @@
 
 @section('scripts')
 @endsection
-
+<script>
 @section('scripts_on_document_ready')
   $('#onClickAddHeading').click(function(e) {
     e.preventDefault();
@@ -244,18 +244,21 @@
         displayError("Could not save some changes");
   }
 
-  $('#outlineContents').sortable({
-    axis: "y",
-    // TODO: Implement cross browser cursor (no, not move)
-    cursor:"-webkit-grabbing",
-    items: ".draggable",
-    opacity: 0.5,
-    // Don't drag and confuse the server on link clicking
-    cancel: "a",
-    update: function(event, ui) {
-      updateIndices();
-    }
-  }); // End sortable
+// Disable on mobile browser as sortable crashes the touch scroll functionality
+if(!isMobile) {
+    $('#outlineContents').sortable({
+      axis: "y",
+      // TODO: Implement cross browser cursor (no, not move)
+      cursor:"-webkit-grabbing",
+      items: ".draggable",
+      opacity: 0.5,
+      // Don't drag and confuse the server on link clicking
+      cancel: "a",
+      update: function(event, ui) {
+        updateIndices();
+      }
+    }); // End sortable
+}
 
   $('.onClickRemoveNote').click(removeNote);
 
@@ -292,6 +295,7 @@
   }
 
 @endsection
+</script>
 @section('content')
     <div class="container" style="background-color:white;">
         <div class="page-header" id="{{ $outline->id }}">

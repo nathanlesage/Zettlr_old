@@ -32,20 +32,6 @@ class NoteController extends Controller
         $this->middleware('auth');
     }
 
-    public function home() {
-        // Some general statistics
-        $notes = Note::all();
-        $noteCount = count($notes);
-        $references = Reference::all();
-        $referenceCount = count($references);
-        $tags = Tag::all();
-        $tagCount = count($tags);
-        $outlines = Outline::all();
-        $outlineCount = count($outlines);
-
-        return view('main', compact('noteCount', 'referenceCount', 'tagCount', 'outlineCount'));
-    }
-
     public function index() {
         // For index output a list of all notes
         // views/notes/list.blade.php
@@ -66,7 +52,7 @@ class NoteController extends Controller
         // Get all note and their tags if the tag ID is in our tags-array
         $tags = [];
         foreach($note->tags as $tag)
-            $tags[] = $tag->id;
+        $tags[] = $tag->id;
 
         // Get all notes that have at least one of this note's tags
         $relatedNotes = Note::whereHas('tags', function($query) use($tags) {

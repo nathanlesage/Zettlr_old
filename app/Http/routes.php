@@ -11,10 +11,6 @@
 |
 */
 
-// Go to NoteController as standard index file
-// TODO: Change to a single logon page (inside UserController)
-// Route::get('/', 'NoteController@home');
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -28,8 +24,8 @@
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
-    Route::get('/',     'NoteController@home');
-    Route::get('/home', 'NoteController@home');
+    Route::get('/',     'AppController@home');
+    Route::get('/home', 'AppController@home');
 
     // Notes routes
     Route::get ('notes/index',                  'NoteController@index');
@@ -68,8 +64,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/trails', 'TrailController@index');
 
     // Settings controls
-    Route::get('/settings',     'AppController@index');
-    Route::post('/settings',    'AppController@postChanges');
+    Route::get('/settings',     'AppController@getSettings');
+    Route::post('/settings',    'AppController@postSettings');
 
     // Ajax routes
     Route::get('/ajax/note/delete/{id}',        'AjaxController@getDeleteNote');

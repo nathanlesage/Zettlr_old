@@ -19,7 +19,7 @@ class CreateCustomFieldsTable extends Migration
           $table->String('type', 255);
           $table->Text('content');
           $table->integer('outline_id')->unsigned();
-          $table->foreign('outline_id')->references('id')->on('outlines');
+          $table->foreign('outline_id')->references('id')->on('outlines')->onDelete('cascade');
           $table->integer('index')->unsigned();
         });
     }

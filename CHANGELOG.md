@@ -1,5 +1,22 @@
 # Changelog for Zettlr
 
+## tba
+
+### Layout
+
+* Overhauled navbar concept to resemble traditional computer programs and to have the search bar fill in the whole remains of it
+* Fixed "sticky" input fields on mobile devices on the "Create notes"-page
+
+### Fixes
+
+* Custom fields on outlines now get automatically deleted when the corresponding outline gets deleted
+* The LESS compiler now checks the server port to compute the URIs for images, fonts, etc. (mainly important for users running this app on a different server port than default)
+* Now the AppController isn't accessible without being logged in (i.e. it redirects to /login)
+
+### Technoloy
+
+* Removed HomeController, everything concerning the app or its users is now handled via the AppController
+
 ## v0.2.0-beta (2016-04-26)
 
 ### Features
