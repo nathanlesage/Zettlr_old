@@ -25,11 +25,8 @@ class AppServiceProvider extends ServiceProvider
             // Create a new minifying parser
             $parser = new Less_Parser([ 'compress' => true ]);
 
-            // As some may want to run this locally, check the server port as well!
-            $app_url = ($_SERVER['SERVER_PORT'] != 80) ? rtrim(getenv('APP_URL'), '/') . ':' . $_SERVER['SERVER_PORT'] . '/' : getenv('APP_URL');
-
             // Parse the bootstrap.less-file
-            $parser->parseFile(base_path() . '/resources/assets/less/bootstrap.less', $app_url);
+            $parser->parseFile(base_path() . '/resources/assets/less/bootstrap.less');
             // (over-)write app.css
             $bytes_written = File::put($appCss, $parser->getCss());
 

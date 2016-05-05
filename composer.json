@@ -19,7 +19,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "graham-campbell/markdown": "^6.0",
-        "oyejorge/less.php": "v1.7.0.10"
+        "oyejorge/less.php": "v1.7.0.10",
+        "league/commonmark": "^0.13"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

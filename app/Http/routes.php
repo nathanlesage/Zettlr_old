@@ -63,6 +63,10 @@ Route::group(['middleware' => 'web'], function () {
     // Deactivated for always killing the dev server
     Route::get('/trails', 'TrailController@index');
 
+    // Importer functions CAREFUL! NOT READY FOR USE!
+    Route::get('/import', 'ImportController@getImport');
+    Route::post('/import', 'ImportController@postImport');
+
     // Settings controls
     Route::get('/settings',     'AppController@getSettings');
     Route::post('/settings',    'AppController@postSettings');

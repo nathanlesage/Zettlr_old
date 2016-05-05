@@ -2,6 +2,10 @@
 
 ## tba
 
+### Features
+
+* **Major feature**: Implemented an importer: Now you can type in whatever program you want and only afterwards import your notes in one step and easily migrate them into your Zettlr. The app will automatically detect notes by their headings and let you confirm potential errors or typos before finally migrating them, even suggesting tags, if you want so.
+
 ### Layout
 
 * Overhauled navbar concept to resemble traditional computer programs and to have the search bar fill in the whole remains of it
@@ -10,12 +14,13 @@
 ### Fixes
 
 * Custom fields on outlines now get automatically deleted when the corresponding outline gets deleted
-* The LESS compiler now checks the server port to compute the URIs for images, fonts, etc. (mainly important for users running this app on a different server port than default)
 * Now the AppController isn't accessible without being logged in (i.e. it redirects to /login)
+* As of my own misunderstanding of the `.gitignore`-concept several necessary directories were not pushed to the repository, causing fresh installations to not run (specifically: the storage-directories that are not created automatically on install).
 
 ### Technoloy
 
 * Removed HomeController, everything concerning the app or its users is now handled via the AppController
+* Added the CommonMark library to dependencies for import
 
 ## v0.2.0-beta (2016-04-26)
 
