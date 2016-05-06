@@ -4,7 +4,8 @@
 
 ### Features
 
-* **Major feature**: Implemented an importer: Now you can type in whatever program you want and only afterwards import your notes in one step and easily migrate them into your Zettlr. The app will automatically detect notes by their headings and let you confirm potential errors or typos before finally migrating them, even suggesting tags, if you want so.
+* **Major feature**: Implemented an importer: Now you can type in whatever program you want and only afterwards import your notes in one step and easily migrate them into your Zettlr. The app will automatically detect notes by their headings and let you confirm potential errors or typos before finally migrating them, even suggesting tags, if you want so. Also you can automatically create an outliner that will then contain these notes.
+* You have now additional options when updating outlines, giving you more flexibility to batch-update notes (for example add new references or tags or even synchronize them across your notes)
 
 ### Layout
 

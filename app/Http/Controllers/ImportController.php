@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -13,6 +12,8 @@ use App\Note;
 use App\Outline;
 use App\Tag;
 use App\CustomElement;
+
+use Storage;
 
 use GrahamCampbell\Markdown\Facades\Markdown;
 
@@ -31,7 +32,6 @@ class ImportController extends Controller
         $this->middleware('auth');
     }
 
-    // Just a testing function
     public function getImport()
     {
         return view('imports.form');
@@ -39,39 +39,88 @@ class ImportController extends Controller
 
     public function postImport(Request $request)
     {
-        //  Do we have a file?
-        if($request->hasFile('notes'))
-        {
-            // Now get the file, read its contents and delete
-            if(!$request->file('notes')->isValid())
-                return redirect('/import')->withErrors(['notes' => 'The uploaded file was not valid!']);
-
-            $fcontents = File::get($request->file('notes')->getRealPath());
-            $lines = preg_split("/\\r\\n|\\r|\\n/", $fcontents);
-        }
-        elseif(strlen($request->content) > 0) // Or just input in the textarea?
-        {
-            // First split the retrieved contents linewise
-            $lines = preg_split("/\\r\\n|\\r|\\n/", $request->content);
-        }
-        else
-        {
+        // Check if files have been uploaded
+        $store = Storage::disk('local');
+        $files = $store->files('import');
+        if(count($files) <= 0)
             return redirect('/import')->withErrors(['content' => 'Please input something to import!']);
+
+        // Now loop through all found files and extract the notes
+        $notes = new Collection();
+        foreach($files as $file)
+        {
+            $notes = $notes->merge($this->retrieveNotes($store->get($file), $request->suggestTags, $request->headingType));
         }
+
+        // Now clear the directory
+        $store->delete($files);
+
+        // TODO: Check for custom elements (h2, h3, ps, etc.)
+        // Now in $notes all h4s with trailing stuff should reside
+        return view('imports.confirm', compact('notes'));
+    }
+
+    public function insertImport(Request $request)
+    {
+        if($request->createOutline)
+        {
+            $outline = new Outline();
+            $outline->name = $request->outlineName;
+            $outline->description = $request->outlineDescription;
+            $outline->save();
+            $index = 1;
+        }
+
+        // Just copy the code from NoteController@postCreate
+        foreach($request->title as $index => $title)
+        {
+            $note = new Note;
+            $note->title = $title;
+            $note->content = $request->content[$index];
+
+            $note->save();
+
+            if($request->createOutline)
+                $outline->notes()->attach($note, ["index" => $index]);
+
+            // Now fill the join table
+            if(array_key_exists($index, $request->tags) && (count($request->tags[$index]) > 0))
+            {
+                foreach($request->tags[$index] as $tagname)
+                {
+                    $tag = Tag::firstOrCreate(["name" => $tagname]);
+                    $note->tags()->attach($tag->id);
+                }
+            }
+            $index++;
+        }
+
+        if($request->createOutline)
+            return redirect('/outlines/show/'.$outline->id);
+
+        // Redirect to the main page for now
+        return redirect('/');
+    }
+
+    public function retrieveNotes($filecontents, $suggestTags = false, $headingType = "#")
+    {
+        // Extract file contents linewise
+        $lines = preg_split("/\\r\\n|\\r|\\n/", $filecontents);
 
         $notes = new Collection();
-
-        // Now go through them
+        // Now go through the lines
         $tmp = [];
         $noteFound = false;
         for($i = 0; $i < count($lines); $i++)
         {
             // h4 is always four ####
-            if(substr($lines[$i], 0, 4) == '####')
+            $thisHeading = explode(" ", $lines[$i])[0];
+            if($thisHeading == $headingType)
+            //if(substr($lines[$i], 0, 4) == "####")
             {
                 if(count($tmp) > 1)
                 {
-                    $notes->push(new Note(['title' => substr(array_shift($tmp), 5), 'content' => implode("\n", $tmp)]));
+                    $notes->push(new Note(['title' => substr(array_shift($tmp), strlen($headingType)+1), 'content' => implode("\n", $tmp)]));
                     // Flush tmp without unsetting (which would render it local
                     // only to this specific for-round)
                     $tmp = array();
@@ -83,26 +132,24 @@ class ImportController extends Controller
             {
                 // This is necessary to strip potential additional lines before
                 // the first note and to not include the next h4 also
-                if(substr($lines[$i], 0, 4) != '####' && $noteFound)
-                $tmp[] = $lines[$i];
+                if(!(substr($lines[$i], 0, strlen($headingType)) == $headingType) && $noteFound)
+                //if(substr($lines[$i], 0, 4) == "####" && $noteFound)
+                    $tmp[] = $lines[$i];
             }
         }
         // Now, in the tmp-Array is a last note
         if(count($tmp) > 1)
-            $notes->push(new Note(['title' => substr(array_shift($tmp), 5), 'content' => implode("\n", $tmp)]));
+            $notes->push(new Note(['title' => substr(array_shift($tmp), strlen($headingType)+1), 'content' => implode("\n", $tmp)]));
 
         // Now that we have all notes -> should we suggest tags?
-        if($request->suggestTags)
+        if($suggestTags)
         {
             foreach($notes as $note)
             {
                 $note->suggestedTags = $this->suggestTags($note);
             }
         }
-
-        // TODO: Check for custom elements (h2, h3, ps, etc.)
-        // Now in $notes all h4s with trailing stuff should reside
-        return view('imports.confirm', compact('notes'));
+        return $notes;
     }
 
     public function suggestTags($note)

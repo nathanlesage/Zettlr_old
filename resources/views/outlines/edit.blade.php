@@ -89,6 +89,34 @@
             </div>
 
             <div class="form-group">
+                <div class="col-md-2">
+                    <label>
+                        Additional options:
+                    </label>
+                </div>
+                <div class="col-md-10">
+                    <div class="radio" title="Select this option to only update this outline and leave it's attached notes unchanged" data-toggle="tooltip">
+                        <label>
+                            <input type="radio" name="noteAction" value="1" checked>
+                            Do nothing
+                        </label>
+                    </div>
+                    <div class="radio" title="This option syncs the outline's tags and references with the attached notes. WARNING: This will completely override any tags and references already attached to the notes!" data-toggle="tooltip">
+                        <label>
+                            <input type="radio" name="noteAction" value="2">
+                            Also synchronize all references and tags with notes in this outline?
+                        </label>
+                    </div>
+                    <div class="radio" title="This will not remove already attached items, only add new ones." data-toggle="tooltip">
+                        <label>
+                            <input type="radio" name="noteAction" value="3">
+                            Also attach all references and tags to notes in this outline?
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <div class="col-md-2"></div>
                 <div class="col-md-10">
                     <input type="submit" class="form-control" value="Save changes">

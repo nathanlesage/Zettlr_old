@@ -65,7 +65,8 @@ Route::group(['middleware' => 'web'], function () {
 
     // Importer functions CAREFUL! NOT READY FOR USE!
     Route::get('/import', 'ImportController@getImport');
-    Route::post('/import', 'ImportController@postImport');
+    Route::post('/import/confirm', 'ImportController@postImport');
+    Route::post('/import/finish', 'ImportController@insertImport');
 
     // Settings controls
     Route::get('/settings',     'AppController@getSettings');
@@ -87,4 +88,6 @@ Route::group(['middleware' => 'web'], function () {
                                                 'AjaxController@getOutlineDetachNote');
     Route::get('/ajax/outline/remove/{outlineId}/{customId}',
                                                 'AjaxController@getOutlineRemoveCustom');
+    // Ajax handler for dropzone.js
+    Route::post('/ajax/import/collect', 'AjaxController@collect');
 });

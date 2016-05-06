@@ -301,7 +301,8 @@ if(!isMobile) {
         <div class="page-header" id="{{ $outline->id }}">
             <h1>{{ $outline->name }}
                 <small>Outline (<a href="{{ url('/outlines/edit') }}/{{ $outline->id }}">Edit</a> /
-                    <a href="{{ url('/notes/create') }}/{{ $outline->id }}">Create new notes</a>)</small>
+                    <a href="{{ url('/notes/create') }}/{{ $outline->id }}">Create new notes</a> /
+                    <a href="{{ url('/outlines/delete') }}/{{ $outline->id }}">Delete</a>)</small>
                 </h1>
             </div>
             @if($outline->description)

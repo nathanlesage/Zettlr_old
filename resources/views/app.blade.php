@@ -73,8 +73,11 @@
     {{ Html::script('js/codemirror_modes/gfm.js') }}
 
     <!-- Include Show hint-addon for Codemirror -->
-    {{ Html::script('js/codemirror_addons/show-hint.js') }}
-    {{ Html::style('css/codemirror_addons/show-hint.css') }}
+    {{-- Html::script('js/codemirror_addons/show-hint.js') --}}
+    {{-- Html::style('css/codemirror_addons/show-hint.css') --}}
+
+    <!-- Include dropzone.js -->
+    {{ Html::script('js/dropzone.js') }}
 
     <!-- Include Bootstrap CSS and JS -->
     {{ Html::style('css/app.min.css') }}
@@ -131,6 +134,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">App <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/settings') }}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                                <li><a href="{{ url('import') }}"><span class="glyphicon glyphicon-cloud-upload"></span> Import</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li class="dropdown-header">Logged in as <em>{{ Auth::user()->name }}</em></li>
                                 <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -140,23 +144,35 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notes <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url('/notes/index') }}">View notes</a></li>
-                                <li><a href="{{ url('/notes/create') }}">Insert notes</a></li>
+                                <li><a href="{{ url('/notes/index') }}"><span class="glyphicon glyphicon-th-list"></span> View notes</a></li>
+                                <li><a href="{{ url('/notes/create') }}"><span class="glyphicon glyphicon-plus"></span> Insert notes</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="{{ url('/trails') }}">Find trails</a></li>
+                                <li><a href="{{ url('/trails') }}"><span class="glyphicon glyphicon-tree-deciduous"></span> Find trails</a></li>
                             </ul>
                         </li>
 
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expaned="false">Outlines <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url('/outlines') }}">Outlines</a></li>
-                                <li><a href="{{ url('/outlines/create') }}">Create new outline</a></li>
+                                <li><a href="{{ url('/outlines') }}"><span class="glyphicon glyphicon-th-list"></span> Outlines</a></li>
+                                <li><a href="{{ url('/outlines/create') }}"><span class="glyphicon glyphicon-plus"></span> Create new outline</a></li>
                             </ul>
                         </li>
 
-                        <li><a href="{{ url('tags/index') }}">Tags</a></li>
-                        <li><a href="{{ url('/references/index') }}">References</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expaned="false">Tags <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('tags/index') }}"><span class="glyphicon glyphicon-th-list"></span> Tags</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expaned="false">References <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/references/index') }}"><span class="glyphicon glyphicon-th-list"></span> References</a></li>
+                                <li><a href="{{ url('/references/create') }}"><span class="glyphicon glyphicon-plus"></span> Create new reference</a></li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <form class="navbar-form" role="search">

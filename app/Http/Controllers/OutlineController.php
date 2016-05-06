@@ -245,6 +245,23 @@ class OutlineController extends Controller
         $outline->description = $request->description;
         $outline->save();
 
+        if($request->noteAction == 3) // Attach anything new
+        {
+            foreach($outline->notes as $note)
+            {
+                $note->references()->attach($outline->references);
+                $note->tags()->attach($outline->tags);
+            }
+        }
+        elseif($request->noteAction == 2) // Synchronize
+        {
+            foreach($outline->notes as $note)
+            {
+                $note->references()->sync($outline->references);
+                $note->tags()->sync($outline->tags);
+            }
+        }
+
         return redirect(url('/outlines/show/'.$id));
     }
 
