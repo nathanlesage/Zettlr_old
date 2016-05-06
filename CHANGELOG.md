@@ -6,6 +6,7 @@
 
 * **Major feature**: Implemented an importer: Now you can type in whatever program you want and only afterwards import your notes in one step and easily migrate them into your Zettlr. The app will automatically detect notes by their headings and let you confirm potential errors or typos before finally migrating them, even suggesting tags, if you want so. Also you can automatically create an outliner that will then contain these notes.
 * You have now additional options when updating outlines, giving you more flexibility to batch-update notes (for example add new references or tags or even synchronize them across your notes)
+* Added import feature for BibTex-files
 
 ### Layout
 
@@ -17,6 +18,7 @@
 * Custom fields on outlines now get automatically deleted when the corresponding outline gets deleted
 * Now the AppController isn't accessible without being logged in (i.e. it redirects to /login)
 * As of my own misunderstanding of the `.gitignore`-concept several necessary directories were not pushed to the repository, causing fresh installations to not run (specifically: the storage-directories that are not created automatically on install).
+* Now on deletion of a reference you will be redirected to the index page
 
 ### Technoloy
 

@@ -283,11 +283,13 @@ class AjaxController extends Controller
     // This function collects the dropzone.js-uploaded files for later processing
     public function collect(Request $request)
     {
+        $dirname = ($request->type == 'bibtex') ? 'bibtex' : 'import';
+
         if(!$request->hasFile('import_tmp'))
-        return response()->json(['The file hasn\'t been uploaded!'], 400);
+            return response()->json(['The file hasn\'t been uploaded!'], 400);
 
         if(!$request->file('import_tmp')->isValid())
-        return response()->json(['The file has been corrupted on upload.'], 500);
+            return response()->json(['The file has been corrupted on upload.'], 500);
 
         // First initialize our local storage
         $store = Storage::disk('local');
@@ -296,18 +298,18 @@ class AjaxController extends Controller
         $found = false;
         foreach($store->directories('app') as $dir)
         {
-            if($dir === 'import')
+            if($dir === $dirname)
             $found = true;
         }
 
         if(!$found)
-        $store->makeDirectory('import');
+        $store->makeDirectory($dirname);
 
         $fcontents = File::get($request->file('import_tmp')->getRealPath());
 
         // We're using time() to have a unique identifier for retaining the notes' upload order
         $success = $store->put(
-        'import/tmp_'.time().'.'.$request->file('import_tmp')->getClientOriginalExtension(),
+        $dirname . '/tmp_'.time().'.'.$request->file('import_tmp')->getClientOriginalExtension(),
         $fcontents);
 
         if($success)

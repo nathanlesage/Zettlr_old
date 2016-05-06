@@ -134,7 +134,6 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">App <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/settings') }}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                                <li><a href="{{ url('import') }}"><span class="glyphicon glyphicon-cloud-upload"></span> Import</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li class="dropdown-header">Logged in as <em>{{ Auth::user()->name }}</em></li>
                                 <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
@@ -148,6 +147,8 @@
                                 <li><a href="{{ url('/notes/create') }}"><span class="glyphicon glyphicon-plus"></span> Insert notes</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ url('/trails') }}"><span class="glyphicon glyphicon-tree-deciduous"></span> Find trails</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{ url('import') }}"><span class="glyphicon glyphicon-cloud-upload"></span> Import notes</a></li>
                             </ul>
                         </li>
 
@@ -171,6 +172,8 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/references/index') }}"><span class="glyphicon glyphicon-th-list"></span> References</a></li>
                                 <li><a href="{{ url('/references/create') }}"><span class="glyphicon glyphicon-plus"></span> Create new reference</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{ url('references/import') }}"><span class="glyphicon glyphicon-cloud-upload"></span> Import references</a></li>
                             </ul>
                         </li>
                     </ul>

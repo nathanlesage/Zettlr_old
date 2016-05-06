@@ -9,7 +9,7 @@ $("#drop").dropzone({
     // parallelUploads
     maxFilesize: 8, // 2 MB maximum
     paramName: "import_tmp", // Filename
-    acceptedFiles: ".md,.txt",
+    acceptedFiles: ".bib",
     previewTemplate: document.getElementById('dropzoneFileTemplate').innerHTML,
     init: function() {
         this.on('success', function(file) {
@@ -49,7 +49,7 @@ $("#drop").dropzone({
     },
     sending: function(file, xhr, formData) {
         formData.append("_token", "{{ csrf_token() }}");
-        formData.append('type', 'markdown'); // Actually this doesn't get evaluated
+        formData.append('type', 'bibtex');
     },
     error: function(file, errorMessage, xhr) {
         $(file.previewElement).find("img").remove();
@@ -140,14 +140,12 @@ $("#drop").dropzone({
     <!-- For now just display a simple form -->
     <div class="container" style="background-color:white;">
         <div class="page-header">
-            <h1>Import files <small>Step #1: Choose files</small></h1>
+            <h1>Import BibTex <small>Step #1: Choose files</small></h1>
         </div>
         <div class="alert alert-info">
             Welcome to file uploading! The process of uploading is divided into two steps. First choose files with notes to upload. In a second step, you will be able to review your uploads and make sure everything is correctly imported.<br><br>Currently, <strong>only *.txt and *.md files are supported</strong>.<br><br>
             Every note <strong>must have a heading (in <a href="https://daringfireball.net/projects/markdown/basics" target="_blank" title="For more information about atx and markdown in general click this link" data-toggle="tooltip">atx-style</a>) as a title</strong>. Otherwise Zettlr (currently) can't extract the notes successfully. You can choose the heading you've got below.
         </div>
-
-        {!! Form::open(array('url'=>'/import/confirm','method'=>'POST', 'files'=>true)) !!}
 
         <div>
             <div id="totalinfo"></div>
@@ -160,25 +158,9 @@ $("#drop").dropzone({
             <div class="dz-message">Drop files or click to upload</div>
         </div>
         <hr>
-        <div class="form-group">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="suggestTags"> Suggest tags?
-                </label>
-            </div>
-            <select class="form-control" name="headingType">
-                <option value="#">Heading 1 (#)</option>
-                <option value="##">Heading 2 (##)</option>
-                <option value="###">Heading 3 (###)</option>
-                <option value="####">Heading 4 (####)</option>
-                <option value="#####">Heading 5 (#####)</option>
-                <option value="######">Heading 6 (######)</option>
-            </select>
+        <div>
+            <a href="{{ url('references/import/confirm') }}"><button type="submit" id="importSubmit" class="btn btn-primary">Next</button></a>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Submit" id="importSubmit" class="form-control btn btn-primary">
-        </div>
-    </form>
     @if(count($errors) > 0)
         <div class="alert alert-danger">
             <ul>

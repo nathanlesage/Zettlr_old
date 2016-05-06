@@ -58,6 +58,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/references/edit/{id}',     'ReferenceController@getEdit');
     Route::post('/references/edit/{id}',    'ReferenceController@postEdit');
     Route::get('/references/delete/{id}',   'ReferenceController@delete');
+    Route::get('/references/import', 'ReferenceController@getImport');
+    Route::get('/references/import/confirm', 'ReferenceController@getConfirm');
 
     // Trail routes
     // Deactivated for always killing the dev server

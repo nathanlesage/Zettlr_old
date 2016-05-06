@@ -62,8 +62,18 @@ class Reference extends Model
       return $this->types;
     }
 
-    public function getLabel($typeId)
+    public function typeAllowed($type)
+    {
+        return in_array(strtolower($type), array_map('strtolower', $this->types));
+    }
+
+    public function getTypeLabel($typeId)
     {
       return $this->types[$typeId];
+    }
+
+    public function getTypeKey($label)
+    {
+        return array_search($label, $this->types);
     }
 }
