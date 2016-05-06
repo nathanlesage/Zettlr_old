@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 use Validator;
 
@@ -12,6 +13,8 @@ use App\Http\Requests;
 use Auth;
 use Form;
 use Hash;
+
+use Illuminate\Support\Facades\Redirect;
 // Models
 use App\Note;
 use App\Outline;
@@ -32,7 +35,7 @@ class AppController extends Controller
         // for every action this controller does
         $this->middleware('auth');
     }
-    
+
     /**
     * Show the application dashboard.
     *
@@ -52,11 +55,23 @@ class AppController extends Controller
         return view('app.main', compact('noteCount', 'referenceCount', 'tagCount', 'outlineCount'));
     }
 
+    /**
+     *  Shows the settings pane
+     *
+     *  @return  \Illuminate\Http\Response
+     */
     public function getSettings()
     {
         return view('app.settings');
     }
 
+    /**
+     *  Updates settings in database
+     *
+     *  @param   Request  $request
+     *
+     *  @return  \Redirect
+     */
     public function postSettings(Request $request)
     {
         $validator = Validator::make($request->all(), [

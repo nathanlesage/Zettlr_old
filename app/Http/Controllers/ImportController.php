@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
 use App\Http\Requests;
@@ -32,11 +33,23 @@ class ImportController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     *  Displays a form for file upload
+     *
+     *  @return  Response
+     */
     public function getImport()
     {
         return view('imports.form');
     }
 
+    /**
+     *  Parses uploaded Markdown files and displays them (does NOT insert)
+     *
+     *  @param   Request  $request
+     *
+     *  @return  mixed  Depending on validation: Redirect or Response
+     */
     public function postImport(Request $request)
     {
         // Check if files have been uploaded
@@ -60,6 +73,13 @@ class ImportController extends Controller
         return view('imports.confirm', compact('notes'));
     }
 
+    /**
+     *  Inserts imported and parsed notes into the database
+     *
+     *  @param   Request  $request
+     *
+     *  @return  Response
+     */
     public function insertImport(Request $request)
     {
         if($request->createOutline)
@@ -102,6 +122,15 @@ class ImportController extends Controller
         return redirect('/');
     }
 
+    /**
+     *  Retrieves notes from a given string
+     *
+     *  @param   string  $filecontents  The contents of a file
+     *  @param   bool  $suggestTags   If true, search for tags depending on contents of $filecontents
+     *  @param   string  $headingType   Can be any Markdown atx-style heading identifier (i.e. '###' for h3)
+     *
+     *  @return  Collection                 A collection of notes
+     */
     public function retrieveNotes($filecontents, $suggestTags = false, $headingType = "#")
     {
         // Extract file contents linewise
@@ -152,6 +181,13 @@ class ImportController extends Controller
         return $notes;
     }
 
+    /**
+     *  Suggests tags based on the contents of a note
+     *
+     *  @param   App\Note  $note  The note for which tags should be suggested
+     *
+     *  @return  array         An array of found tags
+     */
     public function suggestTags($note)
     {
         // explode note contents and title by words

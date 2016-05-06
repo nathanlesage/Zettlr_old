@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 
 use App\Http\Requests;
@@ -11,6 +12,8 @@ use App\Reference;
 
 use Validator;
 use Storage;
+
+use Illuminate\View\View;
 
 use OpenJournalSoftware\BibtexBundle\Helper\Bibtex;
 
@@ -29,6 +32,11 @@ class ReferenceController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+    * Displays an index of all references
+    *
+    * @return View List template for references
+    */
     public function index()
     {
         $references = Reference::all();
@@ -36,11 +44,22 @@ class ReferenceController extends Controller
         return view('references.list', compact('references'));
     }
 
+    /**
+    * Displays a form to create a new reference
+    *
+    * @return View Form for adding a new reference
+    */
     public function getCreate()
     {
         return view('references.create');
     }
 
+    /**
+    * Inserts a new reference
+    *
+    * @param  Request $request The posted data
+    * @return RedirectResponse           Redirects to reference index
+    */
     public function postCreate(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -69,6 +88,12 @@ class ReferenceController extends Controller
         return redirect('/references/index');
     }
 
+    /**
+    * Displays a form with the reference data prefilled
+    *
+    * @param  integer $id  Corresponds to the database column id
+    * @return View     Returns a view with reference data
+    */
     public function getEdit($id)
     {
         if(!$id || $id <= 0)
@@ -79,6 +104,13 @@ class ReferenceController extends Controller
         return view('references.edit', compact('reference'));
     }
 
+    /**
+    * Updates a reference in the database
+    *
+    * @param  Request $request  Data to be updated
+    * @param  integer  $id          Corresponds to the database column id
+    * @return RedirectResponse  Redirects depending on validation
+    */
     public function postEdit(Request $request, $id)
     {
         if(!$id || $id <= 0)
@@ -109,6 +141,12 @@ class ReferenceController extends Controller
         return redirect('/references/index');
     }
 
+    /**
+    * Removes a record from the database table
+    *
+    * @param  integer $id           Corresponds to the id-column
+    * @return RedirectResponse  Redirects
+    */
     public function delete($id)
     {
         if(!$id || $id <= 0)
@@ -124,12 +162,22 @@ class ReferenceController extends Controller
         return redirect('/references/index');
     }
 
+    /**
+    * Displays a form to import references from a *.bib-file
+    *
+    * @return View Returns an empty form
+    */
     public function getImport()
     {
         // Display a view and let the Ajax-controller again handle the file collection
         return view('references.form');
     }
 
+    /**
+    * Displays a results page to check the import status
+    *
+    * @return mixed Depending on validation redirects or view
+    */
     public function getConfirm()
     {
         // Check if files have been uploaded
@@ -225,8 +273,6 @@ class ReferenceController extends Controller
                 * 'unpublished' -> NULL
                 */
             }
-
-
         }
         // Clear the uploaded files before exiting
         $store->delete($files);

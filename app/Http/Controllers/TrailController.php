@@ -25,6 +25,13 @@ class TrailController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     *  Looping function that counts all possible trails
+     *
+     *  @param   App\Note  $note  The note, whose trails should be searched
+     *
+     *  @return  integer         The current count of trails (backwards)
+     */
     public function getPossibleTrails($note)
     {
         if(count($note->next()) > 0) {
@@ -39,6 +46,14 @@ class TrailController extends Controller
         }
     }
 
+    /**
+     *  Looper function that traverses all possible trails
+     *
+     *  @param   App\Note   $note    The current note (also a node)
+     *  @param   boolean  $isRoot  Only given for the "start" note in index function
+     *
+     *  @return  Illuminate\Support\Collection            A collection of all notes found
+     */
     public function getTrails($note, $isRoot = false)
     {
         $nextNotes = $note->next();
@@ -63,6 +78,11 @@ class TrailController extends Controller
         }
     }
 
+    /**
+     *  Searches the notes for possible trails and displays them
+     *
+     *  @return  Illuminate\Http\Response
+     */
     public function index()
     {
         $notes = Note::all(['id']);

@@ -24,6 +24,7 @@
 
 * Removed HomeController, everything concerning the app or its users is now handled via the AppController
 * Added the CommonMark library to dependencies for import
+* Added first documentation (DocBlocks)
 
 ## v0.2.0-beta (2016-04-26)
 

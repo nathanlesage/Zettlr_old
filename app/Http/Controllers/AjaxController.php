@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests;
@@ -16,6 +17,8 @@ use App\Reference;
 
 use Storage;
 use Illuminate\Support\Facades\File;
+
+use Illuminate\Support\Collection;
 
 // For rendering the markup within the view
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -40,7 +43,13 @@ class AjaxController extends Controller
         $this->middleware('auth');
     }
 
-    // Fetch note contents via given ID
+    /**
+     *  Fetch note contents via given ID
+     *
+     *  @param   int  $id  the ID of the note to be show
+     *
+     *  @return  mixed       Depending on validation: Note or Response
+     */
     public function getNoteContents($id)
     {
         $note = Note::find($id);
@@ -61,7 +70,13 @@ class AjaxController extends Controller
         }
     }
 
-    // Delete note
+    /**
+     *  Removes a note from database
+     *
+     *  @param   int  $id  The note's ID
+     *
+     *  @return  Response       A JSON encoded result message
+     */
     public function getDeleteNote($id)
     {
         $note = Note::find($id);
@@ -79,6 +94,13 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     *  Returns matches in the tag table for the given term
+     *
+     *  @param   string  $term  The search term
+     *
+     *  @return  mixed         Response or Collection depending on validation
+     */
     public function getTagSearch($term)
     {
         // The "LIKE"-Statement in SQL just searches for the pattern
@@ -95,6 +117,13 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     *  Returns matches in the reference table for the given term
+     *
+     *  @param   string  $term  The search term
+     *
+     *  @return  mixed         Response or Collection depending on validation
+     */
     public function getReferenceSearch($term)
     {
         // The "LIKE"-Statement in SQL just searches for the pattern
@@ -116,6 +145,13 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     *  Returns matches in the note table for the given term
+     *
+     *  @param   string  $term  The search term
+     *
+     *  @return  mixed         Response or Collection depending on validation
+     */
     public function getNoteSearch($term)
     {
         // TODO: implement a "good" fulltext search.
@@ -141,6 +177,14 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     *  Links two notes together
+     *
+     *  @param   int  $id1  The first note's id
+     *  @param   int  $id2  The second note's id
+     *
+     *  @return  Response        A JSON encoded result message
+     */
     public function getLinkNotes($id1, $id2)
     {
         if(($id1 <= 0) || ($id2 <= 0))
@@ -167,6 +211,14 @@ class AjaxController extends Controller
         return response()->json(['message', 'Notes linked successfully'], 200);
     }
 
+    /**
+     *  Unlinks two previously linked notes
+     *
+     *  @param   int  $id1  First note id
+     *  @param   int  $id2  Second note id
+     *
+     *  @return  Response        A JSON encoded message containing the result
+     */
     public function getUnlinkNotes($id1, $id2)
     {
         if(($id1 <= 0) || ($id2 <= 0))
@@ -193,9 +245,17 @@ class AjaxController extends Controller
         return response()->json(['message', 'Notes linked successfully'], 200);
     }
 
-    /*
-    * OUTLINER FUNCTIONS
-    */
+    /**
+     *  Attach an element to an outline
+     *
+     *  @param   int  $outlineID       The ID describing the outline
+     *  @param   string  $attachmentType  'custom' or 'note'
+     *  @param   mixed  $requestContent  int or string depending on $attachmentType
+     *  @param   int  $index           The index that this function should assign to the element
+     *  @param   string  $type            Only necessary for custom elements, the HTML tag ("p" or "h2")
+     *
+     *  @return  mixed                   Response, CustomField or Note depending on params
+     */
     public function getOutlineAttach($outlineID, $attachmentType, $requestContent, $index, $type = "p")
     {
         // First catch the outline
@@ -232,6 +292,16 @@ class AjaxController extends Controller
         }
     }
 
+    /**
+     *  Changes the index of an element inside the outline
+     *
+     *  @param   string  $type       'custom' or 'note'
+     *  @param   int  $elementId  The ID identifying the element to be moved
+     *  @param   int  $outlineId  The ID identifying the outline on which the element should be moved
+     *  @param   int  $newIndex   The new index for the element
+     *
+     *  @return  Response              A JSON encoded result message
+     */
     public function getChangeIndex($type, $elementId, $outlineId, $newIndex)
     {
         if(!$elementId || !$newIndex)
@@ -254,6 +324,14 @@ class AjaxController extends Controller
         return response()->json(['message', 'Updating successful'], 200);
     }
 
+    /**
+     *  Remove a note from an outline (without removing the note itself)
+     *
+     *  @param   int  $outlineId  The outline ID
+     *  @param   int  $noteId     The note ID
+     *
+     *  @return  Response              A JSON encoded response message
+     */
     public function getOutlineDetachNote($outlineId, $noteId)
     {
         if(!$outlineId || !$noteId)
@@ -264,6 +342,14 @@ class AjaxController extends Controller
         return response()->json(['message', 'Removed note from outliner']);
     }
 
+    /**
+     *  Remove a custom field from the outline and delete it
+     *
+     *  @param   int  $outlineId  Outline ID
+     *  @param   int  $customId   CustomField ID
+     *
+     *  @return  Response    A JSON encoded result message
+     */
     public function getOutlineRemoveCustom($outlineId, $customId)
     {
         if(!$outlineId || !$customId)
@@ -280,16 +366,23 @@ class AjaxController extends Controller
         return response()->json(['message', 'Removed custom field from outliner'], 200);
     }
 
-    // This function collects the dropzone.js-uploaded files for later processing
+    /**
+     *  Accepts files sent by Dropzone.JS and saves them in respective folders
+     *  for *.bib- and *.md files.
+     *
+     *  @param   Request  $request  An object containing the file and CSRF token
+     *
+     *  @return  Response             A JSON encoded response
+     */
     public function collect(Request $request)
     {
         $dirname = ($request->type == 'bibtex') ? 'bibtex' : 'import';
 
         if(!$request->hasFile('import_tmp'))
-            return response()->json(['The file hasn\'t been uploaded!'], 400);
+        return response()->json(['The file hasn\'t been uploaded!'], 400);
 
         if(!$request->file('import_tmp')->isValid())
-            return response()->json(['The file has been corrupted on upload.'], 500);
+        return response()->json(['The file has been corrupted on upload.'], 500);
 
         // First initialize our local storage
         $store = Storage::disk('local');

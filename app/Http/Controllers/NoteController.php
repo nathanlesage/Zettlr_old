@@ -11,8 +11,11 @@ use App\Reference;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
+
+use Illuminate\View\View;
 
 // For rendering the markup within the view
 use GrahamCampbell\Markdown\Facades\Markdown;
@@ -32,6 +35,11 @@ class NoteController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     *  Displays a list of all notes
+     *
+     *  @return  Illuminate\Http\Response
+     */
     public function index() {
         // For index output a list of all notes
         // views/notes/list.blade.php
@@ -41,6 +49,13 @@ class NoteController extends Controller
         return view('notes.list', ['notes' => $notes]);
     }
 
+    /**
+     *  Displays a single note
+     *
+     *  @param   int  $id  Note id
+     *
+     *  @return  Response
+     */
     public function show($id) {
         // eager load Note with its tags
         $note = Note::find($id);
@@ -97,6 +112,13 @@ class NoteController extends Controller
         return view('notes.show', compact('note', 'relatedNotes', 'maxCount', 'linkedNotes', 'mainID'));
     }
 
+    /**
+     *  Displays a form to add a single note
+     *
+     *  @param   integer  $outlineId  Outline id
+     *
+     *  @return  Response
+     */
     public function getCreate($outlineId = 0) {
         if($outlineId > 0)
         {
@@ -115,6 +137,13 @@ class NoteController extends Controller
         return view('notes.create', ['outline' => null]);
     }
 
+    /**
+     *  Inserts a post into the database
+     *
+     *  @param   Request  $request
+     *
+     *  @return  Response
+     */
     public function postCreate(Request $request) {
         // Insert a note into the db
         // New tags have ID = -1!
@@ -183,6 +212,13 @@ class NoteController extends Controller
         return redirect(url('/notes/create'));
     }
 
+    /**
+     *  Displays a form with prefilled values
+     *
+     *  @param   integer  $id  Note id
+     *
+     *  @return  Response
+     */
     public function getEdit($id) {
         $note = Note::find($id);
         $note->tags;
@@ -190,6 +226,14 @@ class NoteController extends Controller
         return view('notes.edit', ['note' => $note]);
     }
 
+    /**
+     *  Updates a note
+     *
+     *  @param   Request  $request
+     *  @param   integer   $id       note id
+     *
+     *  @return  Response
+     */
     public function postEdit(Request $request, $id) {
         // Update a note
 
@@ -226,8 +270,6 @@ class NoteController extends Controller
             $note->tags()->sync([]);
         }
 
-
-
         if(count($request->references) > 0)
         {
             // Same for references
@@ -262,6 +304,13 @@ class NoteController extends Controller
         return redirect(url('/notes/show/'.$id));
     }
 
+    /**
+     *  Removes a note from database
+     *
+     *  @param   integer  $id  Note id
+     *
+     *  @return  Response
+     */
     public function delete($id) {
         try
         {

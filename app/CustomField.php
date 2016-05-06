@@ -15,6 +15,11 @@ class CustomField extends Model
     'content', 'type', 'index', 'outline_id'
     ];
 
+    /**
+     *  Relationship
+     *
+     *  @return  Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function outline()
     {
       return $this->belongsTo('App\Outline')->withTimestamps();
