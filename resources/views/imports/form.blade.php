@@ -9,7 +9,7 @@ $("#drop").dropzone({
     // parallelUploads
     maxFilesize: 8, // 2 MB maximum
     paramName: "import_tmp", // Filename
-    acceptedFiles: ".md,.txt",
+    acceptedFiles: ".md,.txt,.html,.htm",
     previewTemplate: document.getElementById('dropzoneFileTemplate').innerHTML,
     init: function() {
         this.on('success', function(file) {
@@ -143,8 +143,9 @@ $("#drop").dropzone({
             <h1>Import files <small>Step #1: Choose files</small></h1>
         </div>
         <div class="alert alert-info">
-            Welcome to file uploading! The process of uploading is divided into two steps. First choose files with notes to upload. In a second step, you will be able to review your uploads and make sure everything is correctly imported.<br><br>Currently, <strong>only *.txt and *.md files are supported</strong>.<br><br>
-            Every note <strong>must have a heading (in <a href="https://daringfireball.net/projects/markdown/basics" target="_blank" title="For more information about atx and markdown in general click this link" data-toggle="tooltip">atx-style</a>) as a title</strong>. Otherwise Zettlr (currently) can't extract the notes successfully. You can choose the heading you've got below.
+            Welcome to file uploading! The process of uploading is divided into two steps. First choose files with notes to upload. In a second step, you will be able to review your uploads and make sure everything is correctly imported.<br><br>Currently, <strong>only *.txt, *.md, *.html and *.htm files are supported</strong>.<br><br>
+            Your file <strong>must</strong> contain valid HTML <em>or</em> markdown.<br><br>
+            Every note <strong>must have a heading (in <a href="https://daringfireball.net/projects/markdown/basics" target="_blank" title="For more information about atx and markdown in general click this link" data-toggle="tooltip">atx-style</a>) as a title</strong>. Otherwise Zettlr (currently) can't extract the notes successfully. You can choose the heading you've used below.
         </div>
 
         {!! Form::open(array('url'=>'/import/confirm','method'=>'POST', 'files'=>true)) !!}
@@ -167,12 +168,12 @@ $("#drop").dropzone({
                 </label>
             </div>
             <select class="form-control" name="headingType">
-                <option value="#">Heading 1 (#)</option>
-                <option value="##">Heading 2 (##)</option>
-                <option value="###">Heading 3 (###)</option>
-                <option value="####">Heading 4 (####)</option>
-                <option value="#####">Heading 5 (#####)</option>
-                <option value="######">Heading 6 (######)</option>
+                <option value="#">Heading 1 (# or &lt;h1&gt;)</option>
+                <option value="##">Heading 2 (## or &lt;h2&gt;)</option>
+                <option value="###">Heading 3 (### or &lt;h3&gt;)</option>
+                <option value="####">Heading 4 (#### or &lt;h4&gt;)</option>
+                <option value="#####">Heading 5 (##### or &lt;h5&gt;)</option>
+                <option value="######">Heading 6 (###### or &lt;h6&gt;)</option>
             </select>
         </div>
         <div class="form-group">

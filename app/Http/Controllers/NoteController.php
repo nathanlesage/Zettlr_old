@@ -36,10 +36,10 @@ class NoteController extends Controller
     }
 
     /**
-     *  Displays a list of all notes
-     *
-     *  @return  Illuminate\Http\Response
-     */
+    *  Displays a list of all notes
+    *
+    *  @return  Illuminate\Http\Response
+    */
     public function index() {
         // For index output a list of all notes
         // views/notes/list.blade.php
@@ -50,24 +50,27 @@ class NoteController extends Controller
     }
 
     /**
-     *  Displays a single note
-     *
-     *  @param   int  $id  Note id
-     *
-     *  @return  Response
-     */
+    *  Displays a single note
+    *
+    *  @param   int  $id  Note id
+    *
+    *  @return  Response
+    */
     public function show($id) {
         // eager load Note with its tags
         $note = Note::find($id);
         $note->tags;
+
         // does the note exist? If not, return error
-        if(!$note)
+        if(!$note) {
             return redirect('notes/index')->withErrors(['That note does not exist!']);
+        }
 
         // Get all note and their tags if the tag ID is in our tags-array
         $tags = [];
-        foreach($note->tags as $tag)
+        foreach($note->tags as $tag) {
             $tags[] = $tag->id;
+        }
 
         // Get all notes that have at least one of this note's tags
         $relatedNotes = Note::whereHas('tags', function($query) use($tags) {
@@ -87,17 +90,20 @@ class NoteController extends Controller
             // count all similar tags and write a count-attribute to the model
             $count = 0;
 
-            foreach($n->tags as $t)
-            foreach($note->tags as $t2)
-            if($t->id == $t2->id) {
-                $count++;
-                break;
+            foreach($n->tags as $t) {
+                foreach($note->tags as $t2) {
+                    if($t->id == $t2->id) {
+                        $count++;
+                        break;
+                    }
+                }
             }
 
             $n->count = $count;
             // write current maxCount
-            if($count > $maxCount)
-            $maxCount = $count;
+            if($count > $maxCount) {
+                $maxCount = $count;
+            }
         }
 
         // Now we need to sort the relatedNotes by relevancy
@@ -125,12 +131,13 @@ class NoteController extends Controller
                 }
             }
             $relatedNotes = Collection::make($tmp)->sortBy(function($value) { return $value->count; }, SORT_REGULAR, true)->all();
+
             // Remove this note to reduce inception level
             $thisNoteIndex = -1;
             foreach($relatedNotes as $index => $n)
             {
                 if($note->id == $n->id)
-                    $thisNoteIndex = $index;
+                $thisNoteIndex = $index;
             }
             unset($relatedNotes[$thisNoteIndex]);
             $relatedNotes = array_values($relatedNotes);
@@ -138,17 +145,16 @@ class NoteController extends Controller
         // Now retrieve IDs and title of all linked notes
         $linkedNotes = $note->notes;
         $mainID = $note->id;
-
         return view('notes.show', compact('note', 'relatedNotes', 'maxCount', 'linkedNotes', 'mainID'));
     }
 
     /**
-     *  Displays a form to add a single note
-     *
-     *  @param   integer  $outlineId  Outline id
-     *
-     *  @return  Response
-     */
+    *  Displays a form to add a single note
+    *
+    *  @param   integer  $outlineId  Outline id
+    *
+    *  @return  Response
+    */
     public function getCreate($outlineId = 0) {
         if($outlineId > 0)
         {
@@ -168,12 +174,12 @@ class NoteController extends Controller
     }
 
     /**
-     *  Inserts a post into the database
-     *
-     *  @param   Request  $request
-     *
-     *  @return  Response
-     */
+    *  Inserts a post into the database
+    *
+    *  @param   Request  $request
+    *
+    *  @return  Response
+    */
     public function postCreate(Request $request) {
         // Insert a note into the db
         // New tags have ID = -1!
@@ -243,12 +249,12 @@ class NoteController extends Controller
     }
 
     /**
-     *  Displays a form with prefilled values
-     *
-     *  @param   integer  $id  Note id
-     *
-     *  @return  Response
-     */
+    *  Displays a form with prefilled values
+    *
+    *  @param   integer  $id  Note id
+    *
+    *  @return  Response
+    */
     public function getEdit($id) {
         $note = Note::find($id);
         $note->tags;
@@ -257,13 +263,13 @@ class NoteController extends Controller
     }
 
     /**
-     *  Updates a note
-     *
-     *  @param   Request  $request
-     *  @param   integer   $id       note id
-     *
-     *  @return  Response
-     */
+    *  Updates a note
+    *
+    *  @param   Request  $request
+    *  @param   integer   $id       note id
+    *
+    *  @return  Response
+    */
     public function postEdit(Request $request, $id) {
         // Update a note
 
@@ -335,12 +341,12 @@ class NoteController extends Controller
     }
 
     /**
-     *  Removes a note from database
-     *
-     *  @param   integer  $id  Note id
-     *
-     *  @return  Response
-     */
+    *  Removes a note from database
+    *
+    *  @param   integer  $id  Note id
+    *
+    *  @return  Response
+    */
     public function delete($id) {
         try
         {
@@ -358,6 +364,13 @@ class NoteController extends Controller
         return redirect(url('/notes/index'));
     }
 
+    /**
+    *  Runs a comparision between notes on text basis
+    *
+    *  @param   Note     $note  The note, for which related notes should be returned
+    *
+    *  @return  array         An array containing the IDs and relevancy of related notes
+    */
     function textAnalysis(Note $note)
     {
         // For a text analysis we need to reduce this note and
@@ -403,7 +416,7 @@ class NoteController extends Controller
         }
 
         // Remove potential duplicate notes
-        $suggestedNotes = array_unique($suggestedNotes);
+        $suggestedNotes = array_values(array_unique($suggestedNotes));
         // now write the index of relevancy into the remaining $suggestedNotes
         unset($tmp);
         $tmp = [];

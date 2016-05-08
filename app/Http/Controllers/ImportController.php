@@ -16,10 +16,22 @@ use App\CustomElement;
 
 use Storage;
 
+// Mardown -> HTML and HTML -> Markdown
 use GrahamCampbell\Markdown\Facades\Markdown;
+use League\HTMLToMarkdown\HtmlConverter;
 
 class ImportController extends Controller
 {
+    /**
+    *  Array of possible file extensions
+    *
+    *  @var  array
+    */
+    protected $html_extensions = [
+        "html",
+        "htm"
+    ];
+
     /**
     * Create a new controller instance.
     * Use "auth" middleware.
@@ -34,35 +46,41 @@ class ImportController extends Controller
     }
 
     /**
-     *  Displays a form for file upload
-     *
-     *  @return  Response
-     */
+    *  Displays a form for file upload
+    *
+    *  @return  Response
+    */
     public function getImport()
     {
         return view('imports.form');
     }
 
     /**
-     *  Parses uploaded Markdown files and displays them (does NOT insert)
-     *
-     *  @param   Request  $request
-     *
-     *  @return  mixed  Depending on validation: Redirect or Response
-     */
+    *  Parses uploaded Markdown files and displays them (does NOT insert)
+    *
+    *  @param   Request  $request
+    *
+    *  @return  mixed  Depending on validation: Redirect or Response
+    */
     public function postImport(Request $request)
     {
         // Check if files have been uploaded
         $store = Storage::disk('local');
         $files = $store->files('import');
         if(count($files) <= 0)
-            return redirect('/import')->withErrors(['content' => 'Please input something to import!']);
+        return redirect('/import')->withErrors(['content' => 'Please input something to import!']);
 
         // Now loop through all found files and extract the notes
         $notes = new Collection();
+        $converter = new HtmlConverter(array('strip_tags' => true));
         foreach($files as $file)
         {
-            $notes = $notes->merge($this->retrieveNotes($store->get($file), $request->suggestTags, $request->headingType));
+            $fcontents = $store->get($file);
+            if(in_array(pathinfo($file, PATHINFO_EXTENSION), $this->html_extensions)) {
+                // We need to convert it to markdown first.
+                $fcontents = $converter->convert($fcontents);
+            }
+            $notes = $notes->merge($this->retrieveNotes($fcontents, $request->suggestTags, $request->headingType));
         }
 
         // Now clear the directory
@@ -74,12 +92,12 @@ class ImportController extends Controller
     }
 
     /**
-     *  Inserts imported and parsed notes into the database
-     *
-     *  @param   Request  $request
-     *
-     *  @return  Response
-     */
+    *  Inserts imported and parsed notes into the database
+    *
+    *  @param   Request  $request
+    *
+    *  @return  Response
+    */
     public function insertImport(Request $request)
     {
         if($request->createOutline)
@@ -88,7 +106,7 @@ class ImportController extends Controller
             $outline->name = $request->outlineName;
             $outline->description = $request->outlineDescription;
             $outline->save();
-            $index = 1;
+            // $index = 0;
         }
 
         // Just copy the code from NoteController@postCreate
@@ -100,52 +118,53 @@ class ImportController extends Controller
 
             $note->save();
 
-            if($request->createOutline)
-                $outline->notes()->attach($note, ["index" => $index]);
+            if($request->createOutline) {
+                $outline->notes()->attach($note, ["index" => $index+1]);
+            }
+
 
             // Now fill the join table
-            if(array_key_exists($index, $request->tags) && (count($request->tags[$index]) > 0))
-            {
-                foreach($request->tags[$index] as $tagname)
+            if(count($request->tags[$index]) > 0) {
+                if(array_key_exists($index, $request->tags) && (count($request->tags[$index]) > 0))
                 {
-                    $tag = Tag::firstOrCreate(["name" => $tagname]);
-                    $note->tags()->attach($tag->id);
+                    foreach($request->tags[$index] as $tagname)
+                    {
+                        $tag = Tag::firstOrCreate(["name" => $tagname]);
+                        $note->tags()->attach($tag->id);
+                    }
                 }
             }
-            $index++;
+            // $index++;
         }
 
         if($request->createOutline)
-            return redirect('/outlines/show/'.$outline->id);
+        return redirect('/outlines/show/'.$outline->id);
 
         // Redirect to the main page for now
         return redirect('/');
     }
 
     /**
-     *  Retrieves notes from a given string
-     *
-     *  @param   string  $filecontents  The contents of a file
-     *  @param   bool  $suggestTags   If true, search for tags depending on contents of $filecontents
-     *  @param   string  $headingType   Can be any Markdown atx-style heading identifier (i.e. '###' for h3)
-     *
-     *  @return  Collection                 A collection of notes
-     */
+    *  Retrieves notes from a given string
+    *
+    *  @param   string  $filecontents  The contents of a file
+    *  @param   bool  $suggestTags   If true, search for tags depending on contents of $filecontents
+    *  @param   string  $headingType   Can be any Markdown atx-style heading identifier (i.e. '###' for h3)
+    *
+    *  @return  Collection                 A collection of notes
+    */
     public function retrieveNotes($filecontents, $suggestTags = false, $headingType = "#")
     {
         // Extract file contents linewise
         $lines = preg_split("/\\r\\n|\\r|\\n/", $filecontents);
-
         $notes = new Collection();
         // Now go through the lines
         $tmp = [];
         $noteFound = false;
         for($i = 0; $i < count($lines); $i++)
         {
-            // h4 is always four ####
             $thisHeading = explode(" ", $lines[$i])[0];
             if($thisHeading == $headingType)
-            //if(substr($lines[$i], 0, 4) == "####")
             {
                 if(count($tmp) > 1)
                 {
@@ -161,14 +180,15 @@ class ImportController extends Controller
             {
                 // This is necessary to strip potential additional lines before
                 // the first note and to not include the next h4 also
-                if(!(substr($lines[$i], 0, strlen($headingType)) == $headingType) && $noteFound)
-                //if(substr($lines[$i], 0, 4) == "####" && $noteFound)
+                if(!(substr($lines[$i], 0, strlen($headingType)) == $headingType) && $noteFound) {
                     $tmp[] = $lines[$i];
+                }
             }
         }
         // Now, in the tmp-Array is a last note
-        if(count($tmp) > 1)
+        if(count($tmp) > 1) {
             $notes->push(new Note(['title' => substr(array_shift($tmp), strlen($headingType)+1), 'content' => implode("\n", $tmp)]));
+        }
 
         // Now that we have all notes -> should we suggest tags?
         if($suggestTags)
@@ -182,12 +202,12 @@ class ImportController extends Controller
     }
 
     /**
-     *  Suggests tags based on the contents of a note
-     *
-     *  @param   App\Note  $note  The note for which tags should be suggested
-     *
-     *  @return  array         An array of found tags
-     */
+    *  Suggests tags based on the contents of a note
+    *
+    *  @param   App\Note  $note  The note for which tags should be suggested
+    *
+    *  @return  array         An array of found tags
+    */
     public function suggestTags($note)
     {
         // explode note contents and title by words

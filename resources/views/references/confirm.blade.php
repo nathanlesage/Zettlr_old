@@ -32,7 +32,7 @@
         @endforeach
         <hr>
         <div class="form-group">
-            <a href="{{ url('/references') }}"><button class="form-control btn btn-primary">Everything looks good? Go to references</button></a>
+            <a href="{{ url('/references/index') }}"><button class="form-control btn btn-primary">Everything looks good? Go to references</button></a>
         </div>
     </div>
 @endsection

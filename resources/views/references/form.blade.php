@@ -143,8 +143,12 @@ $("#drop").dropzone({
             <h1>Import BibTex <small>Step #1: Choose files</small></h1>
         </div>
         <div class="alert alert-info">
-            Welcome to file uploading! The process of uploading is divided into two steps. First choose files with notes to upload. In a second step, you will be able to review your uploads and make sure everything is correctly imported.<br><br>Currently, <strong>only *.txt and *.md files are supported</strong>.<br><br>
-            Every note <strong>must have a heading (in <a href="https://daringfireball.net/projects/markdown/basics" target="_blank" title="For more information about atx and markdown in general click this link" data-toggle="tooltip">atx-style</a>) as a title</strong>. Otherwise Zettlr (currently) can't extract the notes successfully. You can choose the heading you've got below.
+            Welcome to file uploading! The process of uploading is divided into two steps. First choose BibTex-files with references to upload. In a second step, you will be able to review your uploads and make sure everything is correctly imported.<br><br><strong>Only *.bib files are supported</strong>.<br><br>
+            Currently, only the following item types are allowed:
+                @foreach($types as $type)
+                    {{ $type }},
+                @endforeach
+            </ul>
         </div>
 
         <div>
@@ -158,8 +162,8 @@ $("#drop").dropzone({
             <div class="dz-message">Drop files or click to upload</div>
         </div>
         <hr>
-        <div>
-            <a href="{{ url('references/import/confirm') }}"><button type="submit" id="importSubmit" class="btn btn-primary">Next</button></a>
+        <div class="form-group">
+            <a href="{{ url('references/import/confirm') }}"><button type="submit" id="importSubmit" class="form-control btn btn-primary">Next</button></a>
         </div>
     @if(count($errors) > 0)
         <div class="alert alert-danger">

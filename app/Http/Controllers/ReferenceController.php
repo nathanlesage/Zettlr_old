@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests;
 
 use App\Reference;
+use App\Note;
 
 use Validator;
 use Storage;
@@ -170,7 +171,8 @@ class ReferenceController extends Controller
     public function getImport()
     {
         // Display a view and let the Ajax-controller again handle the file collection
-        return view('references.form');
+        $dummyRef = new Reference();
+        return view('references.form', ["types" => $dummyRef->getTypes()]);
     }
 
     /**
