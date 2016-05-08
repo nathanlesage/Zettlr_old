@@ -65,10 +65,10 @@ Route::group(['middleware' => 'web'], function () {
     // Deactivated for always killing the dev server
     Route::get('/trails', 'TrailController@index');
 
-    // Importer functions CAREFUL! NOT READY FOR USE!
-    Route::get('/import', 'ImportController@getImport');
-    Route::post('/import/confirm', 'ImportController@postImport');
-    Route::post('/import/finish', 'ImportController@insertImport');
+    // Importer functions
+    Route::get('/import',           'ImportController@getImport');
+    Route::post('/import/confirm',  'ImportController@postImport');
+    Route::post('/import/finish',   'ImportController@insertImport');
 
     // Settings controls
     Route::get('/settings',     'AppController@getSettings');
@@ -77,19 +77,32 @@ Route::group(['middleware' => 'web'], function () {
     // Ajax routes
     Route::get('/ajax/note/delete/{id}',        'AjaxController@getDeleteNote');
     Route::get('/ajax/note/search/{term}',      'AjaxController@getNoteSearch');
-    Route::get('/ajax/note/{id}',               'AjaxController@getNoteContents');
+    Route::get('/ajax/note/{id}/{raw?}',        'AjaxController@getNoteContents');
+    Route::post('/ajax/note/update',            'AjaxController@postUpdateNote');
+
     Route::get('/ajax/tag/search/{term}',       'AjaxController@getTagSearch');
+
     Route::get('/ajax/reference/search/{term}', 'AjaxController@getReferenceSearch');
+
     Route::get('/ajax/link/{id1}/with/{id2}',   'AjaxController@getLinkNotes');
     Route::get('/ajax/unlink/{id1}/from/{id2}', 'AjaxController@getUnlinkNotes');
-    Route::get('/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}',
-                                                'AjaxController@getOutlineAttach');
-    Route::get('/ajax/changeindex/{type}/{elementId}/{outlineId}/{newIndex}',
-                                                'AjaxController@getChangeIndex');
-    Route::get('/ajax/outline/detach/{outlineId}/{noteId}',
-                                                'AjaxController@getOutlineDetachNote');
-    Route::get('/ajax/outline/remove/{outlineId}/{customId}',
-                                                'AjaxController@getOutlineRemoveCustom');
+
+    Route::get(
+        '/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}',
+        'AjaxController@getOutlineAttach'
+    );
+    Route::get(
+        '/ajax/changeindex/{type}/{elementId}/{outlineId}/{newIndex}',
+        'AjaxController@getChangeIndex'
+    );
+    Route::get(
+        '/ajax/outline/detach/{outlineId}/{noteId}',
+        'AjaxController@getOutlineDetachNote'
+    );
+    Route::get(
+        '/ajax/outline/remove/{outlineId}/{customId}',
+        'AjaxController@getOutlineRemoveCustom'
+    );
     // Ajax handler for dropzone.js
     Route::post('/ajax/import/collect', 'AjaxController@collect');
 });

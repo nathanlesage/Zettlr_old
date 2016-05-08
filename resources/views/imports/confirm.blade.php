@@ -20,51 +20,11 @@
 
         // Bind an event listener to it
         $("#editField").keypress(function(e) {
-            if(e.which == 13) // Enter
-            titleFinishEdit($(this));
+            if(e.which == 13) { // Enter
+
+                $(this).replaceWith('<h2 class="bg-primary" onClick="titleTurnEditable($(this))"><input type="hidden" name="title[' + $(this).attr("name") + ']" value=\'' + $(this).val() + '\'>' + $(this).val() + '</h2>');
+            }
         });
-    }
-
-    function titleFinishEdit(myElem)
-    {
-        $(myElem).replaceWith('<h2 class="bg-primary" onClick="titleTurnEditable($(this))"><input type="hidden" name="title[' + $(myElem).attr("name") + ']" value=\'' + $(myElem).val() + '\'>' + $(myElem).val() + '</h2>');
-    }
-
-    function noteTurnEditable(myElem)
-    {
-        // First check if there are other to edit (then close them first)
-        if($("#gfm-code").length)
-        noteFinishEdit($('.CodeMirror')[0].CodeMirror);
-
-        // Retrieve the note's index - format: title[index]
-        index = $(myElem).find("textarea[class='hidden']").attr("name").match(/([0-9]{1,})/)[0];
-
-        $(myElem).replaceWith('<textarea class="form-control" name="'+index+'" id="gfm-code">' + $(myElem).text() + '"</textarea>');
-
-        var editor = CodeMirror.fromTextArea(document.getElementById("gfm-code"), {
-            mode: 'gfm',
-            lineNumbers: true,
-            viewportMargin: Infinity,
-            theme: "default",
-            lineWrapping: true,
-            autofocus: true,
-            // Set Tab to false to focus next input
-            // And let Shift-Enter submit the form.
-            extraKeys: { "Shift-Enter": noteFinishEdit }
-        });
-
-        // Display an info that one can close this via Return
-        displayInfo("Finish editing by pressing Shift+Return");
-    }
-
-    function noteFinishEdit(cm)
-    {
-        cm.save();
-        cm.toTextArea();
-
-        $("#gfm-code").replaceWith('<pre onClick="noteTurnEditable($(this))">'
-        + '<textarea class="hidden" name="content['+$("#gfm-code").attr("name")+']">'+$("#gfm-code").val()+'</textarea>'
-        + $("#gfm-code").val() + '</pre>');
     }
 
     function toggleRestForm()
@@ -99,7 +59,7 @@
             {{ csrf_field() }}
         @foreach($notes as $index => $note)
             <h2 class="bg-primary" onClick="titleTurnEditable($(this))"><input type="hidden" name="title[{{ $index }}]" value="{{ $note->title }}">{{ $note->title }}</h2>
-                <pre onClick="noteTurnEditable($(this))"><textarea class="hidden" name="content[{{ $index }}]">{{ $note->content }}</textarea>{{ $note->content }}
+                <pre onClick="codify($(this), {{ $index }})"><textarea class="hidden" name="content[{{ $index }}]">{{ $note->content }}</textarea>{{ $note->content }}
                 </pre>
                 @if(count($note->suggestedTags) > 0)
                     <div class="well">Suggested tags:

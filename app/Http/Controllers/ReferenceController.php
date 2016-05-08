@@ -39,7 +39,7 @@ class ReferenceController extends Controller
     */
     public function index()
     {
-        $references = Reference::all();
+        $references = Reference::orderBy('author_last', 'asc')->get();
 
         return view('references.list', compact('references'));
     }

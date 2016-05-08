@@ -1,10 +1,13 @@
 {{-- Generic code to be executed in app.blade.php --}}
+{{-- TODO: Rename folder to be more clear --}}
 
 // Select all elements with data-toggle="tooltip" in the document
 $('[data-toggle="tooltip"]').tooltip();
 
 // Is any gfm-code text in the area?
 // (You just found a stupid pun. Congratulations!)
+// Tip: This code does not "codify" but just displays one specific
+// CodeMirror instance, that is not dynamically.
 if($("#gfm-code").length)
 {
     var editor = CodeMirror.fromTextArea(document.getElementById("gfm-code"), {
@@ -16,16 +19,16 @@ if($("#gfm-code").length)
         // Set Tab to false to focus next input
         // And let Shift-Enter submit the form.
         extraKeys: { "Tab": false,
-        "Shift-Enter": function(cm){ $("#editNoteForm").submit(); }
-    }
-});
+        "Shift-Enter": function(cm){ $("#noteForm").submit(); }
+        }
+    });
 
 // Submit form on Shift+Enter
 // We're binding it to the document, which leads to
 // submitting the form REGARDLESSLY of when we press it.
 // TODO: Think about removing this (but think twice)
-$("div.codeMirror-focused").bind('keyup', 'Shift+Return', function(){
-    $("#editNoteForm").submit();
+$(document).bind('keyup', 'Shift+Return', function(){
+    $("#noteForm").submit();
 });
 
 // Do we have any errors concerning content? Add them to the editor afterwards.
@@ -52,7 +55,7 @@ if($('#tagSearchBox').length)
             {
                 if(jqXHR.status == 500)
                 {
-                    displayError("There was an error while retrieving the search results");
+                    displayError("There was an error while retrieving the search results: " + textStatus);
                 }
             });
         },
@@ -98,7 +101,7 @@ if($('#referenceSearchBox').length)
             {
                 if(jqXHR.status == 500)
                 {
-                    displayError("There was an error while retrieving the search results");
+                    displayError("There was an error while retrieving the search results: " + textStatus);
                 }
             });
         },
@@ -142,7 +145,7 @@ $("#navSearchBar").autocomplete({
         {
             if(jqXHR.status == 500)
             {
-                displayError("There was an error while retrieving the search results");
+                displayError("There was an error while retrieving the search results: " + textStatus);
             }
         });
     },
@@ -178,6 +181,8 @@ $("#navSearchBar").autocomplete("instance")._renderItem = function(ul, item) {
 $('input').keypress(function(e) {
     if((e.which == 13) && !($(this).hasClass("loginInputField")))
     {
+        // TODO: What is this code for? (Not the submission, but who would
+        // press Ctrl?!)
         // Have we got a Ctrl key press?
         if(!e.ctrlKey)
             e.preventDefault();

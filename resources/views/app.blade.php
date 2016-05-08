@@ -84,6 +84,13 @@
     {{ Html::script('js/bootstrap.min.js') }}
 
     <!-- Include helper functions -->
+    <script>
+        // The ajax functions need the base url
+        var appBaseUrl = "{{ url('/') }}";
+        // These need to be globally available
+        var editMode = true;
+        var sortMode = false;
+    </script>
     {{ Html::script('js/helper_functions.js') }}
 
     {{-- yield possible additional scripts --}}

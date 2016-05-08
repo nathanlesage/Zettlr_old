@@ -47,10 +47,11 @@ class AjaxController extends Controller
      *  Fetch note contents via given ID
      *
      *  @param   int  $id  the ID of the note to be show
+     *  @param   bool  $raw  If the output should be returned in raw format
      *
      *  @return  mixed       Depending on validation: Note or Response
      */
-    public function getNoteContents($id)
+    public function getNoteContents($id, $raw = false)
     {
         $note = Note::find($id);
         $note->tags;
@@ -64,10 +65,37 @@ class AjaxController extends Controller
         {
             // Otherwise just return our complete note in JSON format
             // Don't forget to parse the content to HTML
-            $note->content = Markdown::convertToHtml($note->content);
+            if(!$raw)
+                $note->content = Markdown::convertToHtml($note->content);
 
             return $note;
         }
+    }
+
+    /**
+     *  Updates a note in the database and returns evaluated content
+     *
+     *  @param   Request  $request
+     *
+     *  @return  string   Content in HTML format
+     */
+    public function postUpdateNote(Request $request)
+    {
+        $id = $request->id;
+        $content = $request->content;
+        $title = $request->title;
+
+        $note = Note::find($id);
+
+        if(strlen($content) > 0)
+            $note->content = $content;
+
+        if(strlen($title) > 0)
+            $note->title = $title;
+
+        $note->save();
+
+        return Markdown::convertToHtml($note->content);
     }
 
     /**
