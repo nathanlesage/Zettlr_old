@@ -11,10 +11,6 @@
 |
 */
 
-// Go to NoteController as standard index file
-// TODO: Change to a single logon page (inside UserController)
-// Route::get('/', 'NoteController@home');
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -28,8 +24,8 @@
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
-    Route::get('/',     'NoteController@home');
-    Route::get('/home', 'NoteController@home');
+    Route::get('/',     'AppController@home');
+    Route::get('/home', 'AppController@home');
 
     // Notes routes
     Route::get ('notes/index',                  'NoteController@index');
@@ -62,29 +58,51 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/references/edit/{id}',     'ReferenceController@getEdit');
     Route::post('/references/edit/{id}',    'ReferenceController@postEdit');
     Route::get('/references/delete/{id}',   'ReferenceController@delete');
+    Route::get('/references/import', 'ReferenceController@getImport');
+    Route::get('/references/import/confirm', 'ReferenceController@getConfirm');
 
     // Trail routes
     // Deactivated for always killing the dev server
     Route::get('/trails', 'TrailController@index');
 
+    // Importer functions
+    Route::get('/import',           'ImportController@getImport');
+    Route::post('/import/confirm',  'ImportController@postImport');
+    Route::post('/import/finish',   'ImportController@insertImport');
+
     // Settings controls
-    Route::get('/settings',     'AppController@index');
-    Route::post('/settings',    'AppController@postChanges');
+    Route::get('/settings',     'AppController@getSettings');
+    Route::post('/settings',    'AppController@postSettings');
 
     // Ajax routes
     Route::get('/ajax/note/delete/{id}',        'AjaxController@getDeleteNote');
     Route::get('/ajax/note/search/{term}',      'AjaxController@getNoteSearch');
-    Route::get('/ajax/note/{id}',               'AjaxController@getNoteContents');
+    Route::get('/ajax/note/{id}/{raw?}',        'AjaxController@getNoteContents');
+    Route::post('/ajax/note/update',            'AjaxController@postUpdateNote');
+
     Route::get('/ajax/tag/search/{term}',       'AjaxController@getTagSearch');
+
     Route::get('/ajax/reference/search/{term}', 'AjaxController@getReferenceSearch');
+
     Route::get('/ajax/link/{id1}/with/{id2}',   'AjaxController@getLinkNotes');
     Route::get('/ajax/unlink/{id1}/from/{id2}', 'AjaxController@getUnlinkNotes');
-    Route::get('/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}',
-                                                'AjaxController@getOutlineAttach');
-    Route::get('/ajax/changeindex/{type}/{elementId}/{outlineId}/{newIndex}',
-                                                'AjaxController@getChangeIndex');
-    Route::get('/ajax/outline/detach/{outlineId}/{noteId}',
-                                                'AjaxController@getOutlineDetachNote');
-    Route::get('/ajax/outline/remove/{outlineId}/{customId}',
-                                                'AjaxController@getOutlineRemoveCustom');
+
+    Route::get(
+        '/ajax/outline/attach/{outlineID}/{attachmentType}/{requestContent}/{index}/{type?}',
+        'AjaxController@getOutlineAttach'
+    );
+    Route::get(
+        '/ajax/changeindex/{type}/{elementId}/{outlineId}/{newIndex}',
+        'AjaxController@getChangeIndex'
+    );
+    Route::get(
+        '/ajax/outline/detach/{outlineId}/{noteId}',
+        'AjaxController@getOutlineDetachNote'
+    );
+    Route::get(
+        '/ajax/outline/remove/{outlineId}/{customId}',
+        'AjaxController@getOutlineRemoveCustom'
+    );
+    // Ajax handler for dropzone.js
+    Route::post('/ajax/import/collect', 'AjaxController@collect');
 });

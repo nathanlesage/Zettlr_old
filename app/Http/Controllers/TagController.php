@@ -24,6 +24,11 @@ class TagController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     *  Displays a list of all tags
+     *
+     *  @return  Response
+     */
     public function index()
     {
         // Don't only return the Tags, but also the IDs of the belonging notes, to get a count
@@ -32,6 +37,13 @@ class TagController extends Controller
         return view('tags.list', compact('tags'));
     }
 
+    /**
+     *  Shows a tag and displays all associated notes
+     *
+     *  @param   integer  $id  Tag id
+     *
+     *  @return  Response
+     */
     public function show($id)
     {
         if(!$id || $id <= 0)
@@ -46,6 +58,13 @@ class TagController extends Controller
         return view('tags.show', compact('notes', 'tag'));
     }
 
+    /**
+     *  Removes a tag from the database
+     *
+     *  @param   integer  $id  Tag id
+     *
+     *  @return  Response
+     */
     public function delete($id)
     {
         if(!$id || $id <= 0)

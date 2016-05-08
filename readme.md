@@ -15,6 +15,8 @@ With Zettlr you can …
 * … insert notes with pre-assigned tags and references so that you can insert notes even faster
 * … use outlines to gather notes, add your personal notes and arrange them any way you like
 
+[Visit the homepage](http://www.zettlr.com)
+
 ## Install
 
 Zettlr is still under heavy development. It is not recommended for use in production yet. If you want to test it, please make sure to regularly backup your database in case some unwanted behavior by the app results in loss of data.
@@ -25,7 +27,7 @@ To install, first navigate to the desired location and clone the repository:
 $ git clone https://github.com/nathanlesage/Zettlr
 ```
 
-Then install the project via composer:
+Then install the project dependencies via composer:
 
 ```
 $ cd Zettlr
@@ -40,7 +42,7 @@ $ php artisan migrate
 $ php artisan db:seed
 ```
 
-The `touch`-command is because Artisan has a bug that prevents it from automatically create the database-file. Of course, if you want to use another database type, edit the following line in `config/database.php`:
+The `touch`-command is because Artisan has a bug that prevents it from automatically creating the database-file. Of course, if you want to use another database type, edit the following line in `config/database.php`:
 
 ```
 'default' => env('DB_CONNECTION', 'sqlite'),
@@ -55,7 +57,9 @@ $ cp .env.example .env
 $ php artisan key:generate
 ```
 
-If you are done, set the application to production and start your server (if you want a local installation).
+If your local domain (or, if you plan to publish the installation) varies from http://localhost, provide the correct string in the `.env`-file in the `APP_URL`-variable. If you don't the LESS-compiler will give a wrong path to the final CSS-file. In case you already created one, you can always delete the stylesheet (located in `public/css/app.min.css`). The compiler will notice this and recreate it automatically.
+
+If you are done, set the application to production and start your server.
 
 ```
 $ php artisan up
