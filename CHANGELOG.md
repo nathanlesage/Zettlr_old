@@ -1,6 +1,6 @@
 # Changelog for Zettlr
 
-## v.0.3.0-beta (2016-05-08)
+## v.0.3.0-beta (2016-05-09)
 
 ### Features
 

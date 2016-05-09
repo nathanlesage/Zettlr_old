@@ -20,8 +20,8 @@
         "laravel/framework": "5.2.*",
         "graham-campbell/markdown": "^6.0",
         "oyejorge/less.php": "v1.7.0.10",
-        "openjournalsoftware/bibtex": "^0.2.0",
         "league/html-to-markdown": "^4.2",
+        "openjournalsoftware/bibtex": "^0.2.0",
         "laravelcollective/html": "5.2.*"
     },
     "require-dev": {
