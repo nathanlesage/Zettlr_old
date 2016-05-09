@@ -1,6 +1,6 @@
 # Changelog for Zettlr
 
-## v.0.2.0-beta (2016-05-08)
+## v.0.3.0-beta (2016-05-08)
 
 ### Features
 
@@ -23,6 +23,7 @@
 * Now on deletion of a reference you will be redirected to the index page
 * References are now ordered by author's last name
 * Fixed link of reference importer to reference overview
+* Moved laravelcollective/html from require-dev to require to prevent install from crashing when installing with flag --no-dev
 
 ### Technoloy
 
