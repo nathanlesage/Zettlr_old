@@ -15,11 +15,21 @@ class Tag extends Model
     'name'
     ];
 
+    /**
+     *  Relationship
+     *
+     *  @return  Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function notes()
     {
     	return $this->belongsToMany('App\Note')->withTimestamps();
     }
 
+    /**
+     *  Relationship
+     *
+     *  @return  Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function outlines()
     {
       return $this->belongsToMany('App\Outline')->withTimestamps();

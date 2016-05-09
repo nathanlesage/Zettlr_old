@@ -26,9 +26,13 @@ class AppServiceProvider extends ServiceProvider
             $parser = new Less_Parser([ 'compress' => true ]);
 
             // Parse the bootstrap.less-file
-            $parser->parseFile(base_path() . '/resources/assets/less/bootstrap.less', getenv('APP_URL'));
+            $parser->parseFile(base_path() . '/resources/assets/less/bootstrap.less');
             // (over-)write app.css
             $bytes_written = File::put($appCss, $parser->getCss());
+
+            if(!$bytes_written)
+                throw new Exception('Could not write new CSS file!');
+
         }
     }
 

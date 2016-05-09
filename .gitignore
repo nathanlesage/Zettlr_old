@@ -1,19 +1,24 @@
+!.gitignore
+!.gitattributes
+!.env.example
+
 # My own notes
 notizen.md
+
+# The compiled app.min.css
+public/css/app.min.css
 
 vendor/
 node_modules/
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
-
 # Laravel 5 & Lumen specific
 bootstrap/cache/
-storage/
-.env.example
+# storage/
 
-# Something from before 
+# Don't exclude the example.
+# We can override it for easier install by just cp
+
+# Something from before
 
 /bootstrap/compiled.php
 .env.*.php

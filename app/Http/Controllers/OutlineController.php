@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -30,6 +31,11 @@ class OutlineController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+    *  Displays a list of all outlines
+    *
+    *  @return  Response
+    */
     public function index()
     {
         // ToDo: Display list of all outliners
@@ -38,15 +44,22 @@ class OutlineController extends Controller
         return view('outlines.list', ['outlines' => $outlines]);
     }
 
+    /**
+    *  Displays a single outline
+    *
+    *  @param   integer  $id  Outline id
+    *
+    *  @return  Response
+    */
     public function show($id)
     {
-        // Take the id and output it (for now)
         try {
             $outline = Outline::findOrFail($id);
         } catch (ModelNotFoundException $e) {
             return redirect('outlines')->withErrors(['message', 'Could not find outline.']);
         }
 
+        // Eager load tags and references
         $outline->tags;
         $outline->references;
 
@@ -117,12 +130,24 @@ class OutlineController extends Controller
         return view('outlines.show', compact('outline', 'attachedElements'));
     }
 
+    /**
+    *  Display a form to insert a new outline
+    *
+    *  @return  Response
+    */
     public function getCreate()
     {
         // Simply return the view
         return view('outlines.create');
     }
 
+    /**
+    *  Inserts a new outline into the database
+    *
+    *  @param   Request  $request
+    *
+    *  @return  Response
+    */
     public function postCreate(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -170,6 +195,13 @@ class OutlineController extends Controller
         return redirect('notes/create/'.$outline->id);
     }
 
+    /**
+    *  Displays a form to edit an outline
+    *
+    *  @param   integer  $id  Outline id
+    *
+    *  @return  Response
+    */
     public function getEdit($id)
     {
         if(!$id || $id <= 0)
@@ -181,10 +213,19 @@ class OutlineController extends Controller
         return view('outlines.edit', ['outline' => $outline]);
     }
 
+    /**
+    *  Updates an outline record in the database
+    *
+    *  @param   Request  $request
+    *  @param   integer   $id       Outline id
+    *
+    *  @return  Response
+    */
     public function postEdit(Request $request, $id)
     {
-        if(!$id || $id <= 0)
-        return redirect('outlines/create')->withInput();
+        if(!$id || $id <= 0) {
+            return redirect('outlines/create')->withInput();
+        }
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3|max:255',
@@ -233,7 +274,6 @@ class OutlineController extends Controller
                     // Do nothing
                 }
             }
-
             $outline->references()->sync($referenceIDs);
         }
         else {
@@ -245,9 +285,50 @@ class OutlineController extends Controller
         $outline->description = $request->description;
         $outline->save();
 
+        if($request->noteAction == 3) // Attach anything new
+        {
+            foreach($outline->notes as $note)
+            {
+                foreach($outline->references as $reference) {
+                    if(!$note->references->contains($reference->id)) {
+                        $note->references()->attach($reference->id);
+                    }
+                }
+
+                foreach($outline->tags as $tag) {
+                    if(!$note->tags->contains($tag->id)) {
+                        $note->tags()->attach($tag->id);
+                    }
+                }
+            }
+        }
+        elseif($request->noteAction == 2) // Synchronize
+        {
+            $ref = [];
+            $t = [];
+            foreach($outline->references as $reference) {
+                $ref[] = $reference->id;
+            }
+            foreach($outline->tags as $tag) {
+                $t[] = $tag->id;
+            }
+            foreach($outline->notes as $note)
+            {
+                $note->references()->sync($ref);
+                $note->tags()->sync($t);
+            }
+        }
+
         return redirect(url('/outlines/show/'.$id));
     }
 
+    /**
+    *  Removes an outline, detaches its notes and removes its custom fields
+    *
+    *  @param   integer  $id  Outline id
+    *
+    *  @return  Response
+    */
     public function delete($id)
     {
         try {
