@@ -1,5 +1,11 @@
 # Changelog for Zettlr
 
+## tba
+
+### Fixes
+
+* Sometimes Zettlr crashed when trying to import notes with suggested notes but deleted all notes previously
+
 ## v.0.3.0-beta (2016-05-09)
 
 ### Features

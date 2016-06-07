@@ -124,7 +124,10 @@ class ImportController extends Controller
 
 
             // Now fill the join table
-            if(count($request->tags[$index]) > 0) {
+            // Fix: Sometimes there are just no tags attached to a note
+            // and in these situations, Zettlr broke. Now the existence of
+            // the variable is previously tested before the length is checked
+            if(isset($request->tags[$index]) && count($request->tags[$index]) > 0) {
                 if(array_key_exists($index, $request->tags) && (count($request->tags[$index]) > 0))
                 {
                     foreach($request->tags[$index] as $tagname)
@@ -161,6 +164,7 @@ class ImportController extends Controller
         // Now go through the lines
         $tmp = [];
         $noteFound = false;
+        $emptyLine = false;
         for($i = 0; $i < count($lines); $i++)
         {
             $thisHeading = explode(" ", $lines[$i])[0];
@@ -178,6 +182,16 @@ class ImportController extends Controller
             }
             else
             {
+                if(trim($lines[$i]) === '' && $emptyLine) {
+                    continue;
+                }
+                elseif(trim($lines[$i]) === '' && !$emptyLine) {
+                    $emptyLine = true;
+                }
+                else {
+                    $emptyLine = false;
+                }
+
                 // This is necessary to strip potential additional lines before
                 // the first note and to not include the next h4 also
                 if(!(substr($lines[$i], 0, strlen($headingType)) == $headingType) && $noteFound) {
@@ -187,7 +201,7 @@ class ImportController extends Controller
         }
         // Now, in the tmp-Array is a last note
         if(count($tmp) > 1) {
-            $notes->push(new Note(['title' => substr(array_shift($tmp), strlen($headingType)+1), 'content' => implode("\n", $tmp)]));
+            $notes->push(new Note(['title' => substr(array_shift($tmp), strlen($headingType)+1), 'content' => rtrim(implode("\n", $tmp))]));
         }
 
         // Now that we have all notes -> should we suggest tags?
@@ -223,7 +237,9 @@ class ImportController extends Controller
         {
             if(strlen($content[$i]) > 3)
             {
-                $tags = Tag::where('name', 'LIKE', '%'.$content[$i].'%')->get();
+                // Do not search for the search term anywhere in the word,
+                // as this returns too many unuseful words
+                $tags = Tag::where('name', 'LIKE', $content[$i])->get();
                 if(count($tags) > 0)
                 {
                     foreach($tags as $t)

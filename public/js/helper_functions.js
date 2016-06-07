@@ -265,6 +265,9 @@ function codify(myElem, index)
     }
     else {
         // We have a pre-Tag and must fill our element with this data
+        // To prevent double-filling the note contents (with also the content of
+        // the hidden text area) we have to deleted this hidden textarea first.
+        $(myElem).find("textarea").remove();
         $(myElem).replaceWith('<textarea class="form-control" data-former-tag="' + $(myElem).prop('tagName') + '" name="'+index+'" id="gfm-code">' + $(myElem).text() + '</textarea>');
 
         var editor = CodeMirror.fromTextArea(document.getElementById("gfm-code"), {

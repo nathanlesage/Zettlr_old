@@ -223,22 +223,22 @@ class ReferenceController extends Controller
                 }
 
                 // Is anything empty? Then also omit
-                if(strlen($entry['title']) <= 0)
+                if(!isset($entry['title']) || strlen($entry['title']) <= 0)
                 {
                     $omitted[$index]['reason'] = 'Title missing';
                     continue;
                 }
-                if(strlen($entry['year']) <= 0)
+                if(!isset($entry['year']) || strlen($entry['year']) <= 0)
                 {
                     $omitted[$index]['reason'] = 'Year missing';
                     continue;
                 }
-                if(strlen($entry['author'][0]['last']) <= 0)
+                if(!isset($entry['author']) || strlen($entry['author'][0]['last']) <= 0)
                 {
                     $omitted[$index]['reason'] = 'Author last name missing';
                     continue;
                 }
-                if(strlen($entry['author'][0]['first']) <= 0)
+                if(!isset($entry['author']) || strlen($entry['author'][0]['first']) <= 0)
                 {
                     $omitted[$index]['reason'] = 'Author first name missing';
                     continue;
