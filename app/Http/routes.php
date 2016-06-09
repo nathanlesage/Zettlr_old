@@ -41,7 +41,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('outlines/',             'OutlineController@index');
     Route::get('outlines/create',       'OutlineController@getCreate');
     Route::post('outlines/create',      'OutlineController@postCreate');
-    Route::get('outlines/show/{id}',    'OutlineController@show');
+    Route::get('outlines/show/{id}/{export?}',    'OutlineController@show');
     Route::get('outlines/edit/{id}',    'OutlineController@getEdit');
     Route::post('outlines/edit/{id}',   'OutlineController@postEdit');
     Route::get('/outlines/delete/{id}', 'OutlineController@delete');

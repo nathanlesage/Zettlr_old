@@ -51,7 +51,7 @@ class OutlineController extends Controller
     *
     *  @return  Response
     */
-    public function show($id)
+    public function show($id, $export = "")
     {
         try {
             $outline = Outline::findOrFail($id);
@@ -125,6 +125,41 @@ class OutlineController extends Controller
                     }
                 }
             }
+        }
+
+        if($export === "export") {
+            // Now prepare to export
+
+            // The elements currently are in stdClass format, so we have to make
+            // one large string out of it
+
+            // Outline name as H1
+            $file = $outline->name . "\n" . str_repeat('=', strlen($outline->name)) . "\n\n";
+
+            foreach($attachedElements as $element)
+            {
+                if($element->objType == 'note') {
+                    // Element is a note
+                    $file .= '#### ' . $element->title . "\n\n";
+
+                    // Leave as Markdown
+                    $file .= $element->content;
+
+                    $file .= "\n\n";
+                }
+                else {
+                    $file .= ($element->type == 'h2') ? '## ' : '';
+
+                    $file .= $element->content;
+
+                    $file .= "\n\n";
+                }
+            }
+
+            // Mimetype: text/markdown
+            return response($file)
+            ->header('Content-Type', 'text/markdown')
+            ->header('Content-Disposition', 'attachment; filename=' . $outline->name . '.md');
         }
 
         return view('outlines.show', compact('outline', 'attachedElements'));

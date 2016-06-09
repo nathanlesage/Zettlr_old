@@ -345,6 +345,7 @@ function toggleMode(mode)
                 <button href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="glyphicon glyphicon-option-horizontal"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="{{ url('/outlines/edit') }}/{{ $outline->id }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a></li>
+                    <li><a href="{{ url('/outlines/show/' . $outline->id . '/export') }}"><span class="glyphicon glyphicon-download"></span> Export</a></li>
                     <li><a href="{{ url('/notes/create') }}/{{ $outline->id }}"><span class="glyphicon glyphicon-plus"></span> Create new notes</a></li>
                     <li><a href="{{ url('/outlines/delete') }}/{{ $outline->id }}"><span class="glyphicon glyphicon-trash"></span> Delete</a></li>
                     <li role="separator" class="divider"></li>
